@@ -276,6 +276,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .footer-col a{color:var(--soft-txt);font-size:.9rem;transition:.2s}
 .footer-col a:hover{color:var(--accent)}
 .footer-bottom{text-align:center;padding:18px;color:var(--soft-txt);font-size:.8rem;border-top:1px solid var(--line)}
+.footer-credit{text-align:center;padding:14px 18px;color:var(--txt);font-size:.85rem;border-top:1px solid var(--line);line-height:1.8}
+.footer-credit a{color:var(--accent);font-weight:700;text-decoration:none;transition:.2s}
+.footer-credit a:hover{text-decoration:underline;opacity:.85}
 
 /* ===== 其他 ===== */
 #scroll-top{position:fixed;right:24px;bottom:24px;width:46px;height:46px;border-radius:14px;background:var(--grad);color:#fff;font-size:1.3rem;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:.3s;z-index:90}

@@ -35,7 +35,7 @@ function initParticles(){
 function initBreadcrumb(){
   const el=document.getElementById("breadcrumb"); if(!el) return;
   const path=location.pathname.split("/").pop()||"index.html";
-  const names={index:"首頁",quotes:"心靈金句",stories:"療癒寓言",games:"互動遊戲",play:"開玩",quiz:"心理測驗",gallery:"四季畫廊",stickers:"貼圖下載",shop:"周邊商店",member:"會員",about:"關於",sitemap:"網站地圖"};
+  const names={index:"首頁",quotes:"心靈金句",stories:"療癒寓言",games:"互動遊戲",play:"開玩",quiz:"心理測驗",gallery:"infu空間",stickers:"貼圖下載",shop:"周邊商店",member:"會員",about:"關於",sitemap:"網站地圖"};
   let key=path.replace(".html","");
   if(key.startsWith("fable-")){key="stories";}
   el.innerHTML=`<a href="index.html">首頁</a><span class="sep">›</span><span>${names[key]||"探索"}</span>`;

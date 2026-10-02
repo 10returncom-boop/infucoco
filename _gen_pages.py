@@ -19,7 +19,7 @@ HEAD_OPEN = '''<!DOCTYPE html>
 <header class="site-header"><div class="header-inner">
 <div class="logo"><div class="logo-mark"><img src="./assets/webp/infucoco_crescent_bench_stars.webp" alt="INFUCOCO 療癒宇宙吉祥物"></div><div class="logo-txt grad-text">INFUCOCO<small data-i18n="brand">療癒宇宙</small></div></div>
 <nav class="nav-links">
-<a href="index.html">首頁</a><a href="quotes.html">💬 心靈金句</a><a href="stories.html">📖 療癒寓言</a><a href="games.html">🎮 互動遊戲</a><a href="quiz.html">🔮 心理測驗</a><a href="gallery.html">🌿 四季畫廊</a><a href="stickers.html">🖼️ 貼圖下載</a><a href="shop.html">🛍️ 周邊商店</a><a href="member.html">👑 會員</a>
+<a href="index.html">首頁</a><a href="quotes.html">💬 心靈金句</a><a href="stories.html">📖 療癒寓言</a><a href="games.html">🎮 互動遊戲</a><a href="quiz.html">🔮 心理測驗</a><a href="gallery.html">🌿 infu空間</a><a href="stickers.html">🖼️ 貼圖下載</a><a href="shop.html">🛍️ 周邊商店</a><a href="member.html">👑 會員</a>
 </nav>
 <div class="header-tools">
 <div class="quick-search"><span>🔍</span><input id="quick-search-input" type="text" placeholder="搜尋網站內容…"></div>
@@ -50,9 +50,9 @@ FOOT = '''
 <footer class="site-footer"><div class="footer-inner">
 <div class="footer-col"><h4 class="grad-text">INFUCOCO 療癒宇宙</h4><p style="font-size:.9rem;color:var(--soft-txt)">給疲憊的你，一個小小的療癒宇宙：寓言 × 金句 × 遊戲 × 測驗 × 貼圖 × 周邊。</p><p style="margin-top:10px;color:var(--soft-txt)">✉️ hello@infucoco.studio</p></div>
 <div class="footer-col"><h4>療癒</h4><ul><li><a href="quotes.html">💬 心靈金句</a></li><li><a href="stories.html">📖 療癒寓言</a></li><li><a href="quiz.html">🔮 心理測驗</a></li></ul></div>
-<div class="footer-col"><h4>玩樂</h4><ul><li><a href="games.html">🎮 互動遊戲</a></li><li><a href="gallery.html">🌿 四季畫廊</a></li><li><a href="stickers.html">🖼️ 貼圖下載</a></li></ul></div>
+<div class="footer-col"><h4>玩樂</h4><ul><li><a href="games.html">🎮 互動遊戲</a></li><li><a href="gallery.html">🌿 infu空間</a></li><li><a href="stickers.html">🖼️ 貼圖下載</a></li></ul></div>
 <div class="footer-col"><h4>網站地圖</h4><ul><li><a href="shop.html">🛍️ 周邊商店</a></li><li><a href="member.html">👑 會員</a></li><li><a href="about.html">關於</a></li><li><a href="sitemap.html">完整地圖</a></li></ul></div>
-</div><div class="footer-bottom">© 2026 INFUCOCO 療癒宇宙 版權所有 · v1.0.0</div></footer>
+</div><div class="footer-credit">規劃設計開發：張書欣　📞 <a href="tel:0968222201">0968-222201</a>　💬 <a href="https://line.me/ti/p/~331.today" target="_blank" rel="noopener">331.today</a></div><div class="footer-bottom">© 2026 INFUCOCO 療癒宇宙 版權所有 · v1.0.0</div></footer>
 <button id="scroll-top" class="scroll-top" title="回到頂部">↑</button>
 <div id="toast"></div>
 '''
@@ -68,7 +68,7 @@ def nav_active(active):
     h=HEAD_OPEN
     m={'index':'<a href="index.html">','quotes':'<a href="quotes.html">','stories':'<a href="stories.html">','games':'<a href="games.html">','quiz':'<a href="quiz.html">','gallery':'<a href="gallery.html">','stickers':'<a href="stickers.html">','shop':'<a href="shop.html">','member':'<a href="member.html">'}
     if active in m:
-        h=h.replace(m[active],m[active][:-2]+' class="active">',1)
+        h=h.replace(m[active],m[active].replace('>',' class="active">'),1)
     return h
 
 def make(fn,title,desc,page_id,body,scripts,active=None):
@@ -432,7 +432,6 @@ gallery_scripts = '''<script>
 })();
 </script>'''
 make("gallery.html","四季畫廊 - INFUCOCO 療癒宇宙","INFUCOCO 療癒宇宙四季桌布下載，16 張療癒插畫。","gallery",gallery_body,gallery_scripts,active="gallery")
-print("gallery ok")
 
 # ---------- stickers ----------
 stickers_body = '''
@@ -553,4 +552,13 @@ sitemap_scripts='<script>Svc&&Svc.StatSvc.inc("visit_sitemap")</script>'
 make("sitemap.html","網站地圖 - INFUCOCO 療癒宇宙","INFUCOCO 療癒宇宙完整網站地圖。","sitemap",sitemap_body,sitemap_scripts,active=None)
 print("sitemap ok")
 
+# 全域替換：四季畫廊 → infu空間（gallery 標題、sitemap、index 等）
+for fn in os.listdir(ROOT):
+    if fn.endswith(".html"):
+        p=os.path.join(ROOT,fn)
+        c=io.open(p,encoding="utf-8").read()
+        nc=c.replace("四季畫廊","infu空間")
+        if nc!=c:
+            io.open(p,"w",encoding="utf-8").write(nc)
+            print("改名:",fn)
 print("ALL HTML GENERATED")
