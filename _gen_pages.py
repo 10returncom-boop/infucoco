@@ -82,7 +82,7 @@ def make(fn,title,desc,page_id,body,scripts,active=None):
 # ---------- index ----------
 index_body = '''
 <section class="hero">
-  <div class="hero-art"><img src="./assets/webp/infucoco_glow_lamp_moon.webp" alt="infucoco 捧著暖燈，與貓咪小狗依偎在窗前月光下"></div>
+  <div class="hero-art"><img src="./assets/webp/infucoco_night_door_pet_look.webp" alt="infucoco 夜晚推開房門，與貓咪兔子金毛共享溫暖時刻"></div>
   <div class="hero-center">
     <div class="eyebrow">✨ 療癒小宇宙</div>
     <h1 class="grad-text">INFUCOCO<br>療癒宇宙</h1>
@@ -93,7 +93,7 @@ index_body = '''
       <a href="quotes.html" class="btn btn-ghost">💬 讀一句金句</a>
     </div>
   </div>
-  <div class="hero-art flip"><img src="./assets/webp/infucoco_blanket_pet_moon.webp" alt="infucoco 蓋著毯子，與寵物一起看月亮"></div>
+  <div class="hero-art flip"><img src="./assets/webp/infucoco_door_glove_pet_welcome.webp" alt="infucoco 戴著手套在門口迎接橘貓、白兔與小狗"></div>
 </section>
 
 <div class="stat-strip reveal" style="display:none">
