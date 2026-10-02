@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # 生成 INFUCOCO 療癒宇宙 全部 HTML（Windows 本機版，圖片用本機素材）
-import io, os
+import io, os, re
 ROOT = r"D:\www\infucoco_healing"
 
 HEAD_OPEN = '''<!DOCTYPE html>
@@ -563,4 +563,14 @@ for fn in os.listdir(ROOT):
         if nc!=c:
             io.open(p,"w",encoding="utf-8").write(nc)
             print("改名:",fn)
+
+# 資源版本號（cache-busting）：避免瀏覽器快取舊版 CSS/JS
+V="20261003a"
+for fn in os.listdir(ROOT):
+    if fn.endswith(".html"):
+        p=os.path.join(ROOT,fn)
+        c=io.open(p,encoding="utf-8").read()
+        c=c.replace('./css/main.css','./css/main.css?v='+V)
+        c=re.sub(r'src="\./js/([^"?]+)"', r'src="./js/\1?v='+V+'"', c)
+        io.open(p,"w",encoding="utf-8").write(c)
 print("ALL HTML GENERATED")
