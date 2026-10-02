@@ -57,8 +57,25 @@ FOOT = '''
 <div id="toast"></div>
 '''
 
+# 全站統一「站內導覽」區塊（頁頁相連：每頁底部都有通往各主要頁面的圖卡）
+EXPLORE = '''
+<section class="container explore">
+  <div class="section-title"><div class="eyebrow">🧭 站內導覽</div><h2 class="grad-text">繼續探索 infu 宇宙</h2></div>
+  <div class="grid g4">
+    <a class="card tilt reveal" href="quotes.html"><img src="./assets/webp/infucoco_glowing_lantern_dark.webp" alt="每日一句心靈金句"><div class="card-body"><span class="card-tag">💬 每日一句</span><h4>心靈金句</h4><p>35 句療癒語錄</p></div></a>
+    <a class="card tilt reveal d2" href="stories.html"><img src="./assets/webp/infucoco_firefly_jar_night.webp" alt="睡前療癒寓言"><div class="card-body"><span class="card-tag">📖 睡前故事</span><h4>療癒寓言</h4><p>6 篇溫暖寓言</p></div></a>
+    <a class="card tilt reveal d3" href="games.html"><img src="./assets/webp/infucoco_glowing_star_fingertip.webp" alt="100款互動遊戲"><div class="card-body"><span class="card-tag">🎮 100 款</span><h4>互動遊戲</h4><p>反應・記憶・益智</p></div></a>
+    <a class="card tilt reveal d4" href="quiz.html"><img src="./assets/webp/infucoco_night_door_pet_look.webp" alt="心理測驗"><div class="card-body"><span class="card-tag">🔮 測驗</span><h4>心理測驗</h4><p>你今天需要什麼療癒</p></div></a>
+    <a class="card tilt reveal" href="gallery.html"><img src="./assets/webp/infucoco_cherry_picnic.webp" alt="四季桌布 infu空間"><div class="card-body"><span class="card-tag">🌿 四季</span><h4>infu空間</h4><p>16 張四季桌布</p></div></a>
+    <a class="card tilt reveal d2" href="stickers.html"><img src="./assets/webp/infucoco_afterwork_coffee_sidewalk.webp" alt="療癒貼圖下載"><div class="card-body"><span class="card-tag">🖼️ 免費</span><h4>貼圖下載</h4><p>療癒貼圖包</p></div></a>
+    <a class="card tilt reveal d3" href="shop.html"><img src="./assets/webp/infucoco_beach_dawn_waves.webp" alt="周邊商店"><div class="card-body"><span class="card-tag">🛍️ 周邊</span><h4>周邊商店</h4><p>杯墊・帆布袋</p></div></a>
+    <a class="card tilt reveal d4" href="member.html"><img src="./assets/webp/infucoco_crescent_bench_stars.webp" alt="會員方案"><div class="card-body"><span class="card-tag">👑 VIP</span><h4>會員方案</h4><p>解鎖更多療癒</p></div></a>
+  </div>
+</section>
+'''
+
 def page(title,desc,page_id,body,scripts):
-    return (HEAD_OPEN.format(title=title,desc=desc,page=page_id)+body+FOOT+
+    return (HEAD_OPEN.format(title=title,desc=desc,page=page_id)+body+EXPLORE+FOOT+
             '<script src="./js/config.js"></script><script src="./js/quotes.js"></script><script src="./js/service.js"></script>'+
             scripts+
             '<script src="./js/utils.js"></script></body></html>')
@@ -73,7 +90,7 @@ def nav_active(active):
 
 def make(fn,title,desc,page_id,body,scripts,active=None):
     head = nav_active(active) if active else HEAD_OPEN
-    html=(head.format(title=title,desc=desc,page=page_id)+body+FOOT+
+    html=(head.format(title=title,desc=desc,page=page_id)+body+EXPLORE+FOOT+
           '<script src="./js/config.js"></script><script src="./js/quotes.js"></script><script src="./js/service.js"></script><script src="./js/utils.js"></script>'+
           scripts+'</body></html>')
     with io.open(os.path.join(ROOT,fn),"w",encoding="utf-8") as f:
