@@ -368,9 +368,10 @@ stories_body = '''
   <div class="grid g3" id="story-grid"></div>
 </div>
 '''
-stories_scripts = '''<script>
+stories_scripts = '''<script src="./js/stories.js"></script><script>
 (function(){
   document.getElementById("story-grid").innerHTML=STORIES.map((s,i)=>`<a class="card tilt reveal" href="fable-${s.id}.html"><img src="./assets/webp/${s.img}.webp" alt="${s.title}"><div class="card-body"><span class="card-tag">${s.tag}</span><h4>${s.title}</h4><p>${s.moral}</p></div></a>`).join("");
+  document.querySelectorAll("#story-grid .reveal").forEach(x=>x.classList.add("in"));
   Svc.StatSvc.inc("visit_stories");
 })();
 </script>'''
