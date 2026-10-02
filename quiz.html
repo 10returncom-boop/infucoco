@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-palette="starlight" data-mode="day">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="INFUCOCO 療癒宇宙心理測驗：今天你需要哪一種療癒？">
+<title>心理測驗 - INFUCOCO 療癒宇宙</title>
+<link rel="stylesheet" href="./css/main.css">
+</head>
+<body data-page="quiz">
+<div class="heal-bg" aria-hidden="true"><div class="heal-blob a"></div><div class="heal-blob b"></div><div class="heal-blob c"></div></div>
+<div class="shooting-star" aria-hidden="true"></div>
+<canvas id="particles" aria-hidden="true"></canvas>
+<header class="site-header"><div class="header-inner">
+<div class="logo"><div class="logo-mark"><img src="./assets/webp/infucoco_crescent_bench_stars.webp" alt="INFUCOCO 療癒宇宙吉祥物"></div><div class="logo-txt grad-text">INFUCOCO<small data-i18n="brand">療癒宇宙</small></div></div>
+<nav class="nav-links">
+<a href="index.html">首頁</a><a href="quotes.html">💬 心靈金句</a><a href="stories.html">📖 療癒寓言</a><a href="games.html">🎮 互動遊戲</a><a href="quiz.html class="active">🔮 心理測驗</a><a href="gallery.html">🌿 四季畫廊</a><a href="stickers.html">🖼️ 貼圖下載</a><a href="shop.html">🛍️ 周邊商店</a><a href="member.html">👑 會員</a>
+</nav>
+<div class="header-tools">
+<div class="quick-search"><span>🔍</span><input id="quick-search-input" type="text" placeholder="搜尋網站內容…"></div>
+<div class="dropdown"><button class="icon-btn dropdown-btn" title="進階工具">⚙️</button><div class="popover-dropdown">
+<div class="popover-dropdown__header"><h3 class="popover-dropdown__title">✨ 探索療癒宇宙</h3><a class="popover-dropdown__view-all" href="sitemap.html">網站地圖 →</a></div>
+<div class="popover-dropdown__grid">
+<a class="popover-dropdown__card" href="quotes.html"><span class="popover-dropdown__icon">💬</span><h4 class="popover-dropdown__card-title">心靈金句</h4><p class="popover-dropdown__card-desc">每日一句溫柔</p></a>
+<a class="popover-dropdown__card" href="stories.html"><span class="popover-dropdown__icon">📖</span><h4 class="popover-dropdown__card-title">療癒寓言</h4><p class="popover-dropdown__card-desc">睡前小故事</p></a>
+<a class="popover-dropdown__card" href="games.html"><span class="popover-dropdown__icon">🎮</span><h4 class="popover-dropdown__card-title">互動遊戲</h4><p class="popover-dropdown__card-desc">100 款療癒小遊戲</p></a>
+<a class="popover-dropdown__card" href="quiz.html"><span class="popover-dropdown__icon">🔮</span><h4 class="popover-dropdown__card-title">心理測驗</h4><p class="popover-dropdown__card-desc">今天需要什麼療癒</p></a>
+<a class="popover-dropdown__card" href="gallery.html"><span class="popover-dropdown__icon">🌿</span><h4 class="popover-dropdown__card-title">四季畫廊</h4><p class="popover-dropdown__card-desc">桌布下載</p></a>
+<a class="popover-dropdown__card" href="stickers.html"><span class="popover-dropdown__icon">🖼️</span><h4 class="popover-dropdown__card-title">貼圖下載</h4><p class="popover-dropdown__card-desc">療癒貼圖</p></a>
+<a class="popover-dropdown__card" href="shop.html"><span class="popover-dropdown__icon">🛍️</span><h4 class="popover-dropdown__card-title">周邊商店</h4><p class="popover-dropdown__card-desc">療癒周邊</p></a>
+<a class="popover-dropdown__card" href="member.html"><span class="popover-dropdown__icon">👑</span><h4 class="popover-dropdown__card-title">會員方案</h4><p class="popover-dropdown__card-desc">三種訂閱</p></a>
+<a class="popover-dropdown__card" href="about.html"><span class="popover-dropdown__icon">⭐</span><h4 class="popover-dropdown__card-title">關於</h4><p class="popover-dropdown__card-desc">療癒宇宙的故事</p></a>
+</div>
+<div class="popover-dropdown__footer">
+<div class="dd-title">🎨 療癒配色</div><div class="dd-row"><button data-theme="starlight">星光紫</button><button data-theme="peach">蜜桃粉</button><button data-theme="mint">薄荷綠</button><button data-theme="lavender">薰衣草</button></div>
+<div class="dd-row"><button data-random>🎲 隨機探索</button><button data-csv>⬇️ 匯出100遊戲CSV</button><button data-lang>🌐 繁中/EN</button></div>
+</div>
+</div></div>
+<button class="icon-btn" data-mode-btn title="日夜模式">🌙</button>
+</div></div></header>
+<nav id="breadcrumb" class="breadcrumb" aria-label="麵包屑"></nav>
+
+<section class="container" style="padding:34px 24px">
+  <div id="quiz-root"></div>
+</section>
+
+<footer class="site-footer"><div class="footer-inner">
+<div class="footer-col"><h4 class="grad-text">INFUCOCO 療癒宇宙</h4><p style="font-size:.9rem;color:var(--soft-txt)">給疲憊的你，一個小小的療癒宇宙：寓言 × 金句 × 遊戲 × 測驗 × 貼圖 × 周邊。</p><p style="margin-top:10px;color:var(--soft-txt)">✉️ hello@infucoco.studio</p></div>
+<div class="footer-col"><h4>療癒</h4><ul><li><a href="quotes.html">💬 心靈金句</a></li><li><a href="stories.html">📖 療癒寓言</a></li><li><a href="quiz.html">🔮 心理測驗</a></li></ul></div>
+<div class="footer-col"><h4>玩樂</h4><ul><li><a href="games.html">🎮 互動遊戲</a></li><li><a href="gallery.html">🌿 四季畫廊</a></li><li><a href="stickers.html">🖼️ 貼圖下載</a></li></ul></div>
+<div class="footer-col"><h4>網站地圖</h4><ul><li><a href="shop.html">🛍️ 周邊商店</a></li><li><a href="member.html">👑 會員</a></li><li><a href="about.html">關於</a></li><li><a href="sitemap.html">完整地圖</a></li></ul></div>
+</div><div class="footer-bottom">© 2026 INFUCOCO 療癒宇宙 版權所有 · v1.0.0</div></footer>
+<button id="scroll-top" class="scroll-top" title="回到頂部">↑</button>
+<div id="toast"></div>
+<script src="./js/config.js"></script><script src="./js/quotes.js"></script><script src="./js/service.js"></script><script src="./js/utils.js"></script><script>
+(function(){
+  const root=document.getElementById("quiz-root");
+  const quiz=QUIZ; let step=0, picks=[];
+  function renderIntro(){
+    root.innerHTML=`<div class="quiz-main reveal in"><h1>🔮 ${quiz.title}</h1><p style="color:var(--soft-txt);margin-top:10px">${quiz.intro}</p><div style="margin-top:26px"><button class="btn btn-lg" onclick="startQuiz()">✨ 開始測驗</button></div></div>`;
+  }
+  window.startQuiz=function(){step=0;picks=[];renderQ()};
+  function renderQ(){
+    const q=quiz.questions[step];
+    const opts=q.o.map((o,ix)=>`<div class="q-opt" onclick="pickOpt(${ix})"><img src="./assets/webp/${o.img}.webp" alt="${o.t}"><span>${o.t}</span></div>`).join("");
+    root.innerHTML=`<div class="quiz-main reveal in"><h1>${step+1} / ${quiz.questions.length}</h1><div class="quiz-q" style="font-size:1.25rem;font-weight:800;padding:18px 0">${q.q}</div><div class="q-opts">${opts}</div></div>`;
+    confetti&&confetti({count:6});
+  }
+  window.pickOpt=function(ix){picks.push(ix); step++; if(step<quiz.questions.length)renderQ(); else renderResult()};
+  function renderResult(){
+    const idx=(picks[0]||0)+((picks[1]||0));
+    const r=quiz.results[Math.min(3,Math.round(idx/1.75))];
+    root.innerHTML=`<div class="quiz-result reveal in"><div class="rtag">${r.tag}</div><h2 style="font-size:1.5rem;font-weight:900;margin:16px 0 12px;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">${r.title}</h2><img src="./assets/webp/${r.img}.webp" alt="${r.title}"><p style="font-size:1.02rem;color:var(--soft-txt)">${r.text}</p><div style="display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap"><button class="btn" onclick="startQuiz()">🔄 再測一次</button><a class="btn btn-ghost" href="quotes.html">💬 送自己一句金句</a><a class="btn btn-ghost" href="games.html">🎮 玩一場放鬆遊戲</a></div></div>`;
+    confetti({count:100}); Svc.StatSvc.inc("quiz_done");
+  }
+  renderIntro();
+})();
+</script></body></html>

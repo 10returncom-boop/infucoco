@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-palette="starlight" data-mode="day">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="INFUCOCO 療癒宇宙四季桌布下載，16 張療癒插畫。">
+<title>四季畫廊 - INFUCOCO 療癒宇宙</title>
+<link rel="stylesheet" href="./css/main.css">
+</head>
+<body data-page="gallery">
+<div class="heal-bg" aria-hidden="true"><div class="heal-blob a"></div><div class="heal-blob b"></div><div class="heal-blob c"></div></div>
+<div class="shooting-star" aria-hidden="true"></div>
+<canvas id="particles" aria-hidden="true"></canvas>
+<header class="site-header"><div class="header-inner">
+<div class="logo"><div class="logo-mark"><img src="./assets/webp/infucoco_crescent_bench_stars.webp" alt="INFUCOCO 療癒宇宙吉祥物"></div><div class="logo-txt grad-text">INFUCOCO<small data-i18n="brand">療癒宇宙</small></div></div>
+<nav class="nav-links">
+<a href="index.html">首頁</a><a href="quotes.html">💬 心靈金句</a><a href="stories.html">📖 療癒寓言</a><a href="games.html">🎮 互動遊戲</a><a href="quiz.html">🔮 心理測驗</a><a href="gallery.html class="active">🌿 四季畫廊</a><a href="stickers.html">🖼️ 貼圖下載</a><a href="shop.html">🛍️ 周邊商店</a><a href="member.html">👑 會員</a>
+</nav>
+<div class="header-tools">
+<div class="quick-search"><span>🔍</span><input id="quick-search-input" type="text" placeholder="搜尋網站內容…"></div>
+<div class="dropdown"><button class="icon-btn dropdown-btn" title="進階工具">⚙️</button><div class="popover-dropdown">
+<div class="popover-dropdown__header"><h3 class="popover-dropdown__title">✨ 探索療癒宇宙</h3><a class="popover-dropdown__view-all" href="sitemap.html">網站地圖 →</a></div>
+<div class="popover-dropdown__grid">
+<a class="popover-dropdown__card" href="quotes.html"><span class="popover-dropdown__icon">💬</span><h4 class="popover-dropdown__card-title">心靈金句</h4><p class="popover-dropdown__card-desc">每日一句溫柔</p></a>
+<a class="popover-dropdown__card" href="stories.html"><span class="popover-dropdown__icon">📖</span><h4 class="popover-dropdown__card-title">療癒寓言</h4><p class="popover-dropdown__card-desc">睡前小故事</p></a>
+<a class="popover-dropdown__card" href="games.html"><span class="popover-dropdown__icon">🎮</span><h4 class="popover-dropdown__card-title">互動遊戲</h4><p class="popover-dropdown__card-desc">100 款療癒小遊戲</p></a>
+<a class="popover-dropdown__card" href="quiz.html"><span class="popover-dropdown__icon">🔮</span><h4 class="popover-dropdown__card-title">心理測驗</h4><p class="popover-dropdown__card-desc">今天需要什麼療癒</p></a>
+<a class="popover-dropdown__card" href="gallery.html"><span class="popover-dropdown__icon">🌿</span><h4 class="popover-dropdown__card-title">四季畫廊</h4><p class="popover-dropdown__card-desc">桌布下載</p></a>
+<a class="popover-dropdown__card" href="stickers.html"><span class="popover-dropdown__icon">🖼️</span><h4 class="popover-dropdown__card-title">貼圖下載</h4><p class="popover-dropdown__card-desc">療癒貼圖</p></a>
+<a class="popover-dropdown__card" href="shop.html"><span class="popover-dropdown__icon">🛍️</span><h4 class="popover-dropdown__card-title">周邊商店</h4><p class="popover-dropdown__card-desc">療癒周邊</p></a>
+<a class="popover-dropdown__card" href="member.html"><span class="popover-dropdown__icon">👑</span><h4 class="popover-dropdown__card-title">會員方案</h4><p class="popover-dropdown__card-desc">三種訂閱</p></a>
+<a class="popover-dropdown__card" href="about.html"><span class="popover-dropdown__icon">⭐</span><h4 class="popover-dropdown__card-title">關於</h4><p class="popover-dropdown__card-desc">療癒宇宙的故事</p></a>
+</div>
+<div class="popover-dropdown__footer">
+<div class="dd-title">🎨 療癒配色</div><div class="dd-row"><button data-theme="starlight">星光紫</button><button data-theme="peach">蜜桃粉</button><button data-theme="mint">薄荷綠</button><button data-theme="lavender">薰衣草</button></div>
+<div class="dd-row"><button data-random>🎲 隨機探索</button><button data-csv>⬇️ 匯出100遊戲CSV</button><button data-lang>🌐 繁中/EN</button></div>
+</div>
+</div></div>
+<button class="icon-btn" data-mode-btn title="日夜模式">🌙</button>
+</div></div></header>
+<nav id="breadcrumb" class="breadcrumb" aria-label="麵包屑"></nav>
+
+<section class="page-head" style="text-align:center;padding:40px 24px 8px">
+  <h1 style="font-size:clamp(2rem,4.5vw,3rem);font-weight:900" class="grad-text">🌿 四季畫廊</h1>
+  <p style="color:var(--soft-txt);margin-top:10px">收藏 infucoco 的四季與療癒瞬間，點圖可下載當桌布。</p>
+</section>
+<div class="container" style="padding-bottom:40px">
+  <div class="grid g4" id="gal-grid"></div>
+</div>
+
+<footer class="site-footer"><div class="footer-inner">
+<div class="footer-col"><h4 class="grad-text">INFUCOCO 療癒宇宙</h4><p style="font-size:.9rem;color:var(--soft-txt)">給疲憊的你，一個小小的療癒宇宙：寓言 × 金句 × 遊戲 × 測驗 × 貼圖 × 周邊。</p><p style="margin-top:10px;color:var(--soft-txt)">✉️ hello@infucoco.studio</p></div>
+<div class="footer-col"><h4>療癒</h4><ul><li><a href="quotes.html">💬 心靈金句</a></li><li><a href="stories.html">📖 療癒寓言</a></li><li><a href="quiz.html">🔮 心理測驗</a></li></ul></div>
+<div class="footer-col"><h4>玩樂</h4><ul><li><a href="games.html">🎮 互動遊戲</a></li><li><a href="gallery.html">🌿 四季畫廊</a></li><li><a href="stickers.html">🖼️ 貼圖下載</a></li></ul></div>
+<div class="footer-col"><h4>網站地圖</h4><ul><li><a href="shop.html">🛍️ 周邊商店</a></li><li><a href="member.html">👑 會員</a></li><li><a href="about.html">關於</a></li><li><a href="sitemap.html">完整地圖</a></li></ul></div>
+</div><div class="footer-bottom">© 2026 INFUCOCO 療癒宇宙 版權所有 · v1.0.0</div></footer>
+<button id="scroll-top" class="scroll-top" title="回到頂部">↑</button>
+<div id="toast"></div>
+<script src="./js/config.js"></script><script src="./js/quotes.js"></script><script src="./js/service.js"></script><script src="./js/utils.js"></script><script>
+(function(){
+  const G=["infucoco_cherry_picnic","infucoco_daisy_spring_walk","infucoco_bench_cherry_petals","infucoco_giant_flower_field",
+  "infucoco_beach_dawn_waves","infucoco_giant_seashell_beach","infucoco_firefly_jar_night","infucoco_cloud_bed_lying",
+  "infucoco_autumn_gold_walk","infucoco_autumn_leaves_basket","infucoco_autumn_hot_cocoa","infucoco_autumn_bench_reading",
+  "infucoco_first_snow_window","infucoco_cold_hands_warm_breath","infucoco_candle_darkness","infucoco_crescent_moon_stars"];
+  const names=["春·櫻花野餐","春·雛菊散步","春·櫻花長椅","春·花田","夏·海邊晨光","夏·海貝","夏·螢火蟲夜","夏·雲朵午睡",
+  "秋·金色散步","秋·落葉籃","秋·熱可可","秋·閱讀長椅","冬·初雪窗","冬·呵暖雙手","冬·燭光夜","冬·月光星星"];
+  document.getElementById("gal-grid").innerHTML=G.map((g,i)=>`<div class="card reveal"><img class="gal-img" src="./assets/webp/${g}.webp" alt="${names[i]}"><div class="card-body"><h4>${names[i]}</h4><a class="dl-chip" href="./assets/webp/${g}.webp" download>⬇️ 下載</a></div></div>`).join("");
+  Svc.StatSvc.inc("visit_gallery");
+})();
+</script></body></html>
