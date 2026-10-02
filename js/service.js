@@ -10,10 +10,7 @@ window.Svc = (function(){
     init(){
       const saved=localStorage.getItem(P+"theme"); let palette="starlight",mode="day";
       if(saved){try{const s=JSON.parse(saved);palette=s.p||"starlight";mode=s.m||"day"}catch(e){}}
-      else{ // 跟隨系統
-        const sys=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;
-        mode=sys?"night":"day";
-      }
+      // 預設固定白天模式（除非用戶已明確儲存選擇）
       apply(palette,mode);
     },
     apply(p){const m=document.documentElement.dataset.mode||"day";apply(p,m)},

@@ -11,7 +11,7 @@
 }
 /* ===== 主題調色盤：starlight / peach / mint / lavender × day/night ===== */
 html[data-palette="starlight"][data-mode="day"]{
-  --bg:#f6f2ff; --bg2:#fff; --card:#ffffff; --txt:#3a3357; --soft-txt:#8a83a6;
+  --bg:#f6f2ff; --bg2:#fff; --card:#ffffff; --txt:#000000; --soft-txt:#3a3a3a;
   --accent:#8b7cf6; --accent2:#ff9ad5; --line:rgba(139,124,246,.18);
   --chip:#ece7ff; --nav-bg:rgba(255,255,255,.75);
 }
@@ -21,7 +21,7 @@ html[data-palette="starlight"][data-mode="night"]{
   --chip:#2f2766; --nav-bg:rgba(24,18,58,.82);
 }
 html[data-palette="peach"][data-mode="day"]{
-  --bg:#fff3ef; --bg2:#fff; --card:#ffffff; --txt:#543a3a; --soft-txt:#a58a84;
+  --bg:#fff3ef; --bg2:#fff; --card:#ffffff; --txt:#000000; --soft-txt:#3a3a3a;
   --accent:#ff8a7a; --accent2:#ffb26b; --line:rgba(255,138,122,.2);
   --chip:#ffe3da; --nav-bg:rgba(255,255,255,.75);
 }
@@ -31,7 +31,7 @@ html[data-palette="peach"][data-mode="night"]{
   --chip:#5f322b; --nav-bg:rgba(48,24,20,.85);
 }
 html[data-palette="mint"][data-mode="day"]{
-  --bg:#effaf2; --bg2:#fff; --card:#ffffff; --txt:#2f4a3d; --soft-txt:#7ea18f;
+  --bg:#effaf2; --bg2:#fff; --card:#ffffff; --txt:#000000; --soft-txt:#3a3a3a;
   --accent:#54c98f; --accent2:#7ad7ff; --line:rgba(84,201,143,.2);
   --chip:#dff5e8; --nav-bg:rgba(255,255,255,.75);
 }
@@ -41,7 +41,7 @@ html[data-palette="mint"][data-mode="night"]{
   --chip:#27503f; --nav-bg:rgba(15,36,30,.85);
 }
 html[data-palette="lavender"][data-mode="day"]{
-  --bg:#f4efff; --bg2:#fff; --card:#ffffff; --txt:#3b3654; --soft-txt:#9489b8;
+  --bg:#f4efff; --bg2:#fff; --card:#ffffff; --txt:#000000; --soft-txt:#3a3a3a;
   --accent:#a08cff; --accent2:#7ad7ff; --line:rgba(160,140,255,.18);
   --chip:#eae2ff; --nav-bg:rgba(255,255,255,.75);
 }
