@@ -115,7 +115,7 @@
   function run(){
     score.textContent="🏆 0";
     stage.innerHTML="";
-    const e=GameEngines[g.ty];
+    const e=GameEngines[g.ty](g);
     const isDaily=Svc.DailySvc.isToday(g.id);
     const start=document.createElement("div");start.className="game-start";
     start.innerHTML=`<div style="font-size:3rem">${g.i}</div><h3>${g.t}</h3><p>${g.d}<br>難度 ${CFG.difficulty[g.lv||1]}${isDaily?"<br>🌟 這是今日療癒挑戰！":""}<br>最佳紀錄：${currentBest>0?currentBest+" 分":"尚未挑戰"}</p><button class="btn">▶ 開始遊戲</button>`;
