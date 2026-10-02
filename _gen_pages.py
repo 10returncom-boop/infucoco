@@ -282,8 +282,9 @@ play_body = '''
 play_scripts = '''<script src="./js/games/games-data.js"></script><script src="./js/games/games.js"></script><script>
 (function(){
   const m=location.href.match(/[?&]g=([a-zA-Z0-9]+)/);
-  const id=m?m[1]:"g01";
-  const g=GAME_MAP[id];
+  let id=m?m[1]:"g01";
+  if(!/^g/i.test(id)) id="g"+id;   // 容錯：?g=02 → g02
+  const g=GAME_MAP[id]||GAME_MAP["g01"];
   const stage=document.getElementById("game-stage");
   const title=document.getElementById("game-title");
   const desc=document.getElementById("game-desc");
