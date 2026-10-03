@@ -9,7 +9,7 @@
   --card:#FFFDF7;
   --txt:#1C1A15;          /* 墨黑字 */
   --soft:#6E6757;
-  --accent:#E8843C;       /* 暖橘 */
+  --accent:#F47600;       /* 暖橘 */
   --accent2:#7A5CC8;      /* 紫 */
   --mint:#3E9B6F;
   --ink:#181510;
@@ -24,7 +24,7 @@ img{max-width:100%;display:block}
 .container{max-width:1240px;margin:0 auto;padding:0 24px;position:relative;z-index:2}
 
 /* ===== 導覽（極簡紙感，浮在照片上）===== */
-.site-header{position:sticky;top:0;z-index:60;background:linear-gradient(135deg,#F6A623 0%,#E8843C 100%);border-bottom:none;box-shadow:0 2px 18px rgba(0,0,0,.2)}
+.site-header{position:sticky;top:0;z-index:60;background:linear-gradient(135deg,#FF7A00 0%,#F47600 100%);border-bottom:none;box-shadow:0 2px 18px rgba(0,0,0,.2)}
 .header-inner{max-width:1240px;margin:0 auto;padding:13px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .logo{font-family:'Baloo 2','ZCOOL KuaiLe',sans-serif;font-weight:800;font-size:1.35rem;letter-spacing:.02em;color:#fff;line-height:1}
 .logo em{font-style:normal;color:#FFE27A}
@@ -64,13 +64,13 @@ img{max-width:100%;display:block}
 .hero-content{position:relative;z-index:3;text-align:center;color:#fff;padding:0 24px;max-width:760px}
 .hero-stamp{display:inline-block;background:#fff;color:var(--ink);font-weight:900;padding:5px 16px;border-radius:4px;transform:rotate(-3deg);font-size:.76rem;margin-bottom:14px;box-shadow:6px 6px 0 rgba(0,0,0,.3)}
 .hero-title{font-family:'Baloo 2','ZCOOL KuaiLe',cursive;font-size:clamp(2.4rem,7vw,5.6rem);font-weight:800;letter-spacing:.01em;color:#fff;text-shadow:0 6px 30px rgba(0,0,0,.8);line-height:1;margin:26px 0 0;text-transform:lowercase}
-.hero-title .hl{color:#FFE27A;text-shadow:0 4px 30px rgba(232,132,60,.6),0 2px 4px rgba(0,0,0,.9)}
+.hero-title .hl{color:#FFE27A;text-shadow:0 4px 30px rgba(244,118,0,.6),0 2px 4px rgba(0,0,0,.9)}
 .hero-title .rl{display:inline-block;transform:rotate(-3deg);color:#fff;margin:0 .1em}
 .hero-sub{max-width:560px;margin:14px auto 20px;color:#fff;font-size:1rem;text-shadow:0 3px 14px rgba(0,0,0,.9);font-weight:600}
 .hero-ctas{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.hero-ctas .btn{font-family:'ZCOOL KuaiLe','Baloo 2',sans-serif;background:linear-gradient(180deg,#FBB13C,#E8843C);color:#fff;font-weight:400;font-size:1.12rem;padding:8px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.28);box-shadow:0 5px 0 #b35a1c,0 12px 22px rgba(0,0,0,.35)}
-.hero-ctas .btn:hover{transform:translateY(-3px);box-shadow:0 9px 0 #b35a1c,0 18px 30px rgba(0,0,0,.42)}
-.hero-ctas .btn:active{transform:translateY(4px);box-shadow:0 2px 0 #b35a1c}
+.hero-ctas .btn{font-family:'ZCOOL KuaiLe','Baloo 2',sans-serif;background:linear-gradient(180deg,#FF8A00,#F47600);color:#fff;font-weight:400;font-size:1.12rem;padding:8px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.28);box-shadow:0 5px 0 #A84E00,0 12px 22px rgba(0,0,0,.35)}
+.hero-ctas .btn:hover{transform:translateY(-3px);box-shadow:0 9px 0 #A84E00,0 18px 30px rgba(0,0,0,.42)}
+.hero-ctas .btn:active{transform:translateY(4px);box-shadow:0 2px 0 #A84E00}
 .scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.7);font-size:.8rem;z-index:3;letter-spacing:.2em;animation:blink 1.6s ease-in-out infinite}
 @keyframes blink{0%,100%{opacity:.4}50%{opacity:1}}
 
@@ -134,7 +134,7 @@ img{max-width:100%;display:block}
 .gnum{position:absolute;top:12px;right:12px;font-weight:900;color:#fff;font-size:1.2rem;text-shadow:0 2px 8px rgba(0,0,0,.5)}
 .play-badge{position:absolute;inset:0;display:grid;place-items:center;background:rgba(24,21,16,.3);opacity:0;transition:.25s}
 .game-card:hover .play-badge{opacity:1}
-.play-badge span{width:60px;height:60px;border-radius:50%;background:var(--accent);display:grid;place-items:center;font-size:1.6rem;color:#fff;box-shadow:0 0 30px rgba(232,132,60,.8)}
+.play-badge span{width:60px;height:60px;border-radius:50%;background:var(--accent);display:grid;place-items:center;font-size:1.6rem;color:#fff;box-shadow:0 0 30px rgba(244,118,0,.8)}
 .game-info{padding:14px 16px}
 .game-info h4{font-size:1.02rem}
 .game-info p{color:var(--soft);font-size:.84rem;margin-top:4px}
@@ -161,7 +161,7 @@ img{max-width:100%;display:block}
 .quote-main .mark{color:var(--accent)}
 .q-card{border-left:5px solid var(--accent)}
 .n-num{font-size:1.1rem;font-weight:900;color:var(--accent)}
-.card-tag{display:inline-block;padding:3px 10px;border-radius:20px;background:rgba(232,132,60,.12);color:var(--accent);font-size:.72rem;font-weight:900;margin-bottom:8px}
+.card-tag{display:inline-block;padding:3px 10px;border-radius:20px;background:rgba(244,118,0,.12);color:var(--accent);font-size:.72rem;font-weight:900;margin-bottom:8px}
 .opt-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px}
 .opt-row button{padding:12px 18px;border-radius:16px;border:2px solid var(--line);background:var(--card);color:var(--txt);font-weight:800;cursor:pointer;transition:.2s}
 .opt-row button:hover{border-color:var(--accent);transform:scale(1.05)}
