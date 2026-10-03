@@ -1,98 +1,82 @@
 <!DOCTYPE html>
-<html lang="zh-Hant" data-palette="starlight" data-mode="day">
+<html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="INFUCOCO 療癒宇宙心靈金句，每日一句療癒短語，一鍵複製分享。">
-<title>心靈金句 - INFUCOCO 療癒宇宙</title>
-<link rel="stylesheet" href="./css/main.css?v=20261003a">
+<meta name="description" content="INFUCOCO 怪美心靈金句，每日一句療癒。">
+<title>心靈金句 - INFUCOCO V6</title>
+<link rel="stylesheet" href="./css/main.css">
 </head>
 <body data-page="quotes">
-<div class="heal-bg" aria-hidden="true"><div class="heal-blob a"></div><div class="heal-blob b"></div><div class="heal-blob c"></div></div>
-<div class="shooting-star" aria-hidden="true"></div>
 <canvas id="particles" aria-hidden="true"></canvas>
 <header class="site-header"><div class="header-inner">
-<div class="logo"><div class="logo-mark"><img src="./assets/webp/infucoco_crescent_bench_stars.webp" alt="INFUCOCO 療癒宇宙吉祥物"></div><div class="logo-txt grad-text">INFUCOCO<small data-i18n="brand">療癒宇宙</small></div></div>
+<div class="logo">INFU<em>COCO</em><small>沉浸療癒宇宙</small></div>
 <nav class="nav-links">
-<a href="index.html">首頁</a><a href="quotes.html" class="active">💬 心靈金句</a><a href="stories.html">📖 療癒寓言</a><a href="games.html">🎮 互動遊戲</a><a href="quiz.html">🔮 心理測驗</a><a href="gallery.html">🌿 infu空間</a><a href="stickers.html">🖼️ 貼圖下載</a><a href="shop.html">🛍️ 周邊商店</a><a href="member.html">👑 會員</a>
+<a href="index.html">首頁</a><a href="quotes.html" class="active">💬 金句</a><a href="stories.html">📖 寓言</a><a href="games.html">🎮 遊戲</a><a href="quiz.html">🔮 測驗</a><a href="gallery.html">🌿 infu空間</a><a href="stickers.html">🖼 貼圖</a><a href="shop.html">🛍 商店</a><a href="member.html">👑 會員</a>
 </nav>
-<div class="header-tools">
-<div class="quick-search"><span>🔍</span><input id="quick-search-input" type="text" placeholder="搜尋網站內容…"></div>
-<div class="dropdown"><button class="icon-btn dropdown-btn" title="進階工具">⚙️</button><div class="popover-dropdown">
-<div class="popover-dropdown__header"><h3 class="popover-dropdown__title">✨ 探索療癒宇宙</h3><a class="popover-dropdown__view-all" href="sitemap.html">網站地圖 →</a></div>
-<div class="popover-dropdown__grid">
-<a class="popover-dropdown__card" href="quotes.html"><span class="popover-dropdown__icon">💬</span><h4 class="popover-dropdown__card-title">心靈金句</h4><p class="popover-dropdown__card-desc">每日一句溫柔</p></a>
-<a class="popover-dropdown__card" href="stories.html"><span class="popover-dropdown__icon">📖</span><h4 class="popover-dropdown__card-title">療癒寓言</h4><p class="popover-dropdown__card-desc">睡前小故事</p></a>
-<a class="popover-dropdown__card" href="games.html"><span class="popover-dropdown__icon">🎮</span><h4 class="popover-dropdown__card-title">互動遊戲</h4><p class="popover-dropdown__card-desc">100 款療癒小遊戲</p></a>
-<a class="popover-dropdown__card" href="quiz.html"><span class="popover-dropdown__icon">🔮</span><h4 class="popover-dropdown__card-title">心理測驗</h4><p class="popover-dropdown__card-desc">今天需要什麼療癒</p></a>
-<a class="popover-dropdown__card" href="gallery.html"><span class="popover-dropdown__icon">🌿</span><h4 class="popover-dropdown__card-title">infu空間</h4><p class="popover-dropdown__card-desc">桌布下載</p></a>
-<a class="popover-dropdown__card" href="stickers.html"><span class="popover-dropdown__icon">🖼️</span><h4 class="popover-dropdown__card-title">貼圖下載</h4><p class="popover-dropdown__card-desc">療癒貼圖</p></a>
-<a class="popover-dropdown__card" href="shop.html"><span class="popover-dropdown__icon">🛍️</span><h4 class="popover-dropdown__card-title">周邊商店</h4><p class="popover-dropdown__card-desc">療癒周邊</p></a>
-<a class="popover-dropdown__card" href="member.html"><span class="popover-dropdown__icon">👑</span><h4 class="popover-dropdown__card-title">會員方案</h4><p class="popover-dropdown__card-desc">三種訂閱</p></a>
-<a class="popover-dropdown__card" href="about.html"><span class="popover-dropdown__icon">⭐</span><h4 class="popover-dropdown__card-title">關於</h4><p class="popover-dropdown__card-desc">療癒宇宙的故事</p></a>
-</div>
-<div class="popover-dropdown__footer">
-<div class="dd-title">🎨 療癒配色</div><div class="dd-row"><button data-theme="starlight">星光紫</button><button data-theme="peach">蜜桃粉</button><button data-theme="mint">薄荷綠</button><button data-theme="lavender">薰衣草</button></div>
-<div class="dd-row"><button data-random>🎲 隨機探索</button><button data-csv>⬇️ 匯出100遊戲CSV</button><button data-lang>🌐 繁中/EN</button></div>
-</div>
-</div></div>
-<button class="icon-btn" data-mode-btn title="日夜模式">🌙</button>
-</div></div></header>
-<nav id="breadcrumb" class="breadcrumb" aria-label="麵包屑"></nav>
-
-<section class="page-head" style="text-align:center;padding:40px 24px 8px">
-  <h1 style="font-size:clamp(2rem,4.5vw,3rem);font-weight:900" class="grad-text">💬 心靈金句</h1>
-  <p style="color:var(--soft-txt);margin-top:10px">每天一句，撿一句溫柔送給自己。</p>
-</section>
-<div class="container" style="text-align:center;padding-bottom:40px">
-  <div id="quote-of-day" class="reveal in" style="background:var(--grad);color:#fff;border-radius:26px;padding:40px 30px;max-width:680px;margin:20px auto;box-shadow:var(--shadow-lg)">
-    <div style="font-size:2.6rem">🌙</div>
-    <p id="qod-text" style="font-size:1.6rem;font-weight:900;line-height:1.6;margin:18px 0"></p>
-    <p id="qod-date" style="opacity:.85;font-size:.9rem"></p>
-    <div style="display:flex;gap:12px;justify-content:center;margin-top:22px;flex-wrap:wrap">
-      <button class="btn" onclick="copyQuote()">📋 複製分享</button>
-      <button class="btn btn-ghost" style="color:#fff;border-color:rgba(255,255,255,.6)" onclick="nextQuote()">🔄 換一句</button>
+<div class="nav-actions">
+  <div class="search-box"><input id="site-search" placeholder="搜尋網站內容…"><button class="icon-btn" id="search-go">🔎</button></div>
+  <div class="popover-wrap">
+    <button class="icon-btn" id="tools-btn" title="進階工具">⚙️</button>
+    <div class="popover-dropdown" id="tools-pop">
+      <div class="popover-dropdown__head"><span class="popover-dropdown__title">✦ 進階工具</span><button class="icon-btn" style="width:32px;height:32px" id="pop-close">✕</button></div>
+      <div class="popover-dropdown__grid">
+        <a class="popover-dropdown__link" href="#" data-nav="random"><span class="popover-dropdown__icon">🎲</span>隨機網站</a>
+        <a class="popover-dropdown__link" href="#" data-nav="jump"><span class="popover-dropdown__icon">⚡</span>快速跳轉</a>
+        <a class="popover-dropdown__link" href="#" data-nav="fav"><span class="popover-dropdown__icon">⭐</span>我的最愛</a>
+        <a class="popover-dropdown__link" href="#" data-nav="recent"><span class="popover-dropdown__icon">🕒</span>最近造訪</a>
+        <a class="popover-dropdown__link" href="#" data-nav="cat"><span class="popover-dropdown__icon">🗂</span>分類統計</a>
+        <a class="popover-dropdown__link" href="#" data-nav="csv"><span class="popover-dropdown__icon">📊</span>匯出CSV</a>
+        <a class="popover-dropdown__link" href="#" data-nav="theme"><span class="popover-dropdown__icon">🎨</span>切換配色</a>
+        <a class="popover-dropdown__link" href="#" data-nav="lang"><span class="popover-dropdown__icon">🌐</span>語言</a>
+        <a class="popover-dropdown__link" href="sitemap.html"><span class="popover-dropdown__icon">🗺</span>網站地圖</a>
+      </div>
+      <div class="popover-dropdown__foot">
+        <button class="popover-dropdown__chip" data-nav="random">🎲 隨機</button>
+        <button class="popover-dropdown__chip" data-nav="csv">📊 CSV</button>
+        <button class="popover-dropdown__chip" data-nav="theme">🎨 配色</button>
+      </div>
     </div>
   </div>
-  <div class="section-title"><div class="eyebrow">📚 金句日曆</div><h2 class="grad-text">翻一頁，撿一句溫柔</h2><p style="color:var(--soft-txt)">點一下就能複製，送給那個需要被抱抱的人。</p></div>
-  <div class="grid g3" id="quote-grid"></div>
 </div>
+</div></header>
+<div class="breadcrumb"><a href="index.html">首頁</a></div>
 
-<section class="container explore">
-  <div class="section-title"><div class="eyebrow">🧭 站內導覽</div><h2 class="grad-text">繼續探索 infu 宇宙</h2></div>
+<section class="skew-sec">
+<div class="container">
+  <div class="section-title"><span class="sec-no">💬 每日一句</span><h2>怪美<span class="rl">心靈金句</span></h2><p class="lead">點一下複製，把溫柔帶走。</p></div>
+  <div class="quote-main" id="q-main"><span class="mark">「</span><span id="q-today">今天，也要好好對待自己。</span><span class="mark">」</span></div>
+  <div class="center mt"><button class="btn o" onclick="nextQ()">🎲 換一句</button><button class="btn dark" onclick="copyQ()">📋 複製金句</button></div>
+  <div class="grid g3 mt" id="q-list"></div>
+</div>
+</section>
+
+<section class="skew-sec" style="padding-top:110px">
+<div class="container explore">
+  <div class="section-title"><span class="sec-no">✦ 繼續探索</span><h2>怪美宇宙<span class="rl">大暴走</span></h2><p class="lead">翻轉卡片，走進每一座怪美場景。</p></div>
   <div class="grid g4">
-    <a class="card tilt reveal" href="quotes.html"><img src="./assets/webp/infucoco_glowing_lantern_dark.webp" alt="每日一句心靈金句"><div class="card-body"><span class="card-tag">💬 每日一句</span><h4>心靈金句</h4><p>35 句療癒語錄</p></div></a>
-    <a class="card tilt reveal d2" href="stories.html"><img src="./assets/webp/infucoco_firefly_jar_night.webp" alt="睡前療癒寓言"><div class="card-body"><span class="card-tag">📖 睡前故事</span><h4>療癒寓言</h4><p>6 篇溫暖寓言</p></div></a>
-    <a class="card tilt reveal d3" href="games.html"><img src="./assets/webp/infucoco_glowing_star_fingertip.webp" alt="100款互動遊戲"><div class="card-body"><span class="card-tag">🎮 100 款</span><h4>互動遊戲</h4><p>反應・記憶・益智</p></div></a>
-    <a class="card tilt reveal d4" href="quiz.html"><img src="./assets/webp/infucoco_night_door_pet_look.webp" alt="心理測驗"><div class="card-body"><span class="card-tag">🔮 測驗</span><h4>心理測驗</h4><p>你今天需要什麼療癒</p></div></a>
-    <a class="card tilt reveal" href="gallery.html"><img src="./assets/webp/infucoco_cherry_picnic.webp" alt="四季桌布 infu空間"><div class="card-body"><span class="card-tag">🌿 四季</span><h4>infu空間</h4><p>16 張四季桌布</p></div></a>
-    <a class="card tilt reveal d2" href="stickers.html"><img src="./assets/webp/infucoco_afterwork_coffee_sidewalk.webp" alt="療癒貼圖下載"><div class="card-body"><span class="card-tag">🖼️ 免費</span><h4>貼圖下載</h4><p>療癒貼圖包</p></div></a>
-    <a class="card tilt reveal d3" href="shop.html"><img src="./assets/webp/infucoco_beach_dawn_waves.webp" alt="周邊商店"><div class="card-body"><span class="card-tag">🛍️ 周邊</span><h4>周邊商店</h4><p>杯墊・帆布袋</p></div></a>
-    <a class="card tilt reveal d4" href="member.html"><img src="./assets/webp/infucoco_crescent_bench_stars.webp" alt="會員方案"><div class="card-body"><span class="card-tag">👑 VIP</span><h4>會員方案</h4><p>解鎖更多療癒</p></div></a>
+    <a class="card-b reveal" href="quotes.html"><img src="./assets/webp/infucoco_glowing_lantern_dark.webp" alt="每日金句"><div class="ovl"><span class="tag">💬 每日一句</span><h3>心靈金句</h3></div></a>
+    <a class="card-b reveal d2" href="stories.html"><img src="./assets/webp/infucoco_firefly_jar_night.webp" alt="睡前寓言"><div class="ovl"><span class="tag">📖 睡前故事</span><h3>療癒寓言</h3></div></a>
+    <a class="card-b reveal d3" href="games.html"><img src="./assets/webp/infucoco_glowing_star_fingertip.webp" alt="100款互動遊戲"><div class="ovl"><span class="tag">🎮 100 款</span><h3>互動遊戲</h3></div></a>
+    <a class="card-b reveal d4" href="quiz.html"><img src="./assets/media/infucoco_blanket_pet_sit_night.webp" alt="心理測驗"><div class="ovl"><span class="tag">🔮 測驗</span><h3>心理測驗</h3></div></a>
   </div>
+</div>
 </section>
 
 <footer class="site-footer"><div class="footer-inner">
-<div class="footer-col"><h4 class="grad-text">INFUCOCO 療癒宇宙</h4><p style="font-size:.9rem;color:var(--soft-txt)">給疲憊的你，一個小小的療癒宇宙：寓言 × 金句 × 遊戲 × 測驗 × 貼圖 × 周邊。</p><p style="margin-top:10px;color:var(--soft-txt)">✉️ hello@infucoco.studio</p></div>
+<div class="footer-col"><h4 style="font-size:1.2rem">INFUCOCO 沉浸療癒宇宙</h4><p style="font-size:.9rem;color:rgba(255,255,255,.6)">給疲憊的你，一座沉浸式怪美宇宙：寓言 × 金句 × 遊戲 × 測驗 × 貼圖 × 周邊。</p><p style="margin-top:10px;color:rgba(255,255,255,.6)">✉️ hello@infucoco.studio</p></div>
 <div class="footer-col"><h4>療癒</h4><ul><li><a href="quotes.html">💬 心靈金句</a></li><li><a href="stories.html">📖 療癒寓言</a></li><li><a href="quiz.html">🔮 心理測驗</a></li></ul></div>
-<div class="footer-col"><h4>玩樂</h4><ul><li><a href="games.html">🎮 互動遊戲</a></li><li><a href="gallery.html">🌿 infu空間</a></li><li><a href="stickers.html">🖼️ 貼圖下載</a></li></ul></div>
-<div class="footer-col"><h4>網站地圖</h4><ul><li><a href="shop.html">🛍️ 周邊商店</a></li><li><a href="member.html">👑 會員</a></li><li><a href="about.html">關於</a></li><li><a href="sitemap.html">完整地圖</a></li></ul></div>
-</div><div class="footer-credit">規劃設計開發：張書欣　📞 <a href="tel:0968222201">0968-222201</a>　💬 <a href="https://line.me/ti/p/~331.today" target="_blank" rel="noopener">331.today</a></div><div class="footer-bottom">© 2026 INFUCOCO 療癒宇宙 版權所有 · v1.0.0</div></footer>
-<button id="scroll-top" class="scroll-top" title="回到頂部">↑</button>
+<div class="footer-col"><h4>玩樂</h4><ul><li><a href="games.html">🎮 互動遊戲</a></li><li><a href="gallery.html">🌿 infu空間</a></li><li><a href="stickers.html">🖼 貼圖下載</a></li></ul></div>
+<div class="footer-col"><h4>網站地圖</h4><ul><li><a href="shop.html">🛍 周邊商店</a></li><li><a href="member.html">👑 會員</a></li><li><a href="about.html">關於</a></li><li><a href="sitemap.html">完整地圖</a></li></ul></div>
+</div><div class="footer-credit">規劃設計開發：張書欣　📞 <a href="tel:0968222201">0968-222201</a>　💬 <a href="https://line.me/ti/p/~331.today" target="_blank" rel="noopener">331.today</a></div><div class="footer-bottom">© 2026 INFUCOCO 沉浸療癒宇宙 · v6.0.0</div></footer>
+<button id="scroll-top" title="回到頂部">↑</button>
 <div id="toast"></div>
-<script src="./js/config.js?v=20261003a"></script><script src="./js/quotes.js?v=20261003a"></script><script src="./js/service.js?v=20261003a"></script><script src="./js/utils.js?v=20261003a"></script><script>
-(function(){
-  const grid=document.getElementById("quote-grid");
-  grid.innerHTML=QUOTES.map((q,i)=>`<div class="card reveal" style="cursor:pointer" onclick="copyThis('${q.replace(/'/g,"\\'")}')"><div class="card-body"><div style="font-size:2rem;margin-bottom:8px">💬</div><p style="font-size:1.05rem;font-weight:700;line-height:1.7">${q}</p><p style="color:var(--soft-txt);font-size:.78rem;margin-top:10px">${String(i+1).padStart(2,"0")} · 點一下複製</p></div></div>`).join("");
-  function showDay(){
-    const d=new Date();const q=QUOTES[d.getDate()%QUOTES.length];
-    document.getElementById("qod-text").textContent=q;
-    document.getElementById("qod-date").textContent=d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日 · 今日金句";
-  }
-  showDay();
-  window.copyQuote=function(){const t=document.getElementById("qod-text").textContent;navigator.clipboard.writeText(t).then(()=>toast("📋 已複製：「"+t+"」"))};
-  window.copyThis=function(t){navigator.clipboard.writeText(t).then(()=>toast("📋 已複製：「"+t+"」"))};
-  window.nextQuote=function(){const d=new Date();document.getElementById("qod-text").textContent=QUOTES[Math.floor(Math.random()*QUOTES.length)]};
-  Svc.StatSvc.inc("visit_quotes");
+<script src="./js/config.js?v=20261003v6"></script><script src="./js/quotes.js?v=20261003v6"></script><script src="./js/service.js?v=20261003v6"></script><script src="./js/utils.js?v=20261003v6"></script><script src="./js/stories.js?v=20261003v6"></script><script src="./js/games/games-data.js?v=20261003v6"></script><script src="./js/games/games.js?v=20261003v6"></script>
+<script>
+(function(){const L=window.QUOTES||[];
+document.getElementById("q-list").innerHTML=L.slice(0,9).map((q,i)=>`<div class="card-b reveal d${(i%3)+2}" style="padding:22px;display:block"><span class="card-tag"># ${i+1}</span><p style="font-size:1.05rem;font-weight:700">${q}</p><button class="card-tag" style="margin-top:12px;cursor:pointer" onclick="navigator.clipboard&&navigator.clipboard.writeText('${q}')">📋 複製</button></div>`).join("");
+const el=document.getElementById("q-today");
+function pick(){el.textContent=L[Math.floor(Math.random()*L.length)];}
+window.nextQ=pick;window.copyQ=()=>{const s=el.textContent;navigator.clipboard&&navigator.clipboard.writeText(s);toast("已複製金句 ✨");};
 })();
 </script></body></html>

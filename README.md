@@ -1,43 +1,46 @@
-# INFUCOCO 療癒宇宙（Windows 本機版）
+# INFUCOCO V6 — 沉浸式場景 · 翻轉雜誌
 
-> 版本：**v1.0.0** · 路徑：`D:\www\infucoco_healing`
-> 說明：此為「療癒宇宙」網站的 **Windows 本機完整版**，解決先前雲端單檔快照連結破圖的問題——所有 CSS/JS/圖片皆在本機，直接雙擊 `index.html` 即可完整開啟。
+**第 6 版「更特殊版型」**：擺脫 V5 霓虹暗黑，改走「**沉浸式場景 × 翻轉雜誌**」——全屏場景照片當主視覺、奶油紙感底、不對稱 Bento 網格、3D 翻轉卡、視差滾動、斜切分區、巨型錯位標題。素材改用 `D:\github.com_10returncom-boop_infucoco_v4\images\infucoco_media` 的照片（已轉 webp）。
 
-## 這是什麼
-以固定 IP 角色 **infucoco（sk333 v1.2）** 為主題、專為網路流量設計的療癒內容平台。金句 × 寓言 × 100 款遊戲 × 心理測驗 × 桌布貼圖 × 周邊電商 × 會員。
+- **版本**：v6.0.0
+- **位置**：`D:\www\infucoco_v6`
+- **IP 角色**：infucoco（sk333 v1.2）——黑髮雙丸子頭＋紅色髮圈、齊瀏海；圓黑眼、粉腮紅；紅白橫紋短袖＋藍色吊帶褲；可愛手繪插畫。畫面零文字。
 
-## 內容
-- 💬 心靈金句 `quotes.html`：35 句，每日一句、一鍵複製
-- 📖 療癒寓言 `stories.html` + `fable-*.html`：6 篇睡前短篇
-- 🎮 100 款互動遊戲 `games.html` + `play.html`：10 玩法、難度、每日挑戰、彩帶
-- 🔮 心理測驗 `quiz.html`：今天需要哪一種療癒
-- 🌿🖼️ 四季畫廊 / 貼圖：桌布貼圖下載
-- 🛍️👑 周邊商店 / 會員方案：變現管道
+## 特殊版型特點（與 V5 完全不同）
+- **全屏沉浸式 Hero**：場景照片做全屏背景＋漸層遮罩＋巨型三行錯位標題（INFU / COCO ✦ / 怪美宇宙）＋印章戳章
+- **Bento 不對稱網格**：`grid-column/row span` 混排（big / w2 / 1×1），讓照片卡錯落有致
+- **3D 翻轉卡**：寓言/貼圖 hover 翻面（正面照片、背面文字＋讀全文）
+- **斜切分區 + 巨型章節編號**：`clip-path` 斜切帶，`01/場景 02/寓言` 大型編號
+- **紙感配色**：奶油底 `#FBF6EC`＋暖橘 `#E8843C`＋墨黑字，照片成為主角（對比 V5 深紫霓虹）
 
-## 商業模式
-💬 金句免費分享(攬流量) → 👑 會員訂閱(NT$99/299/699) → 🛍️ 周邊電商 → 🐾 zootecture 寵物聯名分潤
+## 頁面（18）
+index（沉浸 Hero＋Bento 場景＋翻轉寓言＋熱門遊戲）｜quotes（怪美金句 35）｜stories（寓言 6＋翻轉）｜fable-*（6 篇詳情）｜games（100 款＋分類）｜play（播放器，引擎已修）｜quiz（心理測驗）｜gallery（infu空間 16 桌布 Bento）｜stickers（貼圖 12）｜shop（周邊 8）｜member（會員 3）｜about（品牌＋開發者 credit）｜sitemap（地圖）
 
-## 素材
-全部使用本機 `D:\_SK333` 既有 infucoco 插畫（月亮、螢火蟲、四季、寵物、咖啡、書等療癒主題），複製至 `assets/webp/`（54 張 webp）。角色定版不變（雙丸子頭＋紅髮圈、紅白橫紋短袖＋藍吊帶、零文字）。
+## 功能
+- 全站站內導覽 explore（Bento 交叉圖卡，頁頁相連）
+- Popover Dropdown 進階工具（⚙️：隨機/跳轉/最愛/最近/分類/CSV/配色/語言/地圖）
+- 100 款互動遊戲（10 引擎，play 以 `GameEngines[g.ty](g)` 正確啟動）
+- 粒子背景、回到頂部、toast、動態 reveal
 
-## 技術架構
-```
-D:\www\infucoco_healing\
-├── index/quotes/stories/fable-*6/games/play/quiz
-├── gallery/stickers/shop/member/about/sitemap.html   (共 18)
-├── css/main.css        # 療癒系 4配色×日夜=8主題
-├── js/config.js        # 主題/I18N
-├── js/quotes.js        # 35金句 + 心理測驗
-├── js/stories.js       # 6 寓言
-├── js/service.js       # 收藏/統計/最佳/每日/CSV
-├── js/utils.js         # 粒子/流星/彩帶/麵包屑/工具
-├── js/games/games-data.js  # 100 款(含難度 lv)
-├── js/games/games.js       # 10 引擎
-├── assets/webp/*.webp      # 54 張本機素材
-└── _gen_pages.py / _gen_games.py  # 生成腳本
-```
+## 素材提示詞（infucoco_media 照片轉 webp，4 組 SEO 關鍵字）
+`assets/media/`（24 張，原 `image.png (67)~(90)`，已縮 1200px／webp q84）：
+- `infucoco_door_glove_pet_welcome.webp`：門口戴手套迎貓/兔/狗，窗外圓月（首頁 Hero）
+- `infucoco_blanket_pet_sit_night.webp`：夜晚裹毯坐地，貓狗兔相伴（測驗卡）
+- `infucoco_window_dog_cuddle_moon.webp`：夜窗月＋小狗依偎
+- `infucoco_hide_seek_cat_sofa.webp`：捉迷藏，貓從抱枕探頭
+- `infucoco_entrance_squat_pet_mat.webp`：玄關蹲地墊
+- `infucoco_folding_clothes_pet_moon.webp`：折衣＋窗外月
+- `infucoco_kitchen_cat_bowl_morning.webp`：廚房早晨
+- `infucoco_home_reading_pet_lamp`／`living_cat_sofa_warm`／`garden_rabbit_flower_sun`／`balcony_plant_cat_day`／`stair_cat_follow_sunlight`／`tea_table_pet_chat_warm`／`pillow_cat_cuddle_sleep`／`desk_sketch_pet_lamp`／`window_rain_pet_inside`／`bookshelf_cat_read_light`／`floor_puzzle_pet_play`／`kitchen_dinner_pet_wait`／`sofa_blanket_cat_snuggle`／`night_terrace_star_pet`／`mirror_dress_pet_watch`／`corridor_cat_welcome_home`
 
-## 開啟方式
-直接雙擊 `index.html`（或拖入瀏覽器）即可。支援 8 主題切換、快捷鍵（/ 搜尋、R 隨機、Esc）、側欄、麵包屑、防複製、RWD。
+`assets/webp/`：沿用既有 68 張 IP 插畫（金句/寓言/遊戲/貼圖/桌布用）。
 
-© 2026 INFUCOCO 療癒宇宙
+## Hero 影片（LV 高級感 × infucoco）
+- `assets/video/hero.mp4`（8 秒，16:9，seedance_2.0_fast）
+- 圖生影片：以 `infucoco_door_glove_pet_welcome.webp`（角色全身照）為參考，保持 IP 特徵（雙丸子頭＋紅髮圈、齊瀏海、紅白橫紋＋藍吊帶褲）
+- 提示詞：參考 Louis Vuitton 精品廣告，暗色高質感背景＋金色絲綢光影＋柔光暈染，角色在金光下，鏡頭極緩慢向前推，微微轉頭、眼睫低垂、髮絲輕拂；純視覺氛圍、無字幕
+- 首頁 Hero 以 `<video autoplay muted loop playsinline>` 全屏背景播放（照片作 poster／fallback）
+
+## 生成腳本
+- `_gen_pages.py`：統一 HEAD/nav/footer/popover/explore/cache-busting（`?v=20261003v6`）
+- `_conv.py`：把 infucoco_media PNG 轉 webp 的批次腳本
