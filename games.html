@@ -54,10 +54,10 @@
 <div class="container explore">
   <div class="section-title"><span class="sec-no">✦ 繼續探索</span><h2>怪美宇宙<span class="rl">大暴走</span></h2><p class="lead">翻轉卡片，走進每一座怪美場景。</p></div>
   <div class="grid g4">
-    <a class="card-b reveal" href="quotes.html"><img src="./assets/webp/infucoco_glowing_lantern_dark.webp" alt="每日金句"><div class="ovl"><span class="tag">💬 每日一句</span><h3>心靈金句</h3></div></a>
-    <a class="card-b reveal d2" href="stories.html"><img src="./assets/webp/infucoco_firefly_jar_night.webp" alt="睡前寓言"><div class="ovl"><span class="tag">📖 睡前故事</span><h3>療癒寓言</h3></div></a>
-    <a class="card-b reveal d3" href="games.html"><img src="./assets/webp/infucoco_glowing_star_fingertip.webp" alt="100款互動遊戲"><div class="ovl"><span class="tag">🎮 100 款</span><h3>互動遊戲</h3></div></a>
-    <a class="card-b reveal d4" href="quiz.html"><img src="./assets/media/infucoco_blanket_pet_sit_night.webp" alt="心理測驗"><div class="ovl"><span class="tag">🔮 測驗</span><h3>心理測驗</h3></div></a>
+    <a class="card-b reveal" href="quotes.html"><img src="./assets/webp/infucoco_night_redapple_house_stand.webp" alt="每日金句"><div class="ovl"><span class="tag">💬 每日一句</span><h3>心靈金句</h3></div></a>
+    <a class="card-b reveal d2" href="stories.html"><img src="./assets/webp/infucoco_stage_spotlight_crowd_dusk.webp" alt="睡前寓言"><div class="ovl"><span class="tag">📖 睡前故事</span><h3>療癒寓言</h3></div></a>
+    <a class="card-b reveal d3" href="games.html"><img src="./assets/webp/infucoco_hourglass_sprout_crowd_sit.webp" alt="100款互動遊戲"><div class="ovl"><span class="tag">🎮 100 款</span><h3>互動遊戲</h3></div></a>
+    <a class="card-b reveal d4" href="quiz.html"><img src="./assets/webp/infucoco_rooftop_city_cloud_moon.webp" alt="心理測驗"><div class="ovl"><span class="tag">🔮 測驗</span><h3>心理測驗</h3></div></a>
   </div>
 </div>
 </section>
@@ -74,11 +74,12 @@
 <script>
 (function(){const G=window.GAMES||[];const MAP=window.GAME_MAP||{};
 const cats=[["all","全部"],["react","反應"],["puzzle","益智"],["fable","寓言"],["pet","寵物"],["arcade","玩樂"],["creative","創作"]];
-const TH=["infucoco_blanket_pet_sit_night","infucoco_window_dog_cuddle_moon","infucoco_hide_seek_cat_sofa","infucoco_entrance_squat_pet_mat","infucoco_folding_clothes_pet_moon","infucoco_kitchen_cat_bowl_morning","infucoco_home_reading_pet_lamp","infucoco_door_glove_pet_welcome"];
+const TH=["infucoco_rooftop_city_cloud_moon","infucoco_window_dog_cuddle_moon","infucoco_park_bench_mailbox_toy","infucoco_entrance_squat_pet_mat","infucoco_folding_clothes_pet_moon","infucoco_kitchen_cat_bowl_morning","infucoco_home_reading_pet_lamp","infucoco_door_glove_pet_welcome"];
+const THD=TH.map(n=>n==="infucoco_rooftop_city_cloud_moon"||n==="infucoco_park_bench_mailbox_toy"?"webp":"media");
 const FIL=document.getElementById("filters");const GRID=document.getElementById("game-grid");
 FIL.innerHTML=cats.map(c=>`<button class="filter-chip ${c[0]==='all'?'on':''}" data-c="${c[0]}">${c[1]}</button>`).join("");
 function render(c){let list=G;if(c!=="all")list=G.filter(g=>g.c===c);
-GRID.innerHTML=list.slice(0,60).map((g,i)=>`<a class="game-card reveal d${(i%4)+1}" href="play.html?g=${g.id}"><div class="game-thumb" style="background-image:url('./assets/media/${TH[(g.id.charCodeAt(1)%8)]}.webp')"><span class="gcat">${g.c}</span><span class="gnum">${g.id.toUpperCase()}</span><div class="play-badge"><span>▶</span></div></div><div class="game-info"><h4>${g.i} ${g.t}</h4><p>${g.d}</p></div></a>`).join("");
+GRID.innerHTML=list.slice(0,60).map((g,i)=>`<a class="game-card reveal d${(i%4)+1}" href="play.html?g=${g.id}"><div class="game-thumb" style="background-image:url('./assets/${THD[(g.id.charCodeAt(1)%8)]}/${TH[(g.id.charCodeAt(1)%8)]}.webp')"><span class="gcat">${g.c}</span><span class="gnum">${g.id.toUpperCase()}</span><div class="play-badge"><span>▶</span></div></div><div class="game-info"><h4>${g.i} ${g.t}</h4><p>${g.d}</p></div></a>`).join("");
 }
 FIL.addEventListener("click",e=>{const b=e.target.closest(".filter-chip");if(!b)return;FIL.querySelectorAll(".filter-chip").forEach(x=>x.classList.remove("on"));b.classList.add("on");render(b.dataset.c);});
 render("all");

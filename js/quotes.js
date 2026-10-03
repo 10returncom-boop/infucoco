@@ -47,17 +47,17 @@ window.QUIZ = {
       {t:"月光下的小草地", img:"infucoco_daisy_spring_walk"},
       {t:"一間暖暖的咖啡館", img:"infucoco_afterwork_coffee_sidewalk"},
       {t:"一本打開的書裡", img:"infucoco_book_flying_sky"},
-      {t:"軟軟的雲朵上", img:"infucoco_book_staircase"}
+      {t:"軟軟的雲朵上", img:"infucoco_cloud_balance_scale_books"}
     ]},
     { q:"心裡悄悄期待什麼？", o:[
-      {t:"被好好的擁抱", img:"infucoco_daisy_spring_walk3"},
+      {t:"被好好的擁抱", img:"infucoco_daisy_rainbow_halo_meadow"},
       {t:"一個人安靜一下", img:"infucoco_book_flying_sky"},
-      {t:"來場小小的冒險", img:"infucoco_beach_dawn_waves"},
+      {t:"來場小小的冒險", img:"infucoco_dandelion_sky_rocket_spin"},
       {t:"重新開始", img:"infucoco_first_snow_window"}
     ]}
   ],
   results: [
-    { tag:"🌙 星光療癒", title:"你需要一片星空", img:"infucoco_crescent_moon_stars", text:"你的心需要浪漫與靜謐。去看一場日落、數一晚星星，或寫一封給未來的信，讓自己沉進溫柔裡。" },
+    { tag:"🌙 星光療癒", title:"你需要一片星空", img:"infucoco_night_spoon_fly_village", text:"你的心需要浪漫與靜謐。去看一場日落、數一晚星星，或寫一封給未來的信，讓自己沉進溫柔裡。" },
     { tag:"☕ 暖茶療癒", title:"你需要一個暖暖的擁抱", img:"infucoco_afterwork_coffee_sidewalk", text:"你渴望溫暖和被接住。泡一杯熱飲、裹條毯子，或賴在喜歡的人身邊，讓熱氣把疲憊沖淡。" },
     { tag:"📖 書本療癒", title:"你需要一段獨處的時光", img:"infucoco_book_flying_sky", text:"你的心需要安靜與對話。翻一本書、寫一段字，或只是發呆，都是給自己最好的禮物。" },
     { tag:"🌸 四季療癒", title:"你需要一個新的開始", img:"infucoco_first_snow_window", text:"你正準備蛻變。去散個步、種一盆花，或整理房間，讓儀式感幫你迎接全新的自己。" }
