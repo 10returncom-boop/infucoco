@@ -24,8 +24,8 @@ img{max-width:100%;display:block}
 .container{max-width:1240px;margin:0 auto;padding:0 24px;position:relative;z-index:2}
 
 /* ===== 導覽（極簡紙感，浮在照片上）===== */
-.site-header{position:sticky;top:0;z-index:60;background:linear-gradient(to top,#D95A00 0%,#E36B00 60%,#FF8A30 100%);border-bottom:none;box-shadow:0 2px 18px rgba(0,0,0,.2)}
-.site-header::after{content:"";position:absolute;left:0;right:0;top:100%;height:20px;background:linear-gradient(180deg,rgba(227,107,0,.85),rgba(227,107,0,0));pointer-events:none;z-index:59}
+.site-header{position:sticky;top:0;z-index:60;background:linear-gradient(100deg,#E36B00 0%,#B85B3A 38%,#8A52C0 72%,#5F3FA8 100%);border-bottom:none;box-shadow:0 2px 18px rgba(0,0,0,.22)}
+.site-header::after{content:"";position:absolute;left:0;right:0;top:100%;height:20px;background:linear-gradient(180deg,rgba(95,63,168,.75),rgba(95,63,168,0));pointer-events:none;z-index:59}
 .header-inner{max-width:1240px;margin:0 auto;padding:13px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .logo{font-family:'Microsoft JhengHei','Heiti TC','PingFang TC',system-ui,-apple-system,sans-serif;font-weight:900;font-size:1.75rem;letter-spacing:.02em;color:#fff;line-height:1}
 .logo em{font-style:normal;color:#000}
