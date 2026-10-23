@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head><link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/favicon.png">
+<meta property="og:title" content="infucoco · INFUCOCO 沉浸療癒宇宙">
+<meta property="og:og:description" content="與 infucoco 一起撿金句、玩怪遊戲、讀寓言、逛怪美宇宙。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://infucoco.com/">
+<meta property="og:image" content="https://infucoco.com/assets/webp/infucoco_rooftop_city_cloud_moon.webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="INFUCOCO 互動遊戲播放器，100 款任玩。">
+<title>遊戲播放器 - INFUCOCO V7</title>
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body data-page="games">
+<canvas id="particles" aria-hidden="true"></canvas>
+<header class="site-header"><div class="header-inner">
+<div class="logo">infucoco</div>
+<nav class="nav-links">
+<a href="index.html">首頁</a><a href="quotes.html">金句</a><a href="stories.html">寓言</a><a href="games.html" class="active">🎮 遊戲</a><a href="quiz.html">測驗</a><a href="gallery.html">infu空間</a><a href="stickers.html">貼圖</a><a href="shop.html">商店</a><a href="member.html">會員</a>
+</nav>
+<div class="nav-actions">
+  <div class="search-box"><input id="site-search" placeholder="搜尋"><button class="icon-btn" id="search-go">🔎</button></div>
+  <div class="popover-wrap">
+    <button class="icon-btn" id="tools-btn" title="進階工具">⚙️</button>
+    <div class="popover-dropdown" id="tools-pop">
+      <div class="popover-dropdown__head"><span class="popover-dropdown__title">✦ 進階工具</span><button class="icon-btn" style="width:32px;height:32px" id="pop-close">✕</button></div>
+      <div class="popover-dropdown__grid">
+        <a class="popover-dropdown__link" href="games.html#" data-nav="random"><span class="popover-dropdown__icon">🎲</span>隨機網站</a>
+        <a class="popover-dropdown__link" href="games.html#" data-nav="jump"><span class="popover-dropdown__icon">⚡</span>快速跳轉</a>
+        <a class="popover-dropdown__link" href="games.html#" data-nav="fav"><span class="popover-dropdown__icon">⭐</span>我的最愛</a>
+        <a class="popover-dropdown__link" href="games.html#" data-nav="recent"><span class="popover-dropdown__icon">🕒</span>最近造訪</a>
+        <a class="popover-dropdown__link" href="games.html#" data-nav="cat"><span class="popover-dropdown__icon">🗂</span>分類統計</a>
+        <a class="popover-dropdown__link" href="games.html#" data-nav="csv"><span class="popover-dropdown__icon">📊</span>匯出CSV</a>
+        <a class="popover-dropdown__link" href="games.html#" data-nav="theme"><span class="popover-dropdown__icon">🎨</span>切換配色</a>
+        <a class="popover-dropdown__link" href="games.html#" data-nav="lang"><span class="popover-dropdown__icon">🌐</span>語言</a>
+        <a class="popover-dropdown__link" href="sitemap.html"><span class="popover-dropdown__icon">🗺</span>網站地圖</a>
+      </div>
+      <div class="popover-dropdown__foot">
+        <button class="popover-dropdown__chip" data-nav="random">🎲 隨機</button>
+        <button class="popover-dropdown__chip" data-nav="csv">📊 CSV</button>
+        <button class="popover-dropdown__chip" data-nav="theme">🎨 配色</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div></header>
+<div class="breadcrumb"><a href="index.html">首頁</a> / <a href="games.html">遊戲庫</a></div>
+
+<section class="skew-sec">
+<div class="container">
+  <div class="section-title"><span class="sec-no">🎮 播放器</span><h2>開玩<span class="rl">怪遊戲</span></h2></div>
+  <div class="game-stage" id="game-stage">
+    <div class="g-toolbar"><span class="g-info" id="g-title">載入中…</span><span class="score">🏆 最佳：<span id="g-best">—</span></span></div>
+    <div id="g-arena"><div class="game-start"><h3>✨ 準備好了嗎？</h3><p id="g-desc">選一款遊戲，開始沉浸。</p><button class="btn o" onclick="startGame()">▶ 開始遊戲</button></div></div>
+  </div>
+</div>
+</section>
+
+<footer class="site-footer"><div class="footer-inner">
+<div class="footer-col"><h4 style="font-size:1.2rem">INFUCOCO 沉浸療癒宇宙</h4><p style="font-size:.9rem;color:rgba(255,255,255,.6)">給疲憊的你，一座沉浸式怪美宇宙：寓言 × 金句 × 遊戲 × 測驗 × 貼圖 × 周邊。</p><p style="margin-top:10px;color:rgba(255,255,255,.6)">✉️ hello@infucoco.studio</p></div>
+<div class="footer-col"><h4>療癒</h4><ul><li><a href="quotes.html">💬 心靈金句</a></li><li><a href="stories.html">📖 療癒寓言</a></li><li><a href="quiz.html">🔮 心理測驗</a></li></ul></div>
+<div class="footer-col"><h4>玩樂</h4><ul><li><a href="games.html">🎮 互動遊戲</a></li><li><a href="gallery.html">infu空間</a></li><li><a href="stickers.html">🖼 貼圖下載</a></li></ul></div>
+<div class="footer-col"><h4>網站地圖</h4><ul><li><a href="shop.html">🛍 周邊商店</a></li><li><a href="member.html">會員</a></li><li><a href="about.html">關於</a></li><li><a href="sitemap.html">完整地圖</a></li></ul></div>
+</div><div class="footer-credit">規劃設計開發：張書欣　📞 <a href="tel:0968222201">0968-222201</a>　💬 <a href="https://line.me/ti/p/~331.today" target="_blank" rel="noopener">331.today</a></div><div class="footer-bottom">© 2026 INFUCOCO 沉浸療癒宇宙 · v7.0.0</div></footer>
+<button id="scroll-top" title="回到頂部">↑</button>
+<div id="toast"></div>
+<script src="js/config.js@v=20261003v6"></script><script src="js/games/games.js@v=20261003v6"></script><script src="js/games/games-fx.js@v=20261022v1"></script>
+<script>
+/* 內嵌遊戲資料（10 款精選） */
+window.GAMES=[
+{id:"g01",lv:2,t:"接住彩虹氣球",c:"react",ty:"catch",i:"🎈",d:"氣球從下方升空，快點抓住！彩虹氣球高分、炸彈會扣分。",p:2},
+{id:"g04",lv:2,t:"捕捉發光的螢火蟲",c:"react",ty:"catch",i:"✨",d:"夜色中螢火蟲一閃就消失，在牠熄滅前點到牠！",p:2},
+{id:"g13",lv:2,t:"月亮鞦韆抓星",c:"react",ty:"catch",i:"🌙",d:"游標掃過白色中央線時按下，正中星星得分。",p:2},
+{id:"g53",lv:1,t:"幫小狗洗澡",c:"pet",ty:"quiz",i:"🛁",d:"滿天泡泡快狂戳，把小狗洗得香香的。",p:2},
+{id:"g58",lv:2,t:"水豚泡澡",c:"pet",ty:"quiz",i:"🦫",d:"溫泉泡泡冉冉上升，輕輕戳破，一起放鬆一下。",p:2},
+{id:"g69",lv:3,t:"打地鼠·小怪獸",c:"arcade",ty:"quiz",i:"🦔",d:"小怪獸從洞裡冒出來，快快用錘子揍下去！",p:2},
+{id:"g73",lv:2,t:"轉盤·幸運星",c:"arcade",ty:"quiz",i:"🎡",d:"轉動幸運輪盤，看看你落到幾分的大獎。",p:2},
+{id:"g76",lv:2,t:"釣魚·星之河",c:"arcade",ty:"quiz",i:"🎣",d:"魚兒咬鉤的瞬間立刻拉竿，釣起星星河的魚。",p:2},
+{id:"g85",lv:2,t:"畫一道彩虹",c:"creative",ty:"quiz",i:"🌈",d:"在畫布上拖曳手指，親手畫出一道美麗彩虹。",p:2},
+{id:"g100",lv:2,t:"設計一個小島",c:"creative",ty:"quiz",i:"🏝️",d:"在沙灘上隨意點放棕櫚、山巒與貝殼，打造夢想小島。",p:2}
+];
+window.GAME_MAP={};GAMES.forEach(function(g){GAME_MAP[g.id]=g});
+(function(){
+  const G=window.GAMES||[];const MAP=window.GAME_MAP||{};
+  const url=new URLSearchParams(location.search);const id=url.get("g")||"g01";
+  const g=G.find(x=>x.id===id)||G[0];
+  document.getElementById("g-title").textContent=g.i+" "+g.t;
+  document.getElementById("g-desc").textContent=g.d;
+  const best=localStorage.getItem("infu_best_"+g.id);
+  document.getElementById("g-best").textContent=best?best+" 分":"尚未挑戰";
+
+  window.startGame=function(){
+    const A=document.getElementById("g-arena");
+    const E=window.GameEngines;
+    if(!E)return;
+    const fxKey='fx_'+g.id; const key=E[fxKey]?fxKey:g.ty;
+    if(typeof E[key]!=="function"){A.innerHTML="<div class='game-start'><h3>😅 引擎尚未就緒</h3><p>請重新整理。</p></div>";return;}
+    E[key](g).start(A,
+      function(s){ /* 即時分數由引擎工具列呈現 */ },
+      function(s){
+        const prev=+(localStorage.getItem("infu_best_"+g.id)||0);
+        if(s>prev){localStorage.setItem("infu_best_"+g.id,s);document.getElementById("g-best").textContent=s+" 分 🎉";}
+        else{document.getElementById("g-best").textContent=prev+" 分";}
+      });
+  };
+})();
+</script><script>
+(function(){
+  // reveal on scroll
+  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add("in");io.unobserve(x.target)}})},{threshold:.12});
+  document.querySelectorAll(".reveal").forEach(function(el){io.observe(el)});
+  // scroll top
+  var b=document.getElementById("scroll-top");
+  if(b){window.addEventListener("scroll",function(){b.classList.toggle("show",window.scrollY>600)});b.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"})})}
+})();
+</script>
+</body></html>

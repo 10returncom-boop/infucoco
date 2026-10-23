@@ -1,0 +1,390 @@
+/* ============================================================
+   INFUCOCO 療癒宇宙 — 遊戲引擎 V7（10 玩法 · 友善修飾版）
+   每個引擎回傳 { start(stage,onScore,onEnd) }
+   修掉：再玩一次計時器殘留、match 配對索引錯誤、onScore/onEnd 未定義
+   ============================================================ */
+window.GameEngines=(function(){
+  const $=(stage,html)=>{stage.innerHTML=html};
+  const EMO=["🌙","⭐","🌸","☁️","🦋","🌈","🍬","✨","🐾","🎈"];
+
+  /* 每個遊戲專屬計時器：可單獨停止 / 一次清光（修掉 replay 殘留）*/
+  function makeTimer(){
+    const ids=new Set();
+    return {
+      loop(fn,ms){const id=setInterval(fn,ms);ids.add(id);return id},
+      later(fn,ms){const id=setTimeout(fn,ms);ids.add(id);return id},
+      stop(id){clearInterval(id);clearTimeout(id);ids.delete(id)},
+      clear(){ids.forEach(id=>{clearInterval(id);clearTimeout(id)});ids.clear()}
+    };
+  }
+
+  /* 主題符號：以該遊戲的 emoji 為主角 */
+  function themeSet(g){
+    const base=[g.i||"⭐","🌙","🌸","✨","🌈","🍬","⭐","☁️","🦋","🎈"];
+    return base.filter((v,i)=>base.indexOf(v)===i);
+  }
+
+  /* 共用結束畫面 */
+  function endHTML(score,g,msg){
+    if(window.confetti){try{confetti({count:80})}catch(e){}}
+    return `<div class="game-start"><div style="font-size:3rem">🎉</div><h3>${msg}</h3>
+      <p>你得了 <b style="color:var(--accent)">${score}</b> 分<br>休息一下，再挑戰一次吧！</p>
+      <button class="btn o" onclick="var h=this.closest('.game-stage');h&&h.__replay&&h.__replay()">🔄 再玩一次</button></div>`;
+  }
+  function hostOf(stage){return stage.closest(".game-stage")||stage}
+
+  /* ---------- catch 接物 ---------- */
+  function catchGame(g){
+    return {start(stage,onScore,onEnd){
+      onScore=onScore||function(){};onEnd=onEnd||function(){};
+      const t=makeTimer();const set=themeSet(g);
+      let score=0,left=0;
+      function run(){
+        t.clear();score=0;left=30;
+        $(stage,`<div class="g-toolbar"><span class="g-info">🎯 ${g.t}</span>
+          <span class="score">🏆 <span class="sc">0</span>　⏳ <span class="tl">30</span></span></div>
+          <div class="g-arena" style="position:relative;width:100%;max-width:520px;height:380px;border-radius:20px;overflow:hidden;background:var(--bg2);border:1px solid var(--line)"></div>`);
+        const box=stage.querySelector(".g-arena");
+        const spawn=()=>{
+          const el=document.createElement("div");
+          el.style.cssText="position:absolute;font-size:1.9rem;cursor:pointer;user-select:none;will-change:top";
+          el.textContent=set[Math.floor(Math.random()*set.length)];
+          el.style.left=(4+Math.random()*88)+"%";el.style.top="-8%";
+          box.appendChild(el);
+          let y=-8,vy=1.3+Math.random()*1.5;
+          const fall=t.loop(()=>{y+=vy;el.style.top=y+"%";if(y>110){t.stop(fall);el.remove();}},40);
+          el.onclick=()=>{
+            score++;onScore(score);
+            const sc=stage.querySelector(".sc");if(sc)sc.textContent=score;
+            el.style.transform="scale(1.5)";t.later(()=>el.remove(),120);
+          };
+        };
+        t.loop(spawn,620);
+        t.loop(()=>{left--;const tl=stage.querySelector(".tl");if(tl)tl.textContent=Math.max(0,left);
+          if(left<=0){t.clear();onEnd(score);$(stage,endHTML(score,g,"🎉 時間到！"));}},1000);
+        hostOf(stage).__replay=run;
+      }
+      run();
+    }};
+  }
+
+  /* ---------- whack 打地鼠 ---------- */
+  function whackGame(g){
+    return {start(stage,onScore,onEnd){
+      onScore=onScore||function(){};onEnd=onEnd||function(){};
+      const t=makeTimer();let score=0,ticks=0;const target=g.i||"🐭";
+      function run(){
+        t.clear();score=0;ticks=0;
+        $(stage,`<div class="g-toolbar"><span class="g-info">🔨 ${g.t}</span>
+          <span class="score">🏆 <span class="sc">0</span>　⏳ <span class="tl">20</span></span></div>
+          <div class="g-holes" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:380px;width:100%;margin:0 auto"></div>`);
+        const holes=stage.querySelector(".g-holes");const cells=[];
+        for(let i=0;i<9;i++){const c=document.createElement("div");
+          c.style.cssText="aspect-ratio:1;border-radius:18px;background:var(--chip);display:grid;place-items:center;font-size:1.8rem;cursor:pointer;transition:.15s";
+          holes.appendChild(c);cells.push(c);}
+        let cur=-1;
+        t.loop(()=>{
+          ticks++;
+          if(cur>=0&&cells[cur]){cells[cur].textContent="";cells[cur].style.background="var(--chip)";}
+          if(ticks>40){t.clear();onEnd(score);$(stage,endHTML(score,g,"⚡ 手速超人！"));return;}
+          cur=Math.floor(Math.random()*9);
+          cells[cur].textContent=target;cells[cur].style.background="var(--grad)";
+          const tl=stage.querySelector(".tl");if(tl)tl.textContent=Math.max(0,20-Math.floor(ticks/2));
+        },500);
+        holes.onclick=e=>{const c=e.target.closest("div");if(!c||c.textContent!==target)return;
+          score++;onScore(score);const sc=stage.querySelector(".sc");if(sc)sc.textContent=score;
+          c.textContent="";c.style.background="var(--chip)";cur=-1;
+          c.style.transform="scale(.88)";t.later(()=>c.style.transform="",120);};
+        hostOf(stage).__replay=run;
+      }
+      run();
+    }};
+  }
+
+  /* ---------- memory 配對 ---------- */
+  function memoryGame(g){
+    return {start(stage,onScore,onEnd){
+      onScore=onScore||function(){};onEnd=onEnd||function(){};
+      const t=makeTimer();const set=themeSet(g).slice(0,6);
+      let pairs,deck,open,score;
+      function run(){
+        t.clear();pairs=set.length;
+        deck=[...set,...set].sort(()=>Math.random()-.5);open=[];score=0;
+        $(stage,`<div class="g-toolbar"><span class="g-info">🃏 ${g.t}</span>
+          <span class="score">🏆 <span class="sc">0</span></span></div>
+          <div class="g-cards" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:420px;width:100%;margin:0 auto"></div>`);
+        const gd=stage.querySelector(".g-cards");
+        deck.forEach(v=>{
+          const d=document.createElement("div");
+          d.style.cssText="aspect-ratio:1;border-radius:14px;background:var(--grad);display:grid;place-items:center;font-size:1.6rem;cursor:pointer;color:transparent;user-select:none";
+          d.dataset.v=v;
+          d.onclick=()=>{
+            if(d.classList.contains("ok")||open.includes(d))return;
+            d.textContent=v;d.style.color="#fff";d.style.background="var(--card)";open.push(d);
+            if(open.length===2){
+              if(open[0].dataset.v===open[1].dataset.v){
+                open.forEach(x=>x.classList.add("ok"));score++;onScore(score);
+                const sc=stage.querySelector(".sc");if(sc)sc.textContent=score;open=[];
+                if(score===pairs){t.later(()=>{onEnd(score);$(stage,endHTML(score,g,"🧠 記憶力超強！"));},350);}
+              }else{const a=open;open=[];
+                t.later(()=>{a.forEach(x=>{x.textContent="";x.style.color="transparent";x.style.background="var(--grad)";});},650);}
+            }
+          };
+          gd.appendChild(d);
+        });
+        hostOf(stage).__replay=run;
+      }
+      run();
+    }};
+  }
+
+  /* ---------- quiz 問答（擴充題庫、每次隨機）---------- */
+  function quizGame(g){
+    const BANK=[
+      {q:"累了的時候，最該做什麼？",a:["好好休息","繼續硬撐","熬夜趕工"],r:0},
+      {q:"infucoco 的招牌髮型是？",a:["雙丸子頭","大旁分光頭","爆炸頭"],r:0},
+      {q:"下面哪個最療癒？",a:["泡一杯熱茶","盯著主管","開三小時會"],r:0},
+      {q:"看到星星應該？",a:["許個願","踩扁它","裝沒看到"],r:0},
+      {q:"心情不好時最適合？",a:["抱抱自己","罵路人","不講話冷戰"],r:0},
+      {q:"infucoco 喜歡的天氣？",a:["星空夜","大豔陽","暴風雨"],r:0},
+      {q:"週末最佳行程？",a:["耍廢放空","補交報告","加班兼差"],r:0},
+      {q:"下列哪個是充電？",a:["睡飽飽","滑手機到三點","喝四杯美式"],r:0},
+      {q:"療癒的顏色是？",a:["暖橘夕陽","死灰","螢光綠"],r:0},
+      {q:"遇到挫折先？",a:["深呼吸三次","放棄","哭完再自責"],r:0},
+      {q:"infucoco 陪你做什麼？",a:["一起數星星","一起吵架","一起遲到"],r:0},
+      {q:"微笑的好處？",a:["放鬆又討喜","有雙下巴","沒好處"],r:0}
+    ];
+    return {start(stage,onScore,onEnd){
+      onScore=onScore||function(){};onEnd=onEnd||function(){};
+      const t=makeTimer();const Q=[...BANK].sort(()=>Math.random()-.5).slice(0,6);
+      let qn=0,score=0;
+      function run(){
+        t.clear();
+        if(qn>=Q.length){onEnd(score);$(stage,endHTML(score,g,"💡 療癒達人！"));return;}
+        const q=Q[qn];
+        $(stage,`<div class="g-toolbar"><span class="g-info">❓ ${g.t}（${qn+1}/${Q.length}）</span>
+          <span class="score">🏆 <span class="sc">${score}</span></span></div>
+          <div style="text-align:center;max-width:500px;margin:0 auto">
+          <div style="font-size:1.25rem;font-weight:800;margin-bottom:16px;line-height:1.5">${q.q}</div>
+          <div class="g-opt">${q.a.map((x,i)=>`<button ${i===q.r?"data-r":""}>${x}</button>`).join("")}</div></div>`);
+        stage.querySelector(".g-opt").onclick=e=>{
+          const b=e.target.closest("button");if(!b||b.disabled)return;
+          [...stage.querySelectorAll(".g-opt button")].forEach(x=>x.disabled=true);
+          const correct=b.hasAttribute("data-r");
+          if(correct){score++;onScore(score);b.classList.add("correct");
+            const sc=stage.querySelector(".sc");if(sc)sc.textContent=score;}
+          else{b.classList.add("wrong");const cr=stage.querySelector("[data-r]");if(cr)cr.classList.add("correct");}
+          t.later(()=>{qn++;run();},900);
+        };
+        hostOf(stage).__replay=()=>{qn=0;score=0;run();};
+      }
+      run();
+    }};
+  }
+
+  /* ---------- timing 時機 ---------- */
+  function timingGame(g){
+    return {start(stage,onScore,onEnd){
+      onScore=onScore||function(){};onEnd=onEnd||function(){};
+      const t=makeTimer();let score=0,pos=0,dir=1,tries=0;
+      function run(){
+        t.clear();score=0;pos=0;dir=1;tries=0;
+        $(stage,`<div class="g-toolbar"><span class="g-info">⏱️ ${g.t}</span>
+          <span class="score">🏆 <span class="sc">0</span></span></div>
+          <div style="text-align:center;max-width:440px;margin:0 auto">
+          <div style="position:relative;width:100%;height:46px;border-radius:24px;background:var(--chip);overflow:hidden">
+            <div class="g-dot" style="position:absolute;top:0;left:0;width:30px;height:46px;border-radius:24px;background:var(--grad)"></div>
+            <div style="position:absolute;top:0;left:50%;width:8px;height:46px;background:#fff;opacity:.95"></div>
+          </div>
+          <p style="margin-top:14px;color:var(--soft-txt)">在白色中央線對準時按下！</p>
+          <button class="btn o" style="margin-top:14px">⏱️ 按下！</button></div>`);
+        const dot=stage.querySelector(".g-dot");const btn=stage.querySelector(".btn.o");
+        t.loop(()=>{pos+=dir*3.2;if(pos>92||pos<0){dir*=-1;pos=Math.max(0,Math.min(92,pos));}dot.style.left=pos+"%";},26);
+        btn.onclick=()=>{
+          tries++;const center=Math.abs(pos-46);
+          if(center<9){score++;onScore(score);const sc=stage.querySelector(".sc");if(sc)sc.textContent=score;
+            btn.textContent=center<4?"🎉 正中！":"👍 漂亮";}
+          if(tries>=12){t.clear();onEnd(score);$(stage,endHTML(score,g,"🎯 節奏大師！"));}
+        };
+        hostOf(stage).__replay=run;
+      }
+      run();
+    }};
+  }
+
+  /* ---------- reaction 反應 ---------- */
+  function reactionGame(g){
+    return {start(stage,onScore,onEnd){
+      onScore=onScore||function(){};onEnd=onEnd||function(){};
+      const t=makeTimer();const set=themeSet(g);let score=0,ticks=0;
+      function run(){
+        t.clear();score=0;ticks=0;
+        $(stage,`<div class="g-toolbar"><span class="g-info">⚡ ${g.t}</span>
+          <span class="score">🏆 <span class="sc">0</span>　⏳ <span class="tl">20</span></span></div>
+          <div class="g-arena" style="position:relative;width:100%;max-width:460px;height:320px;border-radius:20px;background:var(--bg2);border:1px solid var(--line);overflow:hidden;margin:0 auto"></div>`);
+        const box=stage.querySelector(".g-arena");
+        t.loop(()=>{
+          ticks++;box.innerHTML="";
+          if(ticks>33){t.clear();onEnd(score);$(stage,endHTML(score,g,"⚡ 反應超快！"));return;}
+          const el=document.createElement("div");
+          el.style.cssText="position:absolute;font-size:2rem;cursor:pointer;user-select:none";
+          el.textContent=set[Math.floor(Math.random()*set.length)];
+          el.style.left=(4+Math.random()*86)+"%";el.style.top=(4+Math.random()*84)+"%";
+          el.onclick=()=>{score++;onScore(score);const sc=stage.querySelector(".sc");if(sc)sc.textContent=score;el.remove();};
+          box.appendChild(el);
+          const tl=stage.querySelector(".tl");if(tl)tl.textContent=Math.max(0,20-Math.floor(ticks/2));
+        },600);
+        hostOf(stage).__replay=run;
+      }
+      run();
+    }};
+  }
+
+  /* ---------- count 數數 ---------- */
+  function countGame(g){
+    return {start(stage,onScore,onEnd){
+      onScore=onScore||function(){};onEnd=onEnd||function(){};
+      const t=makeTimer();const set=themeSet(g);let qn=0,score=0;
+      function run(){
+        t.clear();
+        if(qn>=8){onEnd(score);$(stage,endHTML(score,g,"🔢 算數高手！"));return;}
+        const n=2+Math.floor(Math.random()*6);
+        const shown=Array.from({length:n},()=>set[Math.floor(Math.random()*set.length)]);
+        let wrong=n+(Math.random()<.5?1:-1);if(wrong===n||wrong<1)wrong=n+1;
+        $(stage,`<div class="g-toolbar"><span class="g-info">🔢 ${g.t}（${qn+1}/8）</span>
+          <span class="score">🏆 <span class="sc">${score}</span></span></div>
+          <div style="text-align:center;max-width:500px;margin:0 auto">
+          <div style="font-size:2.2rem;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:18px;min-height:60px">${shown.map(e=>`<span>${e}</span>`).join("")}</div>
+          <p style="color:var(--soft-txt);margin-bottom:8px">剛剛一共出現幾個？</p>
+          <div class="g-opt" style="flex-direction:row;justify-content:center">
+            <button data-n="${n}">${n} 個</button><button data-n="${wrong}">${wrong} 個</button></div></div>`);
+        stage.querySelector(".g-opt").onclick=e=>{
+          const b=e.target.closest("button");if(!b||b.disabled)return;
+          [...stage.querySelectorAll(".g-opt button")].forEach(x=>x.disabled=true);
+          if(+b.dataset.n===n){score++;onScore(score);b.classList.add("correct");
+            const sc=stage.querySelector(".sc");if(sc)sc.textContent=score;}
+          else b.classList.add("wrong");
+          t.later(()=>{qn++;run();},700);
+        };
+        hostOf(stage).__replay=()=>{qn=0;score=0;run();};
+      }
+      run();
+    }};
+  }
+
+  /* ---------- order 排序（真實先後邏輯）---------- */
+  function orderGame(g){
+    const PATHS=[
+      [[["🌱","種子"],["🌷","開花"],["🌸","盛開"]]],
+      [[["🌅","清晨"],["☀️","中午"],["🌇","黃昏"]]],
+      [[["🐛","毛毛蟲"],["🦋","蝴蝶"],["✨","飛起"]]]
+    ][Math.floor(Math.random()*3)][0];
+    return {start(stage,onScore,onEnd){
+      onScore=onScore||function(){};onEnd=onEnd||function(){};
+      const t=makeTimer();let step=0,score=0;
+      function run(){
+        t.clear();
+        if(step>=PATHS.length){onEnd(score);$(stage,endHTML(score,g,"🧭 順序對了！"));return;}
+        $(stage,`<div class="g-toolbar"><span class="g-info">🧭 ${g.t}（第 ${step+1} 步）</span>
+          <span class="score">🏆 ${score}</span></div>
+          <div style="text-align:center;max-width:500px;margin:0 auto">
+          <p style="color:var(--soft-txt);margin-bottom:14px">下一步應該是哪一個？</p>
+          <div class="g-emojis" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          ${PATHS.map((s,i)=>`<span class="g-item" data-i="${i}" style="padding:16px 18px;border-radius:14px;border:2px solid var(--line);background:var(--card);cursor:pointer;font-size:1.4rem">${s.e}</span>`).join("")}
+          </div></div>`);
+        stage.querySelectorAll(".g-item").forEach(x=>x.onclick=()=>{
+          if(+x.dataset.i===step){
+            score++;onScore(score);x.style.opacity=".3";x.style.pointerEvents="none";step++;
+            t.later(run,350);
+          }else{x.style.borderColor="#E8605A";t.later(()=>x.style.borderColor="var(--line)",300);}
+        });
+        hostOf(stage).__replay=()=>{step=0;score=0;run();};
+      }
+      run();
+    }};
+  }
+
+  /* ---------- match 連連看（修正索引 bug）---------- */
+  function matchGame(g){
+    return {start(stage,onScore,onEnd){
+      onScore=onScore||function(){};onEnd=onEnd||function(){};
+      const t=makeTimer();
+      const items=[["🌙","月亮"],["⭐","星星"],["🌸","花朵"],["☁️","雲朵"]];
+      let score=0,matched=0,sel=null;
+      function run(){
+        t.clear();score=0;matched=0;sel=null;
+        $(stage,`<div class="g-toolbar"><span class="g-info">🔗 ${g.t}</span>
+          <span class="score">🏆 ${score}</span></div>
+          <div class="g-match" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:460px;width:100%;margin:0 auto">
+          <div class="g-left" style="display:flex;flex-direction:column;gap:10px"></div>
+          <div class="g-right" style="display:flex;flex-direction:column;gap:10px"></div></div>`);
+        const L=stage.querySelector(".g-left"),R=stage.querySelector(".g-right");
+        // 左：表情（帶原始索引 k）
+        items.forEach((it,i)=>{const d=document.createElement("div");
+          d.style.cssText="padding:12px;border:2px solid var(--line);border-radius:14px;font-size:2rem;text-align:center;cursor:pointer;background:var(--card)";
+          d.textContent=it[0];d.dataset.k=i;L.appendChild(d);});
+        // 右： label 打亂（仍帶原始索引 k）
+        items.map((it,i)=>({label:it[1],k:i})).sort(()=>Math.random()-.5).forEach(o=>{
+          const d=document.createElement("div");
+          d.style.cssText="padding:14px;border:2px solid var(--line);border-radius:14px;text-align:center;cursor:pointer;font-weight:700;background:var(--card)";
+          d.textContent=o.label;d.dataset.k=o.k;R.appendChild(d);});
+        L.onclick=e=>{const x=e.target.closest("div[data-k]");if(!x)return;
+          if(sel)sel.style.borderColor="var(--line)";sel=x;x.style.borderColor="var(--accent)";};
+        R.onclick=e=>{const x=e.target.closest("div[data-k]");if(!x||!sel)return;
+          if(+x.dataset.k===+sel.dataset.k){
+            x.style.borderColor="var(--mint)";sel.style.borderColor="var(--mint)";
+            x.style.opacity=".45";sel.style.opacity=".45";
+            x.style.pointerEvents=sel.style.pointerEvents="none";
+            score++;onScore(score);matched++;sel=null;
+            if(matched===items.length){t.later(()=>{onEnd(score);$(stage,endHTML(score,g,"🔗 全連上了！"));},400);}
+          }else{x.style.borderColor="#E8605A";
+            t.later(()=>{x.style.borderColor="var(--line)";if(sel)sel.style.borderColor="var(--line)";sel=null;},450);}
+        };
+        hostOf(stage).__replay=run;
+      }
+      run();
+    }};
+  }
+
+  /* ---------- sequence 記憶順序 ---------- */
+  function sequenceGame(g){
+    return {start(stage,onScore,onEnd){
+      onScore=onScore||function(){};onEnd=onEnd||function(){};
+      const t=makeTimer();const set=themeSet(g);let round=1;
+      function run(){
+        t.clear();
+        const n=Math.min(round+1,6);
+        const seq=Array.from({length:n},()=>Math.floor(Math.random()*set.length));
+        let guess=0,lock=true;
+        $(stage,`<div class="g-toolbar"><span class="g-info">🎵 ${g.t}（第 ${round} 關）</span>
+          <span class="score">🏆 ${round-1}</span></div>
+          <div class="g-seq" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;max-width:420px;width:100%;margin:0 auto"></div>
+          <p style="text-align:center;color:var(--soft-txt);margin-top:14px;min-height:24px">記住閃亮的順序…</p>`);
+        const gd=stage.querySelector(".g-seq");
+        const cells=set.map((e,i)=>{const d=document.createElement("div");
+          d.style.cssText="aspect-ratio:1;border-radius:14px;background:var(--chip);display:grid;place-items:center;font-size:1.6rem;cursor:pointer;transition:.15s";
+          d.textContent=e;d.dataset.i=i;gd.appendChild(d);return d;});
+        let play=0;
+        const show=t.loop(()=>{
+          const c=cells[seq[play]];
+          c.style.transform="scale(1.15)";c.style.background="var(--grad)";
+          t.later(()=>{c.style.transform="";c.style.background="var(--chip)";},280);
+          play++;
+          if(play>=seq.length){t.stop(show);t.later(()=>{lock=false;},350);}
+        },600);
+        gd.onclick=e=>{
+          const x=e.target.closest("div[data-i]");if(!x||lock)return;
+          if(+x.dataset.i===seq[guess]){
+            guess++;x.style.background="var(--mint)";x.style.color="#fff";
+            if(guess>=seq.length){round++;t.later(run,600);}
+          }else{t.clear();onEnd(round-1);$(stage,endHTML(round-1,g,"🎵 差一點！"));}
+        };
+        hostOf(stage).__replay=()=>{round=1;run();};
+      }
+      run();
+    }};
+  }
+
+  return {catch:catchGame,whack:whackGame,memory:memoryGame,quiz:quizGame,timing:timingGame,
+          reaction:reactionGame,count:countGame,order:orderGame,match:matchGame,sequence:sequenceGame};
+})();

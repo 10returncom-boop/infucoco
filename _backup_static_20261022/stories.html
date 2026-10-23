@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head><link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/favicon.png">
+<meta property="og:title" content="infucoco · INFUCOCO 沉浸療癒宇宙">
+<meta property="og:description" content="與 infucoco 一起撿金句、玩怪遊戲、讀寓言、逛怪美宇宙。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://10returncom-boop.github.io/infucoco/">
+<meta property="og:image" content="https://10returncom-boop.github.io/infucoco/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="INFUCOCO 療癒寓言睡前故事六篇。">
+<title>療癒寓言 - INFUCOCO V6</title>
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body data-page="stories">
+<canvas id="particles" aria-hidden="true"></canvas>
+<header class="site-header"><div class="header-inner">
+<div class="logo">infucoco</div>
+<nav class="nav-links">
+<a href="index.html">首頁</a><a href="quotes.html">金句</a><a href="stories.html" class="active">📖 寓言</a><a href="games.html">遊戲</a><a href="quiz.html">測驗</a><a href="gallery.html">infu空間</a><a href="stickers.html">貼圖</a><a href="shop.html">商店</a><a href="member.html">會員</a>
+</nav>
+<div class="nav-actions">
+  <div class="search-box"><input id="site-search" placeholder="搜尋"><button class="icon-btn" id="search-go">🔎</button></div>
+  <div class="popover-wrap">
+    <button class="icon-btn" id="tools-btn" title="進階工具">⚙️</button>
+    <div class="popover-dropdown" id="tools-pop">
+      <div class="popover-dropdown__head"><span class="popover-dropdown__title">✦ 進階工具</span><button class="icon-btn" style="width:32px;height:32px" id="pop-close">✕</button></div>
+      <div class="popover-dropdown__grid">
+        <a class="popover-dropdown__link" href="stories.html#" data-nav="random"><span class="popover-dropdown__icon">🎲</span>隨機網站</a>
+        <a class="popover-dropdown__link" href="stories.html#" data-nav="jump"><span class="popover-dropdown__icon">⚡</span>快速跳轉</a>
+        <a class="popover-dropdown__link" href="stories.html#" data-nav="fav"><span class="popover-dropdown__icon">⭐</span>我的最愛</a>
+        <a class="popover-dropdown__link" href="stories.html#" data-nav="recent"><span class="popover-dropdown__icon">🕒</span>最近造訪</a>
+        <a class="popover-dropdown__link" href="stories.html#" data-nav="cat"><span class="popover-dropdown__icon">🗂</span>分類統計</a>
+        <a class="popover-dropdown__link" href="stories.html#" data-nav="csv"><span class="popover-dropdown__icon">📊</span>匯出CSV</a>
+        <a class="popover-dropdown__link" href="stories.html#" data-nav="theme"><span class="popover-dropdown__icon">🎨</span>切換配色</a>
+        <a class="popover-dropdown__link" href="stories.html#" data-nav="lang"><span class="popover-dropdown__icon">🌐</span>語言</a>
+        <a class="popover-dropdown__link" href="sitemap.html"><span class="popover-dropdown__icon">🗺</span>網站地圖</a>
+      </div>
+      <div class="popover-dropdown__foot">
+        <button class="popover-dropdown__chip" data-nav="random">🎲 隨機</button>
+        <button class="popover-dropdown__chip" data-nav="csv">📊 CSV</button>
+        <button class="popover-dropdown__chip" data-nav="theme">🎨 配色</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div></header>
+<div class="breadcrumb"><a href="index.html">首頁</a></div>
+
+<section class="skew-sec">
+<div class="container">
+  <div class="section-title"><span class="sec-no">📖 睡前故事</span><h2>療癒<span class="rl">寓言</span></h2><p class="lead">六篇短寓言，讀完再睡。點卡片展開全文。</p></div>
+  <div class="grid g3" id="st-story-grid"></div>
+</div>
+</section>
+
+<section class="skew-sec" style="padding-top:40px">
+<div class="container" style="max-width:760px">
+  <div class="section-title"><span class="sec-no">✦ 寓言全文</span><h2>六篇<span class="rl">小故事</span></h2></div>
+  <div id="st-story-full"></div>
+</div>
+</section>
+
+<section class="skew-sec" style="padding-top:110px">
+<div class="container explore">
+  <div class="section-title"><span class="sec-no">✦ 繼續探索</span><h2>怪美宇宙<span class="rl">大暴走</span></h2><p class="lead">翻轉卡片，走進每一座怪美場景。</p></div>
+  <div class="grid g4">
+    <a class="card-b reveal" href="quotes.html"><img src="assets/webp/infucoco_night_redapple_house_stand.webp" alt="每日金句"><div class="ovl"><span class="tag">💬 每日一句</span><h3>心靈金句</h3></div></a>
+    <a class="card-b reveal d2" href="stories.html"><img src="assets/webp/infucoco_stage_spotlight_crowd_dusk.webp" alt="睡前寓言"><div class="ovl"><span class="tag">📖 睡前故事</span><h3>療癒寓言</h3></div></a>
+    <a class="card-b reveal d3" href="games.html"><img src="assets/webp/infucoco_hourglass_sprout_crowd_sit.webp" alt="100款互動遊戲"><div class="ovl"><span class="tag">🎮 100 款</span><h3>互動遊戲</h3></div></a>
+    <a class="card-b reveal d4" href="quiz.html"><img src="assets/webp/infucoco_rooftop_city_cloud_moon.webp" alt="心理測驗"><div class="ovl"><span class="tag">🔮 測驗</span><h3>心理測驗</h3></div></a>
+  </div>
+</div>
+</section>
+
+<footer class="site-footer"><div class="footer-inner">
+<div class="footer-col"><h4 style="font-size:1.2rem">INFUCOCO 沉浸療癒宇宙</h4><p style="font-size:.9rem;color:rgba(255,255,255,.6)">給疲憊的你，一座沉浸式怪美宇宙：寓言 × 金句 × 遊戲 × 測驗 × 貼圖 × 周邊。</p><p style="margin-top:10px;color:rgba(255,255,255,.6)">✉️ hello@infucoco.studio</p></div>
+<div class="footer-col"><h4>療癒</h4><ul><li><a href="quotes.html">💬 心靈金句</a></li><li><a href="stories.html">📖 療癒寓言</a></li><li><a href="quiz.html">🔮 心理測驗</a></li></ul></div>
+<div class="footer-col"><h4>玩樂</h4><ul><li><a href="games.html">🎮 互動遊戲</a></li><li><a href="gallery.html">infu空間</a></li><li><a href="stickers.html">🖼 貼圖下載</a></li></ul></div>
+<div class="footer-col"><h4>網站地圖</h4><ul><li><a href="shop.html">🛍 周邊商店</a></li><li><a href="member.html">會員</a></li><li><a href="about.html">關於</a></li><li><a href="sitemap.html">完整地圖</a></li></ul></div>
+</div><div class="footer-credit">規劃設計開發：張書欣　📞 <a href="tel:0968222201">0968-222201</a>　💬 <a href="https://line.me/ti/p/~331.today" target="_blank" rel="noopener">331.today</a></div><div class="footer-bottom">© 2026 INFUCOCO 沉浸療癒宇宙 · v6.0.0</div></footer>
+<button id="scroll-top" title="回到頂部">↑</button>
+<div id="toast"></div>
+<script src="js/config.js@v=20261003v6"></script>
+<script>
+/* 內嵌寓言資料（6 篇，每篇 1000 字童言童語） */
+window.STORIES=[
+{ id:"star-seed", title:"種下星星的種子", img:"infucoco_hourglass_sprout_crowd_sit", tag:"耐心", text:"從前從前，有一個小女孩叫 infucoco。她有一天在草地撿到一顆會發光的種子，小小的、暖暖的，像把星星揉成一團。她很高興，想馬上打開來看裡面是什麼。可是旁邊的老婆婆說：「妹妹呀，種子不能急，要澆水、要說話、要等它自己想出來。」infucoco 雖然有點不耐煩，但還是聽話，每天早上第一件事就是去看種子。第一天，她跟種子說：「今天老師稱我字寫得好看喔。」第二天，她說：「隔壁小貓今天對我撒嬌了。」第三天，她說：「媽媽說我長大了耶。」每一天，她都跟種子分享心事。種子都不說話，只是微微發光。有一天早上，infucoco 醒來，看見窗邊飄著一道小小的彩虹——原來種子長大了！長成一顆小小的月亮，掛在那裡，發出柔柔的光。infucoco 忽然懂了：原來最珍貴的東西，都不是急來的。你越急，它越縮起來；你慢慢等，它就慢慢長。就像你烤麵包，越急著打開烤箱，麵包越扁；你耐心等，它就膨脹得圓圓的。大人常常忘記這件事——他們急著長大、急著賺錢、急著成功，結果錯過了好多風景。infucoco 把月亮種子的故事寫在筆記本上：「慢慢來，比較快。」因為她發現，當你不急的時候，風吹過來的味道特別香，鳥叫聲特別好聽，就連腳下的石頭都變得可愛了。這就是耐心的魔法——你給它時間，它給你驚喜。", moral:"慢慢來，比較快。" },
+{ id:"rain-umbrella", title:"雨天也要撐起彩虹", img:"infucoco_daisy_spring_walk", tag:"溫柔", text:"有一天下大雨，雨嘩啦嘩啦下個不停。infucoco 撐著傘走路，看見路邊有一朵小花被雨淋得垂下頭。她二話不說，把傘往小花那邊傾。結果自己半邊身體都濕了，可是小花笑了。雨停了之後，天空出現一道彩虹，剛好照在 infucoco 的傘上。她忽然發現：原來你對別人好，別人會用另一種方式對你好。小花雖然不會說話，但它把最美的顏色借給了天空，讓彩虹出現。大人常常以為，對別人好是吃虧——「我對他好，他又不對我好，為什麼？」可是小朋友不懂這種算計。小朋友只知道：我喜歡那朵花，我就幫它撐傘；我喜歡那隻小貓，我就摸它的頭。不需要回報，只是單純地對它好。結果呢？小花開得更美了，小貓會過來蹭你。這就是溫柔的循環——你給出去，它會用另一種方式回來。也許不是今天，也許不是明天，但總有一天，你會發現，曾經你灑出去的愛，都變成了圍著你的光。infucoco 把這句話寫下來：「你給出去的溫柔，會以彩虹的形式回來。」因為她看見了——雨後的彩虹，就是小花借給天空的顏色。", moral:"你給出去的溫柔，會以彩虹的形式回來。" },
+{ id:"fireworks", title:"替別人的煙火鼓掌", img:"infucoco_stage_spotlight_crowd_dusk", tag:"分享", text:"夜晚，天空綻放一朵朵煙火。別人的煙火好漂亮，金黃色、粉紅色、藍色，一朵接一朵。infucoco 沒有羨慕，她舉起手，認真地為每一朵煙火鼓掌。旁邊的人問她：「又不是你的煙火，你鼓什麼掌？」infucoco 說：「可是它很漂亮啊！漂亮的東西就值得鼓掌。」大人常常不懂這個——他們看到別人好，心裡不舒服，覺得「為什麼不是我？」可是小朋友不懂這種妒忌。小朋友只知道：別人的蛋糕好吃，我就開心；別人的衣服好看，我就稱讚；別人跑得很快，我就拍手。這就是分享的本意——不是把自己的東西分給別人，而是真心為別人的好感到高興。當你真心為別人喝采，屬於你的星火也會悄悄點亮。因為你給出去的快樂，會回來找你。infucoco 發現，當她為別人鼓掌的時候，自己的心也暖暖的。原來快樂不是搶來的，是分享來的。你給出去多少，就收回多少。就像煙火——你為它鼓掌，它就開得更燦爛。這就是分享的魔法：你不需要擁有它，你只要欣賞它，它就屬於你。", moral:"真心為別人喝采，就是為自己點燈。" },
+{ id:"library-stars", title:"迷宮裡的星光", img:"infucoco_book_maze_road_people", tag:"智慧", text:"infucoco 走進一座無人的迷宮。牆壁高高的，每條路都彎彎繞繞。她有點慌張，想找出口，可是怎麼走都走不出去。後來她靜下來，看見牆角有一本書，書頁透出微微的光。她沿著那光一步步走，竟然走出來了！原來迷路的時候，只要心裡有光，就不會走丟。大人常常害怕迷路——他們怕選錯路、怕走錯方向、怕失敗。可是小朋友不懂這種恐懼。小朋友只知道：走錯了就回頭，換一條路就好。迷宮雖然複雜，但只要你靜下心，總會看見一點光。也許是一本書的光，也許是一顆星星的光，也許是你心裡的光。infucoco 把這個發現寫下來：「迷路不可怕，心裡有光就不會走丟。」因為她發現，當你慌的時候，什麼都看不見；當你靜下來，到處都是光。這就是智慧的起點——不是你知道很多答案，而是你懂得在慌張的時候，靜下心來找光。", moral:"迷路不可怕，心裡有光就不會走丟。" },
+{ id:"cosmic-cafe", title:"星塵咖啡館", img:"infucoco_afterwork_coffee_sidewalk", tag:"放鬆", text:"在一間開在銀河邊的咖啡館，infucoco 點了一杯熱的星塵拿鐵。她看著杯子裡的星星像奶泡一樣漂浮，一圈一圈，慢慢轉。她忽然懂了：忙了一天，允許自己停下來，也是一種勇敢。大人常常不敢休息——他們覺得「我停下來，別人就追上來了」。可是小朋友不懂這種焦慮。小朋友玩累了就睡，餓了就吃，從來不覺得休息是罪。infucoco 坐在咖啡館窗邊，看著星星飄來飄去。她發現，當你慢下來，世界反而變得清楚。風吹過來的味道特別香，杯子熱熱的握在手裡特別舒服，就連窗外的雲都變得慢了。原來放鬆不是偷懶，是給自己充電。就像手機沒電了要充電，你累了也要停下來。infucoco 把這句話寫下來：「允許自己休息，是給未來充電。」因為她發現，當你敢停下來，你才有體力繼續走。這就是放鬆的智慧——不是放棄，是為了走更遠。", moral:"允許自己休息，是給未來充電。" },
+{ id:"bridge-stars", title:"通往星星的橋", img:"infucoco_bridge_night_city", tag:"希望", text:"迷路那晚，天黑黑的，infucoco 有點害怕。她看見遠方有一道光，走近一看——原來是一座由星光搭成的橋！橋上鋪滿了小小的燈，一盞接一盞，通向遠方的亮光。她鼓起勇氣踏上橋，一步一步走。風吹過來，有點涼，可是橋的盡頭有光，暖暖的。她走著走著，天就亮了。原來害怕的時候，只要相信前面有光，就能跨過黑夜。大人常常害怕——怕失敗、怕孤單、怕未來。可是小朋友不懂這種恐懼。小朋友只知道：天黑了會亮，下雨了會晴，迷路了會找到路。infucoco 把這個發現寫下來：「害怕時，記得前面總有光在等你。」因為她發現，當你害怕的時候，不要急著跑，靜下心看看——遠方一定有光。也許是一盞路燈，也許是一顆星星，也許是你心裡的光。這就是希望的魔法：你相信它在，它就真的在。就像那座星光橋——你踏上它，它就帶你走向天亮。", moral:"害怕時，記得前面總有光在等你。" }
+];
+(function(){const S=window.STORIES||[];
+// 卡片：點擊展開全文（錨點連到下方全文區）
+document.getElementById("st-story-grid").innerHTML=S.map((s,i)=>`<div class="flip-wrap reveal d${(i%3)+2}"><div class="flip"><div class="face front"><img src="https://infucoco.com/assets/webp/${s.img}.webp" alt="${s.title}"><div class="fcap">${s.tag} · ${s.title}</div></div><div class="face back"><h3>${s.title}</h3><p>${s.moral}</p><a class="btn o" style="margin-top:16px;padding:10px 18px;font-size:.85rem" href="#story-${s.id}">讀全文 →</a></div></div></div>`).join("");
+// 全文區：六篇並排單頁
+document.getElementById("st-story-full").innerHTML=S.map((s,i)=>`<article id="story-${s.id}" class="card-b reveal" style="padding:28px;margin-bottom:22px;scroll-margin-top:90px">
+  <span class="card-tag">${s.tag}</span>
+  <h3 style="margin:10px 0 12px">${i+1}. ${s.title}</h3>
+  <p style="line-height:1.95;color:var(--txt)">${s.text}</p>
+  <div class="quote-main mt" style="font-size:1.15rem;padding:16px"><span class="mark">💛 </span>${s.moral}</div>
+</article>`).join("");
+})();
+</script><script>
+(function(){
+  // reveal on scroll
+  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add("in");io.unobserve(x.target)}})},{threshold:.12});
+  document.querySelectorAll(".reveal").forEach(function(el){io.observe(el)});
+  // scroll top
+  var b=document.getElementById("scroll-top");
+  if(b){window.addEventListener("scroll",function(){b.classList.toggle("show",window.scrollY>600)});b.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"})})}
+})();
+</script>
+</body></html>

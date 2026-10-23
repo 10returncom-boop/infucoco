@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head><link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/favicon.png">
+<meta property="og:title" content="infucoco 應付扣扣の世界">
+<meta property="og:site_name" content="infucoco 應付扣扣の世界">
+<meta property="og:description" content="與 infucoco 一起撿金句、玩療癒遊戲、讀故事、逛 infucoco 世界。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://infucoco.com/">
+<meta property="og:image" content="https://infucoco.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="infucoco 會員三方案，填寫 Email 與 LINE 加入 infucoco 居民。">
+<title>成為 infucoco居民 · infucoco 應付扣扣の世界</title>
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body data-page="member">
+
+<header class="site-header"><div class="header-inner">
+<div class="logo">infucoco<small>應付扣扣の世界</small></div>
+<nav class="nav-links">
+<a href="index.html">首頁</a><a href="quotes.html">金句</a><a href="stories.html">故事</a><a href="games.html">遊戲</a><a href="quiz.html">心靈療癒</a><a href="gallery.html">infucoco世界</a><a href="stickers.html">數位商品</a><a href="shop.html">周邊</a><a href="member.html" class="active">會員</a>
+</nav>
+</div></header>
+
+<section class="page-banner"><img src="assets/webp/banners/banner_member.webp" alt="夜晚門口暖燈下，小動物排隊迎接女孩" loading="lazy"></section>
+
+<section class="skew-sec">
+<div class="container">
+  <div class="section-title member-hero"><h2>成為 <span class="rl">infucoco居民</span></h2><p class="lead">留下 Email 與 LINE，讓我們把療癒場景、專屬貼圖與周邊資訊送到你手上。</p></div>
+  <div class="member-grid">
+    <a class="member-card" href="member.html?plan=traveler#join"><span class="card-tag">免費</span><h3>旅人</h3><p>7 款療癒遊戲 · 每日金句</p><span class="btn dark" style="display:inline-flex;justify-content:center">免費加入</span></a>
+    <a class="member-card" href="member.html?plan=resident#join"><span class="card-tag" style="background:var(--accent);color:#fff">✨ 熱門</span><h3>居民</h3><p>NT$99/月 · 全部數位商品＋專屬故事</p><span class="btn o" style="display:inline-flex;justify-content:center">升級居民</span></a>
+    <a class="member-card" href="member.html?plan=guardian#join"><span class="card-tag">👑</span><h3>守護者</h3><p>NT$299/月 · 限量周邊＋療癒插畫</p><span class="btn dark" style="display:inline-flex;justify-content:center">成為守護者</span></a>
+  </div>
+
+  <form class="member-form-card" id="join" action="mailto:hello@infucoco.studio" method="post" enctype="text/plain">
+    <h2 style="font-size:1.8rem;color:var(--accent)">留下聯絡方式</h2>
+    <p class="form-note">填寫 Email 與 LINE，我們會依你選擇的方案或商品回覆。</p>
+    <div id="form-context" class="form-note" aria-live="polite"></div>
+
+    <div class="member-plan-pick" aria-label="選擇方案或需求">
+      <label><input type="radio" name="intent" value="traveler" checked>旅人 · 免費加入</label>
+      <label><input type="radio" name="intent" value="resident">居民 · NT$99/月</label>
+      <label><input type="radio" name="intent" value="guardian">守護者 · NT$299/月</label>
+      <label><input type="radio" name="intent" value="shop">周邊商品預訂</label>
+      <label><input type="radio" name="intent" value="stickers">數位商品索取</label>
+      <label><input type="radio" name="intent" value="gallery">infucoco世界場景索取</label>
+      <label><input type="radio" name="intent" value="other">其他詢問</label>
+    </div>
+
+    <div class="form-field">
+      <label for="nickname">暱稱 *</label>
+      <input id="nickname" name="nickname" type="text" required autocomplete="nickname" placeholder="想怎麼稱呼你">
+    </div>
+    <div class="form-field">
+      <label for="email">Email *</label>
+      <input id="email" name="email" type="email" required autocomplete="email" placeholder="hello@example.com">
+    </div>
+    <div class="form-field">
+      <label for="lineId">LINE ID / LINE 名稱 *</label>
+      <input id="lineId" name="lineId" type="text" required autocomplete="username" placeholder="331.today 或你的 LINE ID">
+    </div>
+    <div class="form-field">
+      <label for="contactWay">優先聯絡方式</label>
+      <select id="contactWay" name="contactWay">
+        <option>Email</option>
+        <option>LINE</option>
+        <option>都可以</option>
+      </select>
+    </div>
+    <div class="form-field">
+      <label for="message">想說的話 / 商品名稱</label>
+      <textarea id="message" name="message" placeholder="想加入方案、詢問周邊、索取貼圖或世界場景，都可以寫在這裡"></textarea>
+    </div>
+    <label class="form-field" style="display:flex;align-items:center;justify-content:center;gap:8px;max-width:500px">
+      <input type="checkbox" id="consent" name="consent" required style="width:auto">
+      <span>我同意透過 Email 與 LINE 接收回覆</span>
+    </label>
+
+    <div class="form-actions">
+      <button type="submit" class="btn o">💌 送出表單</button>
+      <a class="btn dark" href="https://line.me/ti/p/~331.today" target="_blank" rel="noopener">💬 加入 LINE 331.today</a>
+    </div>
+    <p class="form-note">送出後會打開預設 Email 信箱；若沒有自動開啟，可直接加入 LINE 回覆。</p>
+    <div id="form-success" class="form-success" role="status" aria-live="polite">
+      <h3>✨ 表單已整理完成</h3>
+      <p>Email 信件視窗已準備好，確認送出即可。也可以直接加入 LINE 331.today 繼續聊。</p>
+    </div>
+  </form>
+</div>
+</section>
+
+<section class="skew-sec" style="padding-top:110px">
+<div class="container explore">
+  <div class="section-title"><span class="sec-no">✦ 繼續探索</span><h2>infucoco <span class="rl">精彩角落</span></h2><p class="lead">翻轉卡片，走進每一個 infucoco 場景。</p></div>
+  <div class="grid g4">
+    <a class="card-b" href="quotes.html"><img src="assets/webp/infucoco_night_redapple_house_stand.webp" alt="每日金句"><div class="ovl"><span class="tag">💬 每日一句</span><h3>心靈金句</h3></div></a>
+    <a class="card-b" href="stories.html"><img src="assets/webp/infucoco_stage_spotlight_crowd_dusk.webp" alt="睡前故事"><div class="ovl"><span class="tag">📖 睡前故事</span><h3>療癒故事</h3></div></a>
+    <a class="card-b" href="games.html"><img src="assets/webp/game_g01.webp" alt="7款療癒遊戲"><div class="ovl"><span class="tag">🎮 7 款</span><h3>療癒遊戲</h3></div></a>
+    <a class="card-b" href="quiz.html"><img src="assets/webp/infucoco_rooftop_city_cloud_moon.webp" alt="心靈療癒"><div class="ovl"><span class="tag">🔮 心靈療癒</span><h3>心靈療癒</h3></div></a>
+  </div>
+</div>
+</section>
+
+<footer class="site-footer"><div class="footer-inner">
+<div class="footer-col"><h4 style="font-size:1.2rem">infucoco 應付扣扣の世界</h4><p style="font-size:.9rem;color:rgba(255,255,255,.88)">給疲憊的你，一座 infucoco 世界：故事 × 金句 × 遊戲 × 心靈療癒 × 數位商品 × 周邊。</p><p style="margin-top:10px;color:rgba(255,255,255,.88)">✉️ hello@infucoco.studio</p></div>
+<div class="footer-col"><h4>療癒</h4><ul><li><a href="quotes.html">💬 心靈金句</a></li><li><a href="stories.html">📖 療癒故事</a></li><li><a href="quiz.html">🔮 心靈療癒</a></li></ul></div>
+<div class="footer-col"><h4>玩樂</h4><ul><li><a href="games.html">🎮 療癒遊戲</a></li><li><a href="gallery.html">infucoco世界</a></li><li><a href="stickers.html">🎟️ 數位商品</a></li></ul></div>
+<div class="footer-col"><h4>網站地圖</h4><ul><li><a href="shop.html">🛍 周邊</a></li><li><a href="member.html">會員</a></li><li><a href="about.html">關於</a></li><li><a href="sitemap.html">完整地圖</a></li></ul></div>
+</div><div class="footer-credit">規劃×設計×開發×網路行銷：舒安境 Studi-O　📞 <a href="tel:0968222201">0968-222201</a>　<a href="https://line.me/ti/p/~331.today" target="_blank" rel="noopener">💬 LINE</a></div><div class="footer-bottom">© 2026 infucoco 應付扣扣の世界</div></footer>
+<div class="float-actions">
+  <a href="index.html" title="返回首頁">🏠 首頁</a>
+  <a href="javascript:history.back()" title="上一頁">← 上一頁</a>
+  <a class="line" href="https://line.me/ti/p/~331.today" target="_blank" rel="noopener" title="LINE 聯絡">💬 LINE</a>
+</div>
+
+<script>
+(function(){
+  var labels={traveler:'旅人 · 免費加入',resident:'居民 · NT$99/月',guardian:'守護者 · NT$299/月',shop:'周邊商品預訂',stickers:'數位商品索取',gallery:'infucoco世界場景索取',other:'其他詢問'};
+  var q=new URLSearchParams(location.search);
+  var plan=q.get('plan');
+  if(!labels[plan]) plan='other';
+  var item=(q.get('item')||'').trim();
+  var form=document.getElementById('join');
+  var context=document.getElementById('form-context');
+  var message=document.getElementById('message');
+  function setPlan(p){
+    document.querySelectorAll('input[name="intent"]').forEach(function(radio){radio.checked=radio.value===p;});
+    context.textContent='目前選擇：'+labels[p]+(item?'｜'+item:'');
+  }
+  setPlan(plan);
+  if(item && !message.value) message.value='我想詢問：'+item;
+  document.querySelectorAll('input[name="intent"]').forEach(function(radio){
+    radio.addEventListener('change',function(){setPlan(radio.value);});
+  });
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(!form.reportValidity()) return;
+    var data=new FormData(form);
+    var intent=labels[data.get('intent')]||labels.other;
+    var subject='【infucoco 應付扣扣の世界】'+intent+'｜'+data.get('nickname');
+    var body=[
+      '方案/需求：'+intent,
+      item?'商品/場景：'+item:'',
+      '暱稱：'+data.get('nickname'),
+      'Email：'+data.get('email'),
+      'LINE ID：'+data.get('lineId'),
+      '優先聯絡：'+data.get('contactWay'),
+      '',
+      '留言：',
+      data.get('message')||'（無）',
+      '',
+      '同意聯絡：是'
+    ].filter(Boolean).join('\n');
+    location.href='mailto:hello@infucoco.studio?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+    var success=document.getElementById('form-success');
+    success.classList.add('show');
+    success.scrollIntoView({behavior:'smooth',block:'center'});
+  });
+})();
+</script>
+<script src="js/infucoco-games.js" defer></script>
+<script src="js/infucoco-app.js" defer></script>
+</body></html>
