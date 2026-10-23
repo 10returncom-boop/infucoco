@@ -446,3 +446,42 @@ h3{letter-spacing:.03em;line-height:1.35}
   .float-actions .nav-list{gap:6px}
   .float-actions .nav-list a{width:180px;padding:10px 0;font-size:.95rem;border-radius:20px;white-space:nowrap}
 }
+
+/* ===== 全域響應式文字 RWD ===== */
+@media(max-width:900px){
+  body{font-size:15px}
+  .container{padding-left:16px;padding-right:16px}
+  h1,h2,h3,h4{line-height:1.3}
+  p{font-size:.95rem;line-height:1.7}
+  .lead{font-size:1rem!important}
+  .card h3{font-size:1.05rem;line-height:1.4}
+  .card p{font-size:.85rem;line-height:1.6}
+  .footer-inner{font-size:.85rem}
+  .footer-credit{font-size:.78rem}
+  .footer-notice{font-size:.75rem}
+  .breadcrumb{font-size:.8rem}
+  .tag{font-size:.72rem;padding:3px 10px}
+  .btn,.cta{font-size:.9rem;padding:10px 20px}
+  .section-title{padding:30px 16px}
+  .ovl h3{font-size:1.1rem}
+  .ovl p{font-size:.82rem}
+}
+@media(max-width:560px){
+  body{font-size:14px}
+  .container{padding-left:12px;padding-right:12px}
+  .section-title h2,.section-title h1{font-size:clamp(1.6rem,7vw,2.2rem)}
+  .hero-title{font-size:clamp(1.3rem,8vw,2rem)}
+  p{font-size:.9rem}
+  .card h3{font-size:.98rem}
+  .card p{font-size:.8rem}
+  .quote-main{font-size:1.15rem;padding:24px 16px}
+  .footer-inner{grid-template-columns:1fr;font-size:.82rem}
+  .footer-credit{font-size:.72rem}
+  .footer-notice{font-size:.7rem}
+  .btn,.cta{font-size:.82rem;padding:9px 16px}
+  .section-title{padding:24px 12px}
+  .ovl h3{font-size:.98rem}
+  .ovl p{font-size:.76rem}
+  .tag{font-size:.68rem;padding:2px 8px}
+  .breadcrumb{font-size:.74rem}
+}
