@@ -438,3 +438,5 @@ h3{letter-spacing:.03em;line-height:1.35}
 .float-actions .nav-list{display:none;flex-direction:column;gap:4px;align-items:center}
 .float-actions.open .nav-list{display:flex}
 .float-actions .nav-list a{width:100px;padding:7px 0;font-size:.75rem}
+.float-actions.open .nav-toggle::after{content:"✕"}
+.float-actions .nav-toggle::after{content:"☰"}
