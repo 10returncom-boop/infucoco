@@ -448,6 +448,10 @@ h3{letter-spacing:.03em;line-height:1.35}
 }
 
 /* ===== 全域響應式文字 RWD ===== */
+.rt{white-space:nowrap}
+.rt span{white-space:nowrap}
+.section-title h2 .rt,.section-title h1 .rt{font-size:.82em}
+.section-title h2 .rl,.section-title h1 .rl{font-size:.88em}
 @media(max-width:900px){
   body{font-size:15px}
   .container{padding-left:16px;padding-right:16px}
@@ -465,11 +469,13 @@ h3{letter-spacing:.03em;line-height:1.35}
   .section-title{padding:30px 16px}
   .ovl h3{font-size:1.1rem}
   .ovl p{font-size:.82rem}
+  .section-title h2 .rt,.section-title h1 .rt{font-size:.72em}
+  .section-title h2 .rl,.section-title h1 .rl{font-size:.82em}
 }
 @media(max-width:560px){
   body{font-size:14px}
   .container{padding-left:12px;padding-right:12px}
-  .section-title h2,.section-title h1{font-size:clamp(1.6rem,7vw,2.2rem)}
+  .section-title h2,.section-title h1{font-size:clamp(1.5rem,6.5vw,2rem)}
   .hero-title{font-size:clamp(1.3rem,8vw,2rem)}
   p{font-size:.9rem}
   .card h3{font-size:.98rem}
@@ -484,4 +490,6 @@ h3{letter-spacing:.03em;line-height:1.35}
   .ovl p{font-size:.76rem}
   .tag{font-size:.68rem;padding:2px 8px}
   .breadcrumb{font-size:.74rem}
+  .section-title h2 .rt,.section-title h1 .rt{font-size:.65em}
+  .section-title h2 .rl,.section-title h1 .rl{font-size:.78em}
 }
