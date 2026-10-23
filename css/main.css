@@ -50,8 +50,7 @@ img{max-width:100%;display:block}
 .logo .rip:nth-child(8){animation-delay:.7s}
 @keyframes ripWave{0%,100%{transform:translateY(0) scale(1)}30%{transform:translateY(-6px) scale(1.06)}60%{transform:translateY(2px) scale(.98)}}
 /* 全站 h1/h2 infucoco ripple + 漸層 */
-.rt{display:inline-flex;background:linear-gradient(90deg,#1E1B4B,#5B3A99,#8E6ED8);-webkit-background-clip:text;background-clip:text;color:transparent}
-.rt span{display:inline-block;animation:ripWave 2s ease-in-out infinite}
+.rt span{display:inline-block;color:#C44A00;animation:ripWave 2s ease-in-out infinite}
 .rt span:nth-child(1){animation-delay:0s}
 .rt span:nth-child(2){animation-delay:.1s}
 .rt span:nth-child(3){animation-delay:.2s}
