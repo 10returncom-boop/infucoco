@@ -72,16 +72,16 @@ img{max-width:100%;display:block}
 #tools-btn:hover{box-shadow:0 14px 30px rgba(59,32,110,.65),0 5px 12px rgba(59,32,110,.42)}
 @media(max-width:900px){
   .header-inner{height:64px;padding:0 16px;gap:12px;justify-content:center}
-  .logo{flex:0 0 auto;font-size:1.5rem;text-align:center}
-  .logo small{font-size:.62rem;letter-spacing:.06em;margin-top:2px;text-align:center}
+  .logo{flex:0 0 auto;font-size:1.15rem;text-align:center;white-space:nowrap}
+  .logo small{display:inline;font-size:1.15rem;letter-spacing:.02em;margin:0 0 0 4px;text-align:center}
   .nav-links{display:none}
   .icon-btn{width:36px;height:36px;font-size:.8rem}
   #tools-btn{width:42px;height:42px;font-size:.82rem}
 }
 @media(max-width:560px){
-  .header-inner{height:60px;padding:0 14px}
-  .logo{font-size:1.35rem}
-  .logo small{font-size:.58rem}
+  .header-inner{height:58px;padding:0 14px}
+  .logo{font-size:1rem}
+  .logo small{font-size:1rem;margin-left:3px}
   .nav-links{display:none}
   .icon-btn{width:34px;height:34px;font-size:.75rem}
   #tools-btn{width:40px;height:40px;font-size:.78rem}
