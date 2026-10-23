@@ -116,8 +116,8 @@ img{max-width:100%;display:block}
 .hero-title .hl{color:#FFE27A;text-shadow:0 4px 30px rgba(227,107,0,.6),0 2px 4px rgba(0,0,0,.9)}
 .hero-title .rl{display:inline-block;transform:rotate(-3deg);color:#fff;margin:0 .1em}
 .hero-sub{max-width:560px;margin:14px auto 20px;color:#fff;font-size:1rem;text-shadow:0 3px 14px rgba(0,0,0,.9);font-weight:600}
-.hero-ctas{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;max-width:min(92vw,280px);margin:0 auto}
-.hero-ctas .btn.o,.hero-ctas .btn{font-family:'Fredoka','Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;background:linear-gradient(135deg,#1E1B4B 0%,#3B2A7A 50%,#5B3A99 100%) !important;color:#fff !important;font-weight:900;font-size:1.05rem;padding:12px 26px;border-radius:14px;border:1px solid rgba(255,255,255,.15);box-shadow:0 6px 16px rgba(30,27,75,.45),0 2px 4px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.18),inset 0 -2px 4px rgba(0,0,0,.2);text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.hero-ctas{display:flex;gap:6px;justify-content:center;flex-wrap:nowrap;margin:0 auto}
+.hero-ctas .btn.o,.hero-ctas .btn{font-family:'Fredoka','Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;background:linear-gradient(135deg,#1E1B4B 0%,#3B2A7A 50%,#5B3A99 100%) !important;color:#fff !important;font-weight:700;font-size:.82rem;padding:7px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.15);box-shadow:0 4px 12px rgba(30,27,75,.45),inset 0 1px 0 rgba(255,255,255,.15);text-shadow:0 1px 2px rgba(0,0,0,.4);white-space:nowrap}
 .hero-ctas .btn:hover{transform:translateY(-2px);filter:brightness(1.15);box-shadow:0 10px 24px rgba(30,27,75,.55),0 4px 8px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.25)}
 .hero-ctas .btn:active{transform:translateY(2px);box-shadow:0 2px 6px rgba(30,27,75,.4),inset 0 -1px 2px rgba(0,0,0,.2)}
 .scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.7);font-size:.8rem;z-index:3;letter-spacing:.2em;animation:blink 1.6s ease-in-out infinite}
