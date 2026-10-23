@@ -428,7 +428,7 @@ h3{letter-spacing:.03em;line-height:1.35}
 
 /* ===== 右下角浮動小按鈕 ===== */
 .float-actions{position:fixed;right:12px;bottom:56px;z-index:90;display:flex;flex-direction:column;gap:6px;align-items:center}
-.float-actions a{display:inline-flex;align-items:center;justify-content:center;width:88px;padding:8px 0;border-radius:18px;font-size:.72rem;font-weight:800;color:#fff;background:#5B3A99;box-shadow:0 6px 18px rgba(59,32,110,.4);line-height:1.2;white-space:nowrap;text-align:center;text-decoration:none}
+.float-actions a{display:inline-flex;align-items:center;justify-content:center;width:88px;padding:8px 0;border-radius:18px;font-size:.72rem;font-weight:800;color:#fff;background:linear-gradient(135deg,#8A52C0,#5F3FA8);box-shadow:0 6px 18px rgba(59,32,110,.4);line-height:1.2;white-space:nowrap;text-align:center;text-decoration:none}
 .float-actions a.line{background:#06C755;box-shadow:0 6px 18px rgba(6,199,85,.35)}
 .float-actions a:hover{transform:translateY(-2px)}
 .float-actions a:not(.line):hover{background:#6A48B0;box-shadow:0 8px 22px rgba(59,32,110,.5)}
@@ -439,8 +439,10 @@ h3{letter-spacing:.03em;line-height:1.35}
 .float-actions.open .nav-toggle::after{content:"✕"}
 .float-actions .nav-toggle::after{content:"☰"}
 @media(max-width:900px){
-  .float-actions{right:16px;bottom:80px;gap:8px}
-  .float-actions a{width:110px;padding:11px 0;font-size:.95rem;border-radius:22px}
-  .float-actions .nav-toggle{width:60px;height:60px;font-size:1.6rem}
-  .float-actions .nav-list a{width:130px;padding:11px 0;font-size:.95rem}
+  .float-actions{right:10px;bottom:20px;gap:6px}
+  .float-actions>a.line{width:44px;height:44px;padding:0;font-size:.7rem;border-radius:50%}
+  .float-actions .nav-toggle{width:44px;height:44px;font-size:1.1rem}
+  .float-actions.open .nav-toggle{width:56px;height:56px;font-size:1.4rem}
+  .float-actions .nav-list{gap:6px}
+  .float-actions .nav-list a{width:180px;padding:10px 0;font-size:.95rem;border-radius:20px;white-space:nowrap}
 }
