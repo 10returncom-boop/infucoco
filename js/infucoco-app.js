@@ -33,7 +33,7 @@
             <a class="popover-dropdown__link" href="stories.html">故事</a>
             <a class="popover-dropdown__link" href="games.html">遊戲</a>
             <a class="popover-dropdown__link" href="quiz.html">心靈療癒</a>
-            <a class="popover-dropdown__link" href="gallery.html">infucoco世界</a>
+            <a class="popover-dropdown__link" href="gallery.html">infu世界</a>
             <a class="popover-dropdown__link" href="stickers.html">數位商品</a>
             <a class="popover-dropdown__link" href="shop.html">周邊</a>
             <a class="popover-dropdown__link" href="member.html">會員</a>
