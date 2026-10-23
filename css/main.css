@@ -435,8 +435,8 @@ h3{letter-spacing:.03em;line-height:1.35}
 .float-actions a:hover{transform:translateY(-2px)}
 .float-actions a:not(.line):hover{background:#6A48B0;box-shadow:0 8px 22px rgba(59,32,110,.5)}
 .float-actions .nav-toggle{width:48px;height:48px;border-radius:50%;font-size:1.2rem;padding:0;cursor:pointer;border:none}
-.float-actions .nav-list{display:none;flex-direction:column;gap:4px;align-items:center}
-.float-actions.open .nav-list{display:flex}
+.float-actions .nav-list{display:none !important;flex-direction:column;gap:4px;align-items:center}
+.float-actions.open .nav-list{display:flex !important}
 .float-actions .nav-list a{width:100px;padding:7px 0;font-size:.75rem}
 .float-actions.open .nav-toggle::after{content:"✕"}
 .float-actions .nav-toggle::after{content:"☰"}
