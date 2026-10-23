@@ -71,17 +71,17 @@ img{max-width:100%;display:block}
 #tools-btn{width:48px;height:48px;font-size:.92rem;font-weight:900;letter-spacing:.04em;box-shadow:0 12px 26px rgba(59,32,110,.55),0 4px 10px rgba(59,32,110,.38)}
 #tools-btn:hover{box-shadow:0 14px 30px rgba(59,32,110,.65),0 5px 12px rgba(59,32,110,.42)}
 @media(max-width:900px){
-  .header-inner{height:64px;padding:0 16px;justify-content:center}
+  .header-inner{height:auto;padding:14px 24px;justify-content:center}
   .logo{flex:1 1 auto;font-size:1.35rem;text-align:center;white-space:nowrap}
-  .logo small{display:inline;font-size:.9rem;letter-spacing:.04em;margin:0 0 0 6px;text-align:center}
+  .logo small{display:inline;font-size:.85rem;letter-spacing:.04em;margin:0 0 0 6px;text-align:center}
   .nav-links{display:none}
   .icon-btn{width:36px;height:36px;font-size:.8rem}
   #tools-btn{width:42px;height:42px;font-size:.82rem}
 }
 @media(max-width:560px){
-  .header-inner{height:58px;padding:0 14px}
+  .header-inner{padding:17px 20px}
   .logo{font-size:1.2rem}
-  .logo small{font-size:.9rem;margin-left:4px}
+  .logo small{font-size:.85rem;margin-left:4px}
   .nav-links{display:none}
   .icon-btn{width:34px;height:34px;font-size:.75rem}
   #tools-btn{width:40px;height:40px;font-size:.78rem}
