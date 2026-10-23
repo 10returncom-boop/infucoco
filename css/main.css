@@ -338,7 +338,7 @@ img{max-width:100%;display:block}
 /* ===== 全站頁面橫幅（乾淨圖片，不疊文字；標題文字置於圖片下方） ===== */
 .page-banner{width:100%;overflow:hidden}
 .page-banner img{width:100%;height:clamp(400px,70vh,720px);object-fit:cover;object-position:center;display:block}
-.page-banner + .skew-sec{padding-top:0}
+.page-banner + .skew-sec{padding-top:5px}
 .page-banner + .skew-sec::before{display:none}
 .banner-ctas{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:18px 0 0}
 @media(max-width:560px){.page-banner img{height:320px}}
