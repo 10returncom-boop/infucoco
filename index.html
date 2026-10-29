@@ -206,6 +206,18 @@ img{max-width:100%;display:block}
 .footer-credit a{color:var(--accent);font-weight:800}
 .footer-bottom{max-width:1240px;margin:8px auto 0;padding:0 24px;color:rgba(255,255,255,.5);font-size:.75rem}
 
+/* ===== 工具百寶箱（iconlib 獨立區塊）===== */
+.iconlib-feature{display:flex;align-items:center;gap:22px;flex-wrap:wrap;background:linear-gradient(100deg,#E36B00 0%,#B85B3A 38%,#8A52C0 72%,#5F3FA8 100%);color:#fff;border-radius:var(--radius);padding:30px;box-shadow:var(--shadow)}
+.iconlib-feature__thumb{flex:0 0 auto;width:112px;height:112px;border-radius:18px;overflow:hidden;background:#fff;border:4px solid rgba(255,255,255,.2);display:block}
+.iconlib-feature__thumb img{width:100%;height:100%;object-fit:cover}
+.iconlib-feature__body{flex:1 1 300px;min-width:220px}
+.iconlib-feature__eyebrow{font-size:.78rem;font-weight:900;letter-spacing:.18em;color:#FFE27A;margin-bottom:4px;text-transform:uppercase}
+.iconlib-feature__title{font-weight:900;font-size:clamp(1.3rem,3vw,1.7rem);margin-bottom:8px}
+.iconlib-feature__desc{color:rgba(255,255,255,.9);font-size:.95rem;line-height:1.65}
+.iconlib-feature__cta{flex:0 0 auto;background:#fff;color:#B85B3A;border:none}
+.iconlib-feature__cta:hover{background:#FFE27A;color:#B85B3A;transform:translateY(-3px) rotate(-1deg)}
+@media(max-width:560px){.iconlib-feature__thumb{width:88px;height:88px}}
+
 /* ===== 其他 ===== */
 .breadcrumb{position:relative;z-index:2;color:var(--soft);font-size:.85rem;margin:10px 0 6px;padding:0 24px;max-width:1240px;margin-left:auto;margin-right:auto}
 .breadcrumb a{color:var(--accent)}
@@ -233,9 +245,20 @@ img{max-width:100%;display:block}
 
 <header class="site-header"><div class="header-inner">
 <div class="logo"><span class="rip">i</span><span class="rip">n</span><span class="rip">f</span><span class="rip">u</span><span class="rip">c</span><span class="rip">o</span><span class="rip">c</span><span class="rip">o</span><small>文創數字的異想世界</small></div>
-<nav class="nav-links">
-<a href="index.html" class="active">首頁</a><a href="quotes.html">金句</a><a href="stories.html">故事</a><a href="games.html">遊戲</a><a href="quiz.html">心靈療癒</a><a href="gallery.html">infu世界</a><a href="stickers.html">數位商品</a><a href="shop.html">周邊</a><a href="member.html">會員</a><a href="about.html">關於</a>
-</nav>
+<nav class="nav-links"> <a href="index.html" class="active">首頁</a><button type="button" class="nav-tool-btn" id="nav-tool-btn" aria-haspopup="true" aria-expanded="false">工具</button><a href="games.html">遊戲</a><span class="nav-dd"><button type="button" class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">infu百寶箱<span class="nav-dd-arrow">▾</span></button><div class="nav-dd-panel"><a href="quotes.html"><span class="mm-icon">✨</span>金句</a><a href="quiz.html"><span class="mm-icon">🧘</span>心靈療癒</a><a href="stories.html"><span class="mm-icon">📖</span>故事</a></div></span><span class="nav-dd"><button type="button" class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">數位週邊<span class="nav-dd-arrow">▾</span></button><div class="nav-dd-panel"><a href="stickers.html"><span class="mm-icon">🖼️</span>數位商品</a><a href="shop.html"><span class="mm-icon">🛍️</span>實體周邊</a></div></span><a href="member.html">會員</a><a href="about.html">關於</a> </nav>
+</div>
+<div class="nav-tool-frame" id="nav-tool-frame" role="menu">
+<div class="mm-group">
+<div class="mm-group__head">🔧 工具百寶箱</div>
+<div class="mm-tree">
+<a href="infucoco-iconlib/index.html"><span class="mm-icon">✳️</span>特殊符號</a>
+<a href="infucoco-iconlib/emoji/index.html"><span class="mm-icon">😀</span>Emoji 表情</a>
+<a href="infucoco-iconlib/kaomoji/index.html"><span class="mm-icon">🎭</span>顏文字</a>
+<a href="infucoco-iconlib/blank/index.html"><span class="mm-icon">⬜</span>空白與分隔</a>
+<a href="infucoco-iconlib/font/index.html"><span class="mm-icon">🔤</span>花式字體</a>
+<a href="infucoco-iconlib/text-tools/index.html"><span class="mm-icon">🛠️</span>文字工具</a>
+</div>
+</div>
 </div></header>
 
 <section class="hero">
@@ -253,7 +276,7 @@ img{max-width:100%;display:block}
 <div class="scroll-hint">▼ SCROLL</div>
 </section>
 
-<section class="skew-sec">
+  <section class="skew-sec" id="tool-embed"><div class="container"><div class="section-title"><span class="sec-no">01 / 工具</span><h2>Infucoco<span class="rl">工具百寶箱</span></h2><p class="lead">特殊符號、Emoji、顏文字、空白與花式字體，直接在此使用，點一下即複製。</p></div><div class="tool-embed-frame"><iframe id="tool-embed-iframe" src="infucoco-iconlib/index.html" title="Infucoco 特殊符號複製大全" loading="lazy"></iframe></div></div></section><section class="skew-sec">
 <div class="container">
 <div class="section-title"><h2>走進<span class="rt"><span>i</span><span>n</span><span>f</span><span>u</span><span>c</span><span>o</span><span>c</span><span>o</span></span><span class="rl">異想世界</span></h2><p class="lead">每一張，都是一個可以躲進去的角落。</p></div>
 <div class="bento">
@@ -261,6 +284,20 @@ img{max-width:100%;display:block}
 <a class="card-b" href="puppy-cuddle.html"><img src="assets/media/infucoco_window_dog_cuddle_moon.webp" alt="夜窗月與小狗依偎"><div class="ovl"><span class="tag">夜窗</span><h3>小狗依偎</h3></div></a>
 <a class="card-b" href="hide-and-seek.html"><img src="assets/webp/infucoco_park_bench_mailbox_toy.webp" alt="捉迷藏，貓從抱枕探頭"><div class="ovl"><span class="tag">遊戲</span><h3>捉迷藏</h3></div></a>
 <a class="card-b w2" href="welcome-home.html"><img src="assets/media/infucoco_entrance_squat_pet_mat.webp" alt="玄關蹲地墊，白兔橘貓小狗"><div class="ovl"><span class="tag">玄關</span><h3>回家的第一句話</h3><p>蹲下來，把一天的疲憊交出去</p></div></a>
+</div>
+</div>
+</section>
+
+<section class="skew-sec">
+<div class="container">
+<div class="iconlib-feature">
+<a class="iconlib-feature__thumb" href="infucoco-iconlib/index.html"><img src="infucoco-iconlib/assets/img/icons/symbols.webp" alt="Infucoco 特殊符號複製大全"></a>
+<div class="iconlib-feature__body">
+<p class="iconlib-feature__eyebrow">工具百寶箱</p>
+<p class="iconlib-feature__title">Infucoco 特殊符號複製大全</p>
+<p class="iconlib-feature__desc">特殊符號、Emoji、顏文字、空白與花式字體，收錄在你眼前。點一下複製，輸入的內容不會上傳。</p>
+</div>
+<a href="#tool-embed" class="btn o iconlib-feature__cta">進入符號百寶箱</a>
 </div>
 </div>
 </section>
@@ -299,10 +336,10 @@ img{max-width:100%;display:block}
 <footer class="site-footer"><div class="footer-inner">
 <div class="footer-col"><h4 style="font-size:1.2rem"><span class="rt"><span>i</span><span>n</span><span>f</span><span>u</span><span>c</span><span>o</span><span>c</span><span>o</span></span> 文創數字的異想世界</h4></div>
 <div class="footer-col"><details class="footer-drop"><summary>療癒</summary><ul><li><a href="quotes.html">心靈金句</a></li><li><a href="stories.html">療癒故事</a></li><li><a href="quiz.html">心靈療癒</a></li></ul></details></div>
-<div class="footer-col"><details class="footer-drop"><summary>玩樂</summary><ul><li><a href="games.html">療癒遊戲</a></li><li><a href="gallery.html">infu世界</a></li><li><a href="stickers.html">數位商品</a></li></ul></details></div>
+<div class="footer-col"><details class="footer-drop"><summary>玩樂</summary><ul><li><a href="games.html">療癒遊戲</a></li><li><a href="gallery.html">infu百寶箱</a></li><li><a href="stickers.html">數位商品</a></li><li><a href="infucoco-iconlib/index.html">特殊符號字庫</a></li></ul></details></div>
 <div class="footer-col"><details class="footer-drop"><summary>網站地圖</summary><ul><li><a href="shop.html">周邊</a></li><li><a href="member.html">會員</a></li><li><a href="about.html">關於</a></li><li><a href="sitemap.html">完整地圖</a></li></ul></details></div>
 </div><div class="footer-credit">規劃×設計×開發×網路行銷：舒安境 Studi-O　<a href="tel:0968222201">0968-222201</a>　<a href="https://line.me/ti/p/~331.today" target="_blank" rel="noopener">LINE</a></div><div class="footer-bottom" style="padding-top:10px"><p style="margin:0 0 6px">給疲憊的你，一座 infu 世界：故事 × 金句 × 遊戲 × 心靈療癒 × 數位商品 × 周邊。</p><p style="margin:0">✉️ infucoco@gmail.com</p><p style="margin-top:6px">© 2026 infucoco 文創數字的異想世界</p></div><div class="footer-notice">著作權聲明：本網站圖文、角色 infucoco 與設計內容，未經授權不得轉載、重製或作為商業使用。<br>免責聲明：本站金句、故事與心靈測驗僅供休閒參考，不構成醫療或心理諮商建議；如有身心不適，請尋求專業協助。</div></footer>
-<div class="float-actions" id="float-nav"><a class="line" href="https://line.me/ti/p/~331.today" target="_blank" rel="noopener" title="LINE 聯絡">LINE</a><button class="nav-toggle" onclick="document.getElementById('float-nav').classList.toggle('open')"></button><div class="nav-list"><a href="index.html">首頁</a><a href="quotes.html">金句</a><a href="stories.html">故事</a><a href="games.html">遊戲</a><a href="quiz.html">心靈療癒</a><a href="gallery.html">infu世界</a><a href="stickers.html">數位商品</a><a href="shop.html">周邊</a><a href="member.html">會員</a><a href="about.html">關於</a></div></div>
+<div class="float-actions" id="float-nav"><a class="line" href="https://line.me/ti/p/~331.today" target="_blank" rel="noopener" title="LINE 聯絡">LINE</a><button class="nav-toggle" onclick="document.getElementById('float-nav').classList.toggle('open')"></button><div class="nav-list"><a href="index.html">首頁</a><a href="infucoco-iconlib/index.html">工具</a><a href="games.html">遊戲</a><a href="quotes.html">金句</a><a href="quiz.html">心靈療癒</a><a href="stories.html">故事</a><a href="gallery.html">infu百寶箱</a><a href="stickers.html">數位商品</a><a href="shop.html">實體周邊</a><a href="member.html">會員</a><a href="about.html">關於</a></div></div>
 
 <script>
 (function(){

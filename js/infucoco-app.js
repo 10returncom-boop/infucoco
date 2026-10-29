@@ -38,6 +38,13 @@
             <a class="popover-dropdown__link" href="shop.html">周邊</a>
             <a class="popover-dropdown__link" href="member.html">會員</a>
             <a class="popover-dropdown__link" href="about.html">關於</a>
+            <div class="popover-dropdown__title" style="grid-column:1/-1;margin:10px 0 2px">工具百寶箱</div>
+            <a class="popover-dropdown__link" href="infucoco-iconlib/index.html">特殊符號</a>
+            <a class="popover-dropdown__link" href="infucoco-iconlib/emoji/index.html">Emoji</a>
+            <a class="popover-dropdown__link" href="infucoco-iconlib/kaomoji/index.html">顏文字</a>
+            <a class="popover-dropdown__link" href="infucoco-iconlib/blank/index.html">空白分隔</a>
+            <a class="popover-dropdown__link" href="infucoco-iconlib/font/index.html">花式字體</a>
+            <a class="popover-dropdown__link" href="infucoco-iconlib/text-tools/index.html">文字工具</a>
           </div>
         </div>
       </div>`;
@@ -355,4 +362,74 @@
     initStandaloneGame();
     initStoriesFlip();
   });
+})();
+(function(){var b=document.getElementById("nav-tool-btn"),f=document.getElementById("nav-tool-frame");if(!b||!f)return;b.addEventListener("click",function(e){e.stopPropagation();var o=f.classList.toggle("open");b.classList.toggle("open",o);b.setAttribute("aria-expanded",o?"true":"false");});document.addEventListener("click",function(e){if(!f.contains(e.target)&&e.target!==b){f.classList.remove("open");b.classList.remove("open");b.setAttribute("aria-expanded","false");}});document.addEventListener("keydown",function(e){if(e.key==="Escape"){f.classList.remove("open");b.classList.remove("open");b.setAttribute("aria-expanded","false");}});})();
+/* 工具下拉：有嵌入框則框內載入並捲動；無框則路由到首頁嵌入框（全站統一進框） */
+(function(){
+  var links = document.querySelectorAll('.nav-tool-frame a');
+  for (var i = 0; i < links.length; i++) {
+    (function(a){
+      a.addEventListener('click', function(e){
+        var href = a.getAttribute('href');
+        var ifr = document.getElementById('tool-embed-iframe');
+        if (ifr) {
+          e.preventDefault();
+          ifr.setAttribute('src', href);
+          var s = document.getElementById('tool-embed');
+          if (s) { s.scrollIntoView({behavior:'smooth', block:'start'}); }
+        } else {
+          e.preventDefault();
+          location.href = 'index.html?tool=' + encodeURIComponent(href) + '#tool-embed';
+        }
+      });
+    })(links[i]);
+  }
+})();
+/* 首頁：讀取 ?tool= 載入對應工具到嵌入框並捲動 */
+(function(){
+  var ifr = document.getElementById('tool-embed-iframe');
+  if (!ifr) { return; }
+  var m = location.search.match(/[?&]tool=([^&]+)/);
+  if (m) {
+    ifr.setAttribute('src', decodeURIComponent(m[1]));
+    var s = document.getElementById('tool-embed');
+    if (s) { setTimeout(function(){ s.scrollIntoView({behavior:'auto', block:'start'}); }, 80); }
+  }
+})();
+/* 療癒 / 數位週邊 下拉開合（2026-10-29） */
+(function () {
+  function closeAll(except) {
+    document.querySelectorAll('.nav-dd-panel.open').forEach(function (p) {
+      var w = p.closest('.nav-dd');
+      if (w !== except) {
+        p.classList.remove('open');
+        var b = w.querySelector('.nav-dd-btn');
+        if (b) { b.classList.remove('open'); b.setAttribute('aria-expanded', 'false'); }
+      }
+    });
+    var tf = document.getElementById('nav-tool-frame'), tb = document.getElementById('nav-tool-btn');
+    if (tf) tf.classList.remove('open');
+    if (tb) { tb.classList.remove('open'); tb.setAttribute('aria-expanded', 'false'); }
+    if (!document.querySelector('.nav-dd-panel.open')) {
+      document.querySelectorAll('.nav-links').forEach(function (n) { n.classList.remove('dd-open'); });
+    }
+  }
+  document.querySelectorAll('.nav-dd').forEach(function (w) {
+    var b = w.querySelector('.nav-dd-btn'), p = w.querySelector('.nav-dd-panel');
+    if (!b || !p) return;
+    b.addEventListener('click', function (e) {
+      e.stopPropagation();
+      closeAll(w);
+      var open = !p.classList.contains('open');
+      p.classList.toggle('open', open);
+      b.classList.toggle('open', open);
+      b.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open) {
+        var n = w.closest('.nav-links');
+        if (n) n.classList.add('dd-open');
+      }
+    });
+  });
+  document.addEventListener('click', function () { closeAll(null); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(null); });
 })();

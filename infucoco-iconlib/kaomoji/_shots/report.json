@@ -1,0 +1,688 @@
+{
+  "src": "D:\\_325_Susi_PMO\\icon符號更詳細更完整多功能多頁靜態網站\\kaomoji\\index.html",
+  "url": "file:///D:/_325_Susi_PMO/icon%E7%AC%A6%E8%99%9F%E6%9B%B4%E8%A9%B3%E7%B4%B0%E6%9B%B4%E5%AE%8C%E6%95%B4%E5%A4%9A%E5%8A%9F%E8%83%BD%E5%A4%9A%E9%A0%81%E9%9D%9C%E6%85%8B%E7%B6%B2%E7%AB%99/kaomoji/index.html",
+  "outdir": "D:\\_325_Susi_PMO\\icon符號更詳細更完整多功能多頁靜態網站\\kaomoji\\_shots",
+  "include": [
+    "lint",
+    "screenshots",
+    "structure"
+  ],
+  "shots": {
+    "desktop": {
+      "revealed": 0,
+      "screenshot": "D:\\_325_Susi_PMO\\icon符號更詳細更完整多功能多頁靜態網站\\kaomoji\\_shots\\index_desktop.jpg",
+      "screenshotBytes": 195763,
+      "truncated": false,
+      "structure": {
+        "title": "顏文字複製大全｜開心、難過、生氣、害羞日系顏文字｜Infucoco 特殊符號複製大全",
+        "firstH1": "顏文字複製大全",
+        "viewport": {
+          "w": 1440,
+          "h": 900
+        },
+        "fullpage": {
+          "w": 1440,
+          "h": 3800
+        },
+        "counts": {
+          "section": 0,
+          "h1": 1,
+          "h2": 7,
+          "img": 1,
+          "canvas": 0,
+          "svg": 0,
+          "links": 118,
+          "buttons": 16
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [],
+      "horizontalOverflow": [],
+      "resourceErrors": [],
+      "emojiUsageWarning": [
+        {
+          "tag": "span",
+          "chars": "✦",
+          "contextText": "✦"
+        },
+        {
+          "tag": "span",
+          "chars": "♥",
+          "contextText": "♥"
+        },
+        {
+          "tag": "span",
+          "chars": "★",
+          "contextText": "★"
+        },
+        {
+          "tag": "span",
+          "chars": "✓",
+          "contextText": "✓"
+        },
+        {
+          "tag": "span",
+          "chars": "♈",
+          "contextText": "♈"
+        },
+        {
+          "tag": "span",
+          "chars": "♪",
+          "contextText": "♪"
+        },
+        {
+          "tag": "span",
+          "chars": "☀",
+          "contextText": "☀"
+        },
+        {
+          "tag": "span",
+          "chars": "♠",
+          "contextText": "♠"
+        },
+        {
+          "tag": "span",
+          "chars": "⚔",
+          "contextText": "⚔"
+        },
+        {
+          "tag": "span",
+          "chars": "🎮",
+          "contextText": "🎮"
+        },
+        {
+          "tag": "span",
+          "chars": "😊",
+          "contextText": "😊"
+        },
+        {
+          "tag": "span",
+          "chars": "😀",
+          "contextText": "😀"
+        },
+        {
+          "tag": "span",
+          "chars": "👍",
+          "contextText": "👍"
+        },
+        {
+          "tag": "span",
+          "chars": "🐱",
+          "contextText": "🐱"
+        },
+        {
+          "tag": "span",
+          "chars": "🍰",
+          "contextText": "🍰"
+        }
+      ],
+      "emojiUsageHint": "warning · 含义：页面正文里检出 emoji 字符（U+1F300–U+1FAFF 或 U+2600–U+27BF 平面）。SKILL.md 视觉设计段明确禁用 emoji——不作图标、不作装饰、不放进数据。 | 修法：换成内联 SVG 图标（<svg viewBox=\"0 0 24 24\">）建立风格连贯的图标语言。 | 豁免：(1) **用户品牌资产明确包含 emoji**（罕见，但如即时通讯、社交媒体主题的产物合理）；(2) 主题本身就是关于 emoji 的（emoji 历史 / 表情包研究 / Unicode 演进）；(3) 引用某条真实文本原文（如推文截图的文字版），emoji 是内容而非装饰——保留原文可接受，但仍应权衡；(4) 装饰性 dingbat（如 U+2713 勾选符 ✓、U+2192 箭头 →、U+2605 星 ★）落入 U+2600–U+27BF 平面被误报的，如确认是符号非 emoji 可忽略。"
+    },
+    "mobile": {
+      "revealed": 0,
+      "slices": [
+        "D:\\_325_Susi_PMO\\icon符號更詳細更完整多功能多頁靜態網站\\kaomoji\\_shots\\index_mobile_p1of3.jpg",
+        "D:\\_325_Susi_PMO\\icon符號更詳細更完整多功能多頁靜態網站\\kaomoji\\_shots\\index_mobile_p2of3.jpg",
+        "D:\\_325_Susi_PMO\\icon符號更詳細更完整多功能多頁靜態網站\\kaomoji\\_shots\\index_mobile_p3of3.jpg"
+      ],
+      "sliceHint": "按顺序 Read slices 里的各分片。",
+      "truncated": false,
+      "structure": {
+        "title": "顏文字複製大全｜開心、難過、生氣、害羞日系顏文字｜Infucoco 特殊符號複製大全",
+        "firstH1": "顏文字複製大全",
+        "viewport": {
+          "w": 390,
+          "h": 844
+        },
+        "fullpage": {
+          "w": 390,
+          "h": 8759
+        },
+        "counts": {
+          "section": 0,
+          "h1": 1,
+          "h2": 7,
+          "img": 1,
+          "canvas": 0,
+          "svg": 0,
+          "links": 118,
+          "buttons": 16
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [],
+      "horizontalOverflow": [],
+      "resourceErrors": [],
+      "emojiUsageWarning": [
+        {
+          "tag": "span",
+          "chars": "♥",
+          "contextText": "♥"
+        },
+        {
+          "tag": "span",
+          "chars": "★",
+          "contextText": "★"
+        },
+        {
+          "tag": "span",
+          "chars": "✓",
+          "contextText": "✓"
+        },
+        {
+          "tag": "span",
+          "chars": "♈",
+          "contextText": "♈"
+        },
+        {
+          "tag": "span",
+          "chars": "♪",
+          "contextText": "♪"
+        },
+        {
+          "tag": "span",
+          "chars": "☀",
+          "contextText": "☀"
+        },
+        {
+          "tag": "span",
+          "chars": "♠",
+          "contextText": "♠"
+        },
+        {
+          "tag": "span",
+          "chars": "⚔",
+          "contextText": "⚔"
+        },
+        {
+          "tag": "span",
+          "chars": "🎮",
+          "contextText": "🎮"
+        },
+        {
+          "tag": "span",
+          "chars": "😀",
+          "contextText": "😀"
+        },
+        {
+          "tag": "span",
+          "chars": "👍",
+          "contextText": "👍"
+        },
+        {
+          "tag": "span",
+          "chars": "🐱",
+          "contextText": "🐱"
+        },
+        {
+          "tag": "span",
+          "chars": "🍰",
+          "contextText": "🍰"
+        },
+        {
+          "tag": "span",
+          "chars": "✈",
+          "contextText": "✈"
+        },
+        {
+          "tag": "span",
+          "chars": "📱",
+          "contextText": "📱"
+        }
+      ],
+      "emojiUsageHint": "warning · 含义：页面正文里检出 emoji 字符（U+1F300–U+1FAFF 或 U+2600–U+27BF 平面）。SKILL.md 视觉设计段明确禁用 emoji——不作图标、不作装饰、不放进数据。 | 修法：换成内联 SVG 图标（<svg viewBox=\"0 0 24 24\">）建立风格连贯的图标语言。 | 豁免：(1) **用户品牌资产明确包含 emoji**（罕见，但如即时通讯、社交媒体主题的产物合理）；(2) 主题本身就是关于 emoji 的（emoji 历史 / 表情包研究 / Unicode 演进）；(3) 引用某条真实文本原文（如推文截图的文字版），emoji 是内容而非装饰——保留原文可接受，但仍应权衡；(4) 装饰性 dingbat（如 U+2713 勾选符 ✓、U+2192 箭头 →、U+2605 星 ★）落入 U+2600–U+27BF 平面被误报的，如确认是符号非 emoji 可忽略。"
+    }
+  },
+  "engine": "playwright",
+  "chromiumExec": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "elapsedSec": 5.48,
+  "schemaVersion": 2,
+  "status": "warning",
+  "engineInfo": {
+    "name": "playwright",
+    "degraded": false,
+    "degradedReasons": []
+  },
+  "input": {
+    "original": "D:\\_325_Susi_PMO\\icon符號更詳細更完整多功能多頁靜態網站\\kaomoji\\index.html",
+    "resolvedPath": "D:\\_325_Susi_PMO\\icon符號更詳細更完整多功能多頁靜態網站\\kaomoji\\index.html",
+    "baseUrl": "file:///D:/_325_Susi_PMO/icon%E7%AC%A6%E8%99%9F%E6%9B%B4%E8%A9%B3%E7%B4%B0%E6%9B%B4%E5%AE%8C%E6%95%B4%E5%A4%9A%E5%8A%9F%E8%83%BD%E5%A4%9A%E9%A0%81%E9%9D%9C%E6%85%8B%E7%B6%B2%E7%AB%99/kaomoji/index.html",
+    "protocol": "file",
+    "cwd": "C:\\Users\\susi\\Doubao\\chats\\2026-10-29\\new-chat-2",
+    "mediaMode": {
+      "reducedMotion": true
+    }
+  },
+  "artifacts": {
+    "screenshots": [
+      {
+        "viewport": "desktop",
+        "path": "D:\\_325_Susi_PMO\\icon符號更詳細更完整多功能多頁靜態網站\\kaomoji\\_shots\\index_desktop.jpg",
+        "size": 195763,
+        "visualCoverage": {
+          "complete": true,
+          "reason": null
+        }
+      },
+      {
+        "viewport": "mobile",
+        "tiles": [
+          "D:\\_325_Susi_PMO\\icon符號更詳細更完整多功能多頁靜態網站\\kaomoji\\_shots\\index_mobile_p1of3.jpg",
+          "D:\\_325_Susi_PMO\\icon符號更詳細更完整多功能多頁靜態網站\\kaomoji\\_shots\\index_mobile_p2of3.jpg",
+          "D:\\_325_Susi_PMO\\icon符號更詳細更完整多功能多頁靜態網站\\kaomoji\\_shots\\index_mobile_p3of3.jpg"
+        ],
+        "visualCoverage": {
+          "complete": true,
+          "reason": null
+        }
+      }
+    ]
+  },
+  "summary": {
+    "blocker": 0,
+    "error": 0,
+    "warning": 30,
+    "info": 0
+  },
+  "findings": [
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "desktop",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "✦",
+        "contextText": "✦"
+      },
+      "dedupeKey": "emojiUsageWarning|desktop|span|0"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "desktop",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "♥",
+        "contextText": "♥"
+      },
+      "dedupeKey": "emojiUsageWarning|desktop|span|1"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "desktop",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "★",
+        "contextText": "★"
+      },
+      "dedupeKey": "emojiUsageWarning|desktop|span|2"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "desktop",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "✓",
+        "contextText": "✓"
+      },
+      "dedupeKey": "emojiUsageWarning|desktop|span|3"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "desktop",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "♈",
+        "contextText": "♈"
+      },
+      "dedupeKey": "emojiUsageWarning|desktop|span|4"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "desktop",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "♪",
+        "contextText": "♪"
+      },
+      "dedupeKey": "emojiUsageWarning|desktop|span|5"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "desktop",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "☀",
+        "contextText": "☀"
+      },
+      "dedupeKey": "emojiUsageWarning|desktop|span|6"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "desktop",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "♠",
+        "contextText": "♠"
+      },
+      "dedupeKey": "emojiUsageWarning|desktop|span|7"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "desktop",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "⚔",
+        "contextText": "⚔"
+      },
+      "dedupeKey": "emojiUsageWarning|desktop|span|8"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "desktop",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "🎮",
+        "contextText": "🎮"
+      },
+      "dedupeKey": "emojiUsageWarning|desktop|span|9"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "desktop",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "😊",
+        "contextText": "😊"
+      },
+      "dedupeKey": "emojiUsageWarning|desktop|span|10"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "desktop",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "😀",
+        "contextText": "😀"
+      },
+      "dedupeKey": "emojiUsageWarning|desktop|span|11"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "desktop",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "👍",
+        "contextText": "👍"
+      },
+      "dedupeKey": "emojiUsageWarning|desktop|span|12"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "desktop",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "🐱",
+        "contextText": "🐱"
+      },
+      "dedupeKey": "emojiUsageWarning|desktop|span|13"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "desktop",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "🍰",
+        "contextText": "🍰"
+      },
+      "dedupeKey": "emojiUsageWarning|desktop|span|14"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "mobile",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "♥",
+        "contextText": "♥"
+      },
+      "dedupeKey": "emojiUsageWarning|mobile|span|0"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "mobile",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "★",
+        "contextText": "★"
+      },
+      "dedupeKey": "emojiUsageWarning|mobile|span|1"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "mobile",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "✓",
+        "contextText": "✓"
+      },
+      "dedupeKey": "emojiUsageWarning|mobile|span|2"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "mobile",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "♈",
+        "contextText": "♈"
+      },
+      "dedupeKey": "emojiUsageWarning|mobile|span|3"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "mobile",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "♪",
+        "contextText": "♪"
+      },
+      "dedupeKey": "emojiUsageWarning|mobile|span|4"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "mobile",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "☀",
+        "contextText": "☀"
+      },
+      "dedupeKey": "emojiUsageWarning|mobile|span|5"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "mobile",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "♠",
+        "contextText": "♠"
+      },
+      "dedupeKey": "emojiUsageWarning|mobile|span|6"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "mobile",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "⚔",
+        "contextText": "⚔"
+      },
+      "dedupeKey": "emojiUsageWarning|mobile|span|7"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "mobile",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "🎮",
+        "contextText": "🎮"
+      },
+      "dedupeKey": "emojiUsageWarning|mobile|span|8"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "mobile",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "😀",
+        "contextText": "😀"
+      },
+      "dedupeKey": "emojiUsageWarning|mobile|span|9"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "mobile",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "👍",
+        "contextText": "👍"
+      },
+      "dedupeKey": "emojiUsageWarning|mobile|span|10"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "mobile",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "🐱",
+        "contextText": "🐱"
+      },
+      "dedupeKey": "emojiUsageWarning|mobile|span|11"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "mobile",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "🍰",
+        "contextText": "🍰"
+      },
+      "dedupeKey": "emojiUsageWarning|mobile|span|12"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "mobile",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "✈",
+        "contextText": "✈"
+      },
+      "dedupeKey": "emojiUsageWarning|mobile|span|13"
+    },
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "kind": "typography",
+      "viewport": "mobile",
+      "selector": "span",
+      "evidence": {
+        "tag": "span",
+        "chars": "📱",
+        "contextText": "📱"
+      },
+      "dedupeKey": "emojiUsageWarning|mobile|span|14"
+    }
+  ],
+  "prioritizedActions": [
+    {
+      "ruleId": "emojiUsageWarning",
+      "severity": "warning",
+      "viewport": "desktop",
+      "selector": "span"
+    }
+  ],
+  "reportPath": "D:\\_325_Susi_PMO\\icon符號更詳細更完整多功能多頁靜態網站\\kaomoji\\_shots\\report.json"
+}

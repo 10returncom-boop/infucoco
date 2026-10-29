@@ -493,3 +493,37 @@ h3{letter-spacing:.03em;line-height:1.35}
   .section-title h2 .rt,.section-title h1 .rt{font-size:.65em}
   .section-title h2 .rl,.section-title h1 .rl{font-size:.78em}
 }
+/* ===== 工具下拉 frame（header 下方）===== */
+.nav-tool-btn{font-family:'Fredoka','Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;color:#fff;font-weight:700;font-size:.88rem;line-height:1.4;padding:8px 10px;border-radius:30px;transition:.2s;white-space:nowrap;flex:0 0 auto;background:none;border:0;cursor:pointer;display:inline-block}
+.nav-tool-btn:hover{background:rgba(255,255,255,.25);color:#fff;transform:rotate(-2deg)}
+.nav-tool-btn.open{background:#fff;color:#C2539A}
+/* ===== Megamenu：icon + 簡潔樹狀排列（2026-10-29）===== */
+.nav-tool-frame{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);width:min(88vw,300px);display:none;background:#fff;border-radius:18px;padding:14px;box-shadow:0 22px 60px rgba(24,21,16,.25);z-index:80;white-space:nowrap}
+.nav-tool-frame.open{display:block;animation:pop .18s ease}
+.mm-group{display:flex;flex-direction:column;gap:2px}
+.mm-group__head{font-weight:900;font-size:.82rem;color:var(--accent);padding:2px 10px 10px;letter-spacing:.05em;border-bottom:1px solid var(--line);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.mm-tree{position:relative;padding-left:18px}
+.mm-tree::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:var(--line);border-radius:2px}
+.nav-tool-frame a{position:relative;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;color:#2B2A26;font-weight:700;font-size:.88rem;font-family:'Fredoka','Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;transition:.15s;text-decoration:none}
+.mm-tree a::before{content:"";position:absolute;left:-13px;top:50%;width:9px;height:2px;background:var(--line);border-radius:2px}
+.mm-tree a::after{content:"";position:absolute;left:-19px;top:50%;transform:translateY(-50%);width:7px;height:7px;border-radius:50%;background:#fff;border:2px solid var(--accent2);transition:.15s}
+.nav-tool-frame a:hover{background:#FBF6EC;color:#B85B3A}
+.mm-icon{font-size:1.05rem;width:24px;text-align:center;flex:0 0 24px;line-height:1}
+.nav-dd-panel .mm-icon{font-size:1rem;width:22px;text-align:center;flex:0 0 22px;line-height:1}
+/* ===== 工具百寶箱嵌入 frame（hero 下方，原地使用不跳頁） ===== */
+.tool-embed-frame{ margin-top:24px; border-radius:16px; overflow:hidden; box-shadow:0 18px 40px -18px rgba(0,0,0,.35); background:#fff; border:1px solid rgba(0,0,0,.08); }
+.tool-embed-frame iframe{ display:block; width:100%; height:1000px; border:0; }
+@media(max-width:720px){ .tool-embed-frame iframe{ height:840px; } }
+/* ===== 療癒 / 數位週邊 下拉（2026-10-29）===== */
+.nav-dd{position:relative;display:inline-flex;flex:0 0 auto;align-items:center}
+.nav-dd-btn{font-family:'Fredoka','Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;color:#fff;font-weight:700;font-size:.88rem;line-height:1.4;padding:8px 10px;border-radius:30px;transition:.2s;white-space:nowrap;flex:0 0 auto;background:none;border:0;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+.nav-dd-btn:hover{background:rgba(255,255,255,.25);color:#fff;transform:rotate(-2deg)}
+.nav-dd-btn.open{background:#fff;color:#C2539A}
+.nav-dd-arrow{font-size:.6em;opacity:.85}
+.nav-dd-panel{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);display:none;flex-direction:column;gap:2px;background:#fff;border-radius:14px;padding:8px;box-shadow:0 18px 44px rgba(24,21,16,.28);z-index:80;min-width:150px;white-space:nowrap}
+.nav-dd-panel.open{display:flex;animation:pop .18s ease}
+.nav-dd-panel a{display:flex;align-items:center;gap:10px;padding:9px 14px;border-radius:10px;color:#333;text-decoration:none;font-weight:700;font-size:.9rem;transition:.15s}
+.nav-dd-panel a:hover{background:#FBF6EC;color:#B85B3A}
+.nav-dd-panel a.active{background:#FFE9F2;color:#C2539A}
+/* 下拉開啟時解除 nav 溢出裁切（2026-10-29） */
+.nav-links.dd-open{overflow:visible}
