@@ -1,6 +1,6 @@
-# infucoco電玩追追追追｜電玩無止境
+# infucoco遊戲追追追追｜電玩無止境
 
-> infucoco電玩追追追追 — 電玩無止境
+> infucoco遊戲追追追追 — 電玩無止境
 
 電玩產業鏈生態新聞與創作平台，涵蓋上游硬體、中游內容、下游通路與生態支援四大層級，附設 325 遊樂場（81 款分類小遊戲）。
 
@@ -9,7 +9,7 @@
 ```
 電玩百與產業鏈生態/
 ├── index.html                  # 首頁（主入口）
-├── about-infucoco電玩追追追追-brand.html      # 關於 Sek
+├── about-infucoco遊戲追追追追-brand.html      # 關於 Sek
 ├── README.md                   # 本檔案
 ├── SITE_SPEC.md                # 站點規格（SEO/分類/導覽）
 ├── .gitignore                  # Git 忽略規則
@@ -39,7 +39,7 @@
 │       ├── esports-oriented-games/    # 電競導向遊戲
 │       ├── physical-merch-games/      # 實體周邊結合遊戲
 │       ├── corporate-education-games/ # 企業定制／教育遊戲
-│       └── infucoco電玩追追追追/              # infucoco電玩追追追追 品牌頁
+│       └── infucoco遊戲追追追追/              # infucoco遊戲追追追追 品牌頁
 ├── _backup/                    # 備份（不入 Git）
 └── _shots/                     # 截圖（不入 Git）
 ```
@@ -81,4 +81,4 @@
 
 ## 授權
 
-© 2026 infucoco電玩追追追追｜電玩無止境
+© 2026 infucoco遊戲追追追追｜電玩無止境

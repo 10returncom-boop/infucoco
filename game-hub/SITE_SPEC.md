@@ -1,4 +1,4 @@
-# infucoco電玩追追追追｜電玩無止境 — 網站規格快照
+# infucoco遊戲追追追追｜電玩無止境 — 網站規格快照
 
 > 最後更新：2026-10-23  
 > 根目錄：`D:\_www_325_game\電玩百與產業鏈生態\`
@@ -9,9 +9,9 @@
 
 | 項目 | 值 |
 |---|---|
-| 品牌名 | infucoco電玩追追追追 |
+| 品牌名 | infucoco遊戲追追追追 |
 | 副標 | 電玩無止境 |
-| 英文 slogan | infucoco電玩追追追追 — 電玩無止境 |
+| 英文 slogan | infucoco遊戲追追追追 — 電玩無止境 |
 | 字源 | im-（without 無）+ sequ（chase 追尋），聽感彩蛋 I am Sek |
 | 定位 | 電玩與數位創作平台，從晶片到玩家桌上的完整產業鏈 |
 
@@ -22,7 +22,7 @@
 ```
 電玩百與產業鏈生態/
 ├── index.html          ← 主入口（單頁站）
-├── about.html          ← 關於 infucoco電玩追追追追
+├── about.html          ← 關於 infucoco遊戲追追追追
 ├── SITE_SPEC.md        ← 本規格文件
 ├── README.md
 ├── .gitignore
@@ -40,7 +40,7 @@
 │   └── journal.html
 └── games/              ← 87+ 款線上小遊戲
     ├── doubao10/
-    ├── infucoco電玩追追追追/
+    ├── infucoco遊戲追追追追/
     └── 50-greatest/
 ```
 
@@ -52,9 +52,9 @@
 |---|---|---|
 | 1 | Header | 品牌 Logo + MegaMenu 按鈕 + 主題切換 |
 | 2 | 跑馬燈 | 深藍→深咖漸層背景，白色文字 |
-| 3 | Breadcrumb | 首頁 / infucoco電玩追追追追｜電玩產業鏈生態 |
-| 4 | Hero | 大標「infucoco電玩追追追追｜電玩無止境」 |
-| 5 | infucoco電玩追追追追遊樂場 | Treemap 分類 + 遊戲卡 3D 翻牌 |
+| 3 | Breadcrumb | 首頁 / infucoco遊戲追追追追｜電玩產業鏈生態 |
+| 4 | Hero | 大標「infucoco遊戲追追追追｜電玩無止境」 |
+| 5 | infucoco遊戲追追追追遊樂場 | Treemap 分類 + 遊戲卡 3D 翻牌 |
 | 6 | 五大主題分類 | 5 張方形卡（AI視覺/圖解知識/美學藏品/Zootecture/創作日誌） |
 | 7 | 市場數據看板 | 8 張 KPI 數據卡 |
 | 8 | 電玩產業鏈生態地圖 | 5 層 accordion 摺疊式 |
