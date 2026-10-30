@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>俄羅斯方塊</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body {
+    width:100%; height:100%;
+    font-family:"Microsoft JhengHei","PingFang TC","Heiti TC",sans-serif;
+    background: radial-gradient(ellipse at top, #241b3a 0%, #120c22 70%, #08060f 100%);
+    color:#eae4ff; overflow:hidden;
+  }
+  #wrap {
+    width:100%; height:100%;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:8px;
+  }
+  h1 { font-size:clamp(20px,4vw,30px); letter-spacing:5px; color:#c79bff; text-shadow:0 0 14px rgba(199,155,255,.5); }
+  #layout { display:flex; gap:14px; align-items:flex-start; }
+  #stage { position:relative; }
+  canvas#board { display:block; background:#0d0820; border-radius:10px; box-shadow:0 0 0 2px #3a2a5c, 0 12px 40px rgba(0,0,0,.55); }
+  #side { display:flex; flex-direction:column; gap:10px; width:110px; }
+  .panel {
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+    border-radius:10px; padding:8px 10px; text-align:center;
+  }
+  .panel .label { font-size:12px; color:#9d8fc4; letter-spacing:2px; }
+  .panel .val { font-size:22px; color:#ffd479; font-weight:bold; margin-top:2px; }
+  canvas#next { display:block; margin:4px auto; background:#0d0820; border-radius:8px; }
+  .overlay {
+    position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:12px; text-align:center; background:rgba(8,6,18,.85); border-radius:10px; padding:16px;
+  }
+  .overlay h2 { font-size:clamp(18px,4vw,26px); color:#c79bff; letter-spacing:3px; }
+  .overlay p { font-size:clamp(11px,2.2vw,14px); line-height:1.8; color:#c8bce8; }
+  .btn {
+    cursor:pointer; border:none; border-radius:22px; padding:11px 30px;
+    font-size:clamp(14px,3vw,17px); font-family:inherit; letter-spacing:2px; color:#1a0f2e;
+    background:linear-gradient(180deg,#d9b6ff,#9d6bff); box-shadow:0 4px 0 #6a3dc4, 0 6px 16px rgba(0,0,0,.4);
+  }
+  .btn:active { transform:translateY(3px); box-shadow:0 1px 0 #6a3dc4; }
+  .hidden { display:none !important; }
+  #touch { display:none; grid-template-columns:repeat(3,56px); grid-template-rows:repeat(2,56px); gap:8px; margin-top:6px; }
+  #touch button {
+    font-size:22px; color:#e6ddff; background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.18); border-radius:12px;
+  }
+  @media (pointer:coarse) { #touch { display:grid; } }
+</style>
+</head>
+<body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<div id="wrap">
+  <h1>俄羅斯方塊</h1>
+  <div id="layout">
+    <div id="stage">
+      <canvas id="board"></canvas>
+      <div class="overlay" id="startOv">
+        <h2>俄羅斯方塊</h2>
+        <p>← → 移動　↑ 旋轉<br>↓ 加速　空白鍵 硬降<br>消除橫線得分，等級愈高落得愈快<br>堆到頂端即結束</p>
+        <button class="btn" id="startBtn">開始遊戲</button>
+      </div>
+      <div class="overlay hidden" id="overOv">
+        <h2>遊戲結束</h2>
+        <p id="finalScore"></p>
+        <button class="btn" id="restartBtn">重新開始</button>
+      </div>
+    </div>
+    <div id="side">
+      <div class="panel"><div class="label">下一個</div><canvas id="next" width="80" height="80"></canvas></div>
+      <div class="panel"><div class="label">得分</div><div class="val" id="score">0</div></div>
+      <div class="panel"><div class="label">消除行數</div><div class="val" id="lines">0</div></div>
+      <div class="panel"><div class="label">等級</div><div class="val" id="level">1</div></div>
+    </div>
+  </div>
+  <div id="touch">
+    <button id="tLeft">◀</button>
+    <button id="tRot">⟳</button>
+    <button id="tRight">▶</button>
+    <button id="tDown">▼</button>
+    <button id="tDrop">⤓</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  const COLS = 10, ROWS = 20;
+  const board = document.getElementById('board');
+  const bctx = board.getContext('2d');
+  const nextCv = document.getElementById('next');
+  const nctx = nextCv.getContext('2d');
+
+  let cell = 24;
+  let grid, cur, next, bag, score, lines, level, dropTimer, running;
+
+  // 7 種方塊定義（矩陣）與顏色
+  const SHAPES = {
+    I: { color:'#4dd0e1', m:[[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]] },
+    O: { color:'#ffd54f', m:[[1,1],[1,1]] },
+    T: { color:'#ba68c8', m:[[0,1,0],[1,1,1],[0,0,0]] },
+    S: { color:'#81c784', m:[[0,1,1],[1,1,0],[0,0,0]] },
+    Z: { color:'#e57373', m:[[1,1,0],[0,1,1],[0,0,0]] },
+    J: { color:'#7986cb', m:[[1,0,0],[1,1,1],[0,0,0]] },
+    L: { color:'#ffb74d', m:[[0,0,1],[1,1,1],[0,0,0]] }
+  };
+  const TYPES = Object.keys(SHAPES);
+
+  function resize() {
+    const maxH = Math.min(window.innerHeight*0.78, 620);
+    cell = Math.max(16, Math.floor(maxH / ROWS));
+    board.width = COLS*cell;
+    board.height = ROWS*cell;
+    draw();
+  }
+
+  function newBag() {
+    const b = TYPES.slice();
+    for (let i=b.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; }
+    return b;
+  }
+  function nextType() {
+    if (!bag || bag.length===0) bag = newBag();
+    return bag.pop();
+  }
+
+  function spawn() {
+    const t = next || nextType();
+    next = nextType();
+    const def = SHAPES[t];
+    const m = def.m.map(r => r.slice());
+    cur = { type:t, color:def.color, m, x: Math.floor((COLS - m[0].length)/2), y: 0 };
+    drawNext();
+    if (collides(cur.m, cur.x, cur.y)) gameOver();
+  }
+
+  function collides(m, px, py) {
+    for (let y=0;y<m.length;y++) for (let x=0;x<m[y].length;x++) {
+      if (!m[y][x]) continue;
+      const gx = px+x, gy = py+y;
+      if (gx<0 || gx>=COLS || gy>=ROWS) return true;
+      if (gy>=0 && grid[gy][gx]) return true;
+    }
+    return false;
+  }
+
+  function rotate(m) {
+    const N = m.length;
+    const r = m.map(row => row.slice());
+    for (let y=0;y<N;y++) for (let x=0;x<N;x++) r[x][N-1-y] = m[y][x];
+    return r;
+  }
+
+  function tryRotate() {
+    if (cur.type==='O') return;
+    const r = rotate(cur.m);
+    for (const kick of [0,-1,1,-2,2]) {
+      if (!collides(r, cur.x+kick, cur.y)) { cur.m = r; cur.x += kick; draw(); return; }
+    }
+  }
+
+  function move(dx) {
+    if (!collides(cur.m, cur.x+dx, cur.y)) { cur.x += dx; draw(); }
+  }
+
+  function softDrop() {
+    if (!collides(cur.m, cur.x, cur.y+1)) { cur.y++; }
+    else lock();
+    draw();
+  }
+
+  function hardDrop() {
+    while (!collides(cur.m, cur.x, cur.y+1)) cur.y++;
+    lock();
+    draw();
+  }
+
+  function lock() {
+    for (let y=0;y<cur.m.length;y++) for (let x=0;x<cur.m[y].length;x++) {
+      if (cur.m[y][x] && cur.y+y>=0) grid[cur.y+y][cur.x+x] = cur.color;
+    }
+    clearLines();
+    spawn();
+  }
+
+  function clearLines() {
+    let cleared = 0;
+    for (let y=ROWS-1;y>=0;y--) {
+      if (grid[y].every(c => c)) {
+        grid.splice(y,1);
+        grid.unshift(new Array(COLS).fill(null));
+        cleared++; y++;
+      }
+    }
+    if (cleared>0) {
+      const pts = [0,100,300,500,800][cleared] * level;
+      score += pts;
+      lines += cleared;
+      level = Math.floor(lines/10)+1;
+      document.getElementById('score').textContent = score;
+      document.getElementById('lines').textContent = lines;
+      document.getElementById('level').textContent = level;
+      restartTimer();
+    }
+  }
+
+  function speedFor() { return Math.max(80, 1000 - (level-1)*90); }
+
+  function restartTimer() {
+    clearInterval(dropTimer);
+    dropTimer = setInterval(tick, speedFor());
+  }
+
+  function tick() {
+    if (!running) return;
+    softDrop();
+  }
+
+  function drawCell(ctx, x, y, size, color) {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, size, size);
+    ctx.fillStyle = 'rgba(255,255,255,.25)';
+    ctx.fillRect(x, y, size, 3);
+    ctx.fillRect(x, y, 3, size);
+    ctx.fillStyle = 'rgba(0,0,0,.25)';
+    ctx.fillRect(x, y+size-3, size, 3);
+    ctx.fillRect(x+size-3, y, 3, size);
+  }
+
+  function draw() {
+    bctx.fillStyle = '#0d0820';
+    bctx.fillRect(0,0,board.width,board.height);
+    // 網格
+    bctx.strokeStyle = 'rgba(255,255,255,0.05)';
+    for (let x=0;x<=COLS;x++){ bctx.beginPath(); bctx.moveTo(x*cell,0); bctx.lineTo(x*cell,board.height); bctx.stroke(); }
+    for (let y=0;y<=ROWS;y++){ bctx.beginPath(); bctx.moveTo(0,y*cell); bctx.lineTo(board.width,y*cell); bctx.stroke(); }
+    // 已固定方塊
+    if (grid) {
+      for (let y=0;y<ROWS;y++) for (let x=0;x<COLS;x++) if (grid[y][x]) drawCell(bctx, x*cell, y*cell, cell, grid[y][x]);
+    }
+    // 目前方塊
+    if (cur) {
+      for (let y=0;y<cur.m.length;y++) for (let x=0;x<cur.m[y].length;x++) {
+        if (cur.m[y][x] && cur.y+y>=0) drawCell(bctx, (cur.x+x)*cell, (cur.y+y)*cell, cell, cur.color);
+      }
+    }
+  }
+
+  function drawNext() {
+    nctx.fillStyle = '#0d0820';
+    nctx.fillRect(0,0,nextCv.width,nextCv.height);
+    if (!next) return;
+    const def = SHAPES[next];
+    const m = def.m;
+    const s = 18;
+    // 計算置中
+    let minX=9,maxX=-1,minY=9,maxY=-1;
+    for (let y=0;y<m.length;y++) for (let x=0;x<m[y].length;x++) if (m[y][x]){ minX=Math.min(minX,x);maxX=Math.max(maxX,x);minY=Math.min(minY,y);maxY=Math.max(maxY,y); }
+    const w = (maxX-minX+1)*s, h=(maxY-minY+1)*s;
+    const ox = (nextCv.width-w)/2 - minX*s, oy=(nextCv.height-h)/2 - minY*s;
+    for (let y=0;y<m.length;y++) for (let x=0;x<m[y].length;x++) if (m[y][x]) drawCell(nctx, ox+x*s, oy+y*s, s, def.color);
+  }
+
+  function startGame() {
+    grid = Array.from({length:ROWS}, () => new Array(COLS).fill(null));
+    score = 0; lines = 0; level = 1; bag = null; next = null;
+    document.getElementById('score').textContent = 0;
+    document.getElementById('lines').textContent = 0;
+    document.getElementById('level').textContent = 1;
+    document.getElementById('startOv').classList.add('hidden');
+    document.getElementById('overOv').classList.add('hidden');
+    running = true;
+    spawn();
+    restartTimer();
+  }
+
+  function gameOver() {
+    running = false;
+    clearInterval(dropTimer);
+    document.getElementById('finalScore').textContent = '最終得分：' + score + '　消除行數：' + lines;
+    document.getElementById('overOv').classList.remove('hidden');
+  }
+
+  document.addEventListener('keydown', e => {
+    if (!running) { if (e.key===' ') startGame(); return; }
+    const k = e.key;
+    if (k==='ArrowLeft'){ move(-1); e.preventDefault(); }
+    else if (k==='ArrowRight'){ move(1); e.preventDefault(); }
+    else if (k==='ArrowUp'){ tryRotate(); e.preventDefault(); }
+    else if (k==='ArrowDown'){ softDrop(); e.preventDefault(); }
+    else if (k===' '){ hardDrop(); e.preventDefault(); }
+  });
+
+  document.getElementById('startBtn').addEventListener('click', startGame);
+  document.getElementById('restartBtn').addEventListener('click', startGame);
+  document.getElementById('tLeft').addEventListener('click', () => running && move(-1));
+  document.getElementById('tRight').addEventListener('click', () => running && move(1));
+  document.getElementById('tRot').addEventListener('click', () => running && tryRotate());
+  document.getElementById('tDown').addEventListener('click', () => running && softDrop());
+  document.getElementById('tDrop').addEventListener('click', () => running && hardDrop());
+
+  window.addEventListener('resize', resize);
+  resize();
+})();
+</script>
+</body>
+</html>

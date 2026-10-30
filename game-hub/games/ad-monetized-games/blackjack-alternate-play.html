@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>霓虹廿一點 — 對戰莊家</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0e17'/%3E%3Ctext x='32' y='44' font-size='30' font-weight='900' text-anchor='middle' fill='%23f0c040' font-family='Arial'>21</text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+:root{--bg:#070a12;--ink:#e8ecf5;--dim:#8fa0bd;--teal:#2dd4bf;--pink:#ff6b9d;--gold:#f0c040;--cyan:#53c7ff;--line:#22304a;--panel:#0e1524}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Segoe UI",system-ui,sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+#vignette{position:fixed;inset:0;pointer-events:none;z-index:5;background:radial-gradient(ellipse at center,transparent 55%,rgba(2,4,9,.7) 100%)}
+#wrap{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:6;padding:12px}
+#top{display:flex;align-items:center;gap:8px;width:min(460px,94vw);flex-wrap:wrap}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px 12px;font-size:13px}
+.chip b{color:var(--gold);font-variant-numeric:tabular-nums}
+.chip .k{font-size:11px;color:var(--dim)}
+.spacer{flex:1}
+#muteBtn{width:40px;height:40px;border-radius:10px;background:var(--panel);border:1px solid var(--line);color:var(--dim);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;flex:none}
+#muteBtn:hover{color:var(--ink);border-color:var(--gold)}
+#table{width:min(460px,94vw);background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 0 50px rgba(240,192,64,.08)}
+.areaLabel{font-size:13px;color:var(--dim);letter-spacing:.1em;margin-bottom:8px}
+.areaLabel b{color:var(--ink);font-variant-numeric:tabular-nums}
+.hand{display:flex;gap:8px;flex-wrap:wrap;min-height:74px;margin-bottom:14px}
+.card{width:48px;height:68px;border-radius:8px;background:#f4f6fb;color:#10131c;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;font-size:18px;box-shadow:0 3px 8px rgba(0,0,0,.4)}
+.card.red{color:#d83a52}
+.card .s{font-size:15px;margin-top:2px;font-weight:700}
+.card.back{background:repeating-linear-gradient(45deg,#16305a,#16305a 6px,#1d3f74 6px,#1d3f74 12px);border:1px solid var(--line)}
+#msg{text-align:center;font-size:18px;font-weight:800;min-height:26px;margin:6px 0;color:var(--gold)}
+#controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;min-height:52px;align-items:center}
+.btn{background:linear-gradient(180deg,#53c7ff,#2a8fd6);color:#04121c;border:none;border-radius:12px;padding:13px 26px;font-size:16px;font-weight:800;letter-spacing:.08em;cursor:pointer;transition:.15s;min-height:48px}
+.btn:hover{transform:translateY(-2px)}
+.btn.green{background:linear-gradient(180deg,#2dd4bf,#159c8a);color:#04140f}
+.btn.gold{background:linear-gradient(180deg,#f0c040,#d19a22);color:#1a1204}
+.ghostBtn{background:transparent;border:1px solid var(--line);color:var(--dim);border-radius:12px;padding:12px 22px;font-size:15px;cursor:pointer;transition:.15s;min-height:48px}
+.ghostBtn:hover{color:var(--ink);border-color:var(--gold)}
+.chipBet{width:56px;height:56px;border-radius:50%;border:3px dashed rgba(255,255,255,.5);color:#fff;font-weight:900;font-size:14px;cursor:pointer;transition:.12s;min-height:48px}
+.chipBet:hover{transform:translateY(-2px)}
+.overlay{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;flex-direction:column;background:radial-gradient(ellipse at 50% 40%,#0d1526,#05070d 80%);padding:24px;text-align:center;overflow:auto}
+.overlay.show{display:flex}
+.logo{font-size:clamp(38px,8vw,60px);font-weight:900;letter-spacing:.06em}
+.logo .n{color:var(--gold)}.logo .t{color:var(--pink)}
+.tag{color:var(--dim);letter-spacing:.3em;margin-top:12px;font-size:14px}
+.bigBtn{margin-top:26px;background:linear-gradient(180deg,#f0c040,#d19a22);color:#1a1204;border:none;border-radius:14px;padding:15px 52px;font-size:18px;font-weight:800;letter-spacing:.15em;cursor:pointer;transition:.18s;box-shadow:0 10px 30px rgba(240,192,64,.26)}
+.bigBtn:hover{transform:translateY(-2px)}
+.help{display:grid;grid-template-columns:1fr;gap:8px 0;margin-top:24px;font-size:14px;color:var(--dim);max-width:340px}
+.help .row{display:flex;justify-content:space-between;align-items:center}
+.result .big{font-size:clamp(32px,7vw,50px);font-weight:900;color:var(--pink)}
+.stat{display:flex;gap:26px;justify-content:center;margin:24px 0 8px;flex-wrap:wrap}
+.stat .v{font-size:28px;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums}
+.stat .k{font-size:12px;color:var(--dim);margin-top:4px;letter-spacing:.1em}
+.rowbtns{display:flex;gap:14px;margin-top:20px;flex-wrap:wrap;justify-content:center}
+@media (min-width:768px){#table{width:min(520px,94vw)}.card{width:54px;height:76px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<div id="wrap">
+  <div id="top">
+    <div class="chip"><span class="k">籌碼</span> <b id="sBal">1000</b></div>
+    <div class="chip"><span class="k">下注</span> <b id="sBet">0</b></div>
+    <div class="chip"><span class="k">最佳</span> <b id="sBest">1000</b></div>
+    <div class="spacer"></div>
+    <button id="muteBtn" aria-label="聲音開關">
+      <svg id="iconOn" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+      <svg id="iconOff" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+    </button>
+  </div>
+  <div id="table">
+    <div class="areaLabel">莊家 <b id="dVal"></b></div>
+    <div class="hand" id="dealerHand"></div>
+    <div class="areaLabel">你 <b id="pVal"></b></div>
+    <div class="hand" id="playerHand"></div>
+    <div id="msg"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+<div id="vignette"></div>
+<div class="overlay show" id="menu">
+  <div class="logo"><span class="n">霓虹</span><span class="t">廿一點</span></div>
+  <div class="tag">BLACKJACK · 對戰莊家</div>
+  <button class="bigBtn" id="startBtn">進入賭桌</button>
+  <div class="help">
+    <div class="row"><span>目標</span><span>點數接近 21</span></div>
+    <div class="row"><span>A</span><span>可算 1 或 11</span></div>
+    <div class="row"><span>黑傑克</span><span>賠 1.5 倍</span></div>
+    <div class="row"><span>莊家</span><span>17 點以上停牌</span></div>
+  </div>
+</div>
+<div class="overlay" id="result">
+  <div class="result">
+    <div class="big" id="resTitle">破產了</div>
+    <div class="stat">
+      <div><div class="v" id="rBal">0</div><div class="k">最終籌碼</div></div>
+      <div><div class="v" id="rBest">1000</div><div class="k">歷史最佳</div></div>
+    </div>
+    <div class="rowbtns">
+      <button class="ghostBtn" id="againBtn">重新購入 1000</button>
+      <button class="ghostBtn" id="menuBtn">回主選單</button>
+    </div>
+  </div>
+</div>
+<script>
+"use strict";
+const Sfx={audio:null,muted:false};
+Sfx.init=()=>{if(!Sfx.audio){const AC=window.AudioContext||window.webkitAudioContext;if(AC)Sfx.audio=new AC();}};
+Sfx.beep=(f,d,type,v,slide)=>{if(Sfx.muted||!Sfx.audio)return;try{const t=Sfx.audio.currentTime,o=Sfx.audio.createOscillator(),g=Sfx.audio.createGain();o.type=type||"square";o.frequency.setValueAtTime(f,t);if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+d);g.gain.setValueAtTime(v||.1,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(Sfx.audio.destination);o.start(t);o.stop(t+d+.02);}catch(e){}};
+Sfx.play=n=>{if(Sfx.muted)return;if(n==="chip")Sfx.beep(600,.05,"square",.08);else if(n==="card")Sfx.beep(340,.07,"sine",.1);else if(n==="win"){Sfx.beep(520,.12,"sine",.14);setTimeout(()=>Sfx.beep(780,.2,"sine",.14),130);}else if(n==="lose")Sfx.beep(220,.4,"sawtooth",.12,90);else if(n==="push")Sfx.beep(320,.15,"triangle",.1);};
+
+const SUITS=["♠","♥","♦","♣"];
+const RANKS=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+const RED={"♥":1,"♦":1};
+let balance=1000,best=1000,bet=0,deck=[],playerHand=[],dealerHand=[],phase="bet",holeHidden=true,doubleUsed=false;
+const msgEl=document.getElementById("msg"),ctrlEl=document.getElementById("controls");
+
+function loadSave(){
+  try{balance=parseInt(localStorage.getItem("ngBlackjack_balance")||"1000",10)||1000;}catch(e){balance=1000;}
+  try{best=parseInt(localStorage.getItem("ngBlackjack_best")||"1000",10)||1000;}catch(e){best=1000;}
+  if(balance<10)balance=1000;
+}
+function saveBalance(){try{localStorage.setItem("ngBlackjack_balance",String(balance));}catch(e){}}
+function saveBest(){try{localStorage.setItem("ngBlackjack_best",String(best));}catch(e){}}
+
+function buildDeck(){
+  deck=[];
+  for(let d=0;d<6;d++)for(const s of SUITS)for(const r of RANKS)deck.push({r,s});
+  for(let i=deck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]];}
+}
+function draw(){if(deck.length<20)buildDeck();return deck.pop();}
+
+function cardValue(c){if(c.r==="A")return 11;if(["J","Q","K"].includes(c.r))return 10;return parseInt(c.r,10);}
+function handValue(h){
+  let total=0,aces=0;
+  for(const c of h){total+=cardValue(c);if(c.r==="A")aces++;}
+  while(total>21&&aces>0){total-=10;aces--;}
+  return total;
+}
+function isBJ(h){return h.length===2&&handValue(h)===21;}
+
+function renderCard(c,hidden){
+  const el=document.createElement("div");
+  if(hidden){el.className="card back";return el;}
+  el.className="card"+(RED[c.s]?" red":"");
+  el.innerHTML="<div>"+c.r+'</div><div class="s">'+c.s+"</div>";
+  return el;
+}
+function render(){
+  const dh=document.getElementById("dealerHand");dh.innerHTML="";
+  dealerHand.forEach((c,i)=>dh.appendChild(renderCard(c,holeHidden&&i===1)));
+  document.getElementById("dVal").textContent=holeHidden&&dealerHand.length?(""+cardValue(dealerHand[0])+" + ?"):(""+handValue(dealerHand));
+  const ph=document.getElementById("playerHand");ph.innerHTML="";
+  playerHand.forEach(c=>ph.appendChild(renderCard(c,false)));
+  document.getElementById("pVal").textContent=""+handValue(playerHand);
+  document.getElementById("sBal").textContent=balance;
+  document.getElementById("sBet").textContent=bet;
+  document.getElementById("sBest").textContent=best;
+}
+
+function setControls(){
+  ctrlEl.innerHTML="";
+  if(phase==="bet"){
+    [10,25,50,100].forEach(v=>{
+      const b=document.createElement("button");b.className="chipBet";b.style.background=v===100?"#d83a52":v===50?"#2dd4bf":v===25?"#53c7ff":"#f0c040";b.textContent=v;
+      b.addEventListener("click",()=>{if(bet+v<=balance){bet+=v;Sfx.play("chip");render();setControls();}});
+      ctrlEl.appendChild(b);
+    });
+    const clear=document.createElement("button");clear.className="ghostBtn";clear.textContent="清除";clear.addEventListener("click",()=>{bet=0;render();setControls();});
+    const deal=document.createElement("button");deal.className="btn green";deal.textContent="開牌";deal.addEventListener("click",dealRound);deal.disabled=bet<=0;deal.style.opacity=bet<=0?.4:1;
+    ctrlEl.appendChild(clear);ctrlEl.appendChild(deal);
+  } else if(phase==="player"){
+    const hit=document.createElement("button");hit.className="btn";hit.textContent="要牌";hit.addEventListener("click",playerHit);
+    const stand=document.createElement("button");stand.className="btn gold";stand.textContent="停牌";stand.addEventListener("click",playerStand);
+    ctrlEl.appendChild(hit);ctrlEl.appendChild(stand);
+    if(playerHand.length===2&&balance>=bet&&!doubleUsed){
+      const dbl=document.createElement("button");dbl.className="btn green";dbl.textContent="加倍";dbl.addEventListener("click",playerDouble);ctrlEl.appendChild(dbl);
+    }
+  } else if(phase==="roundEnd"){
+    const next=document.createElement("button");next.className="btn green";next.textContent="下一輪";next.addEventListener("click",nextRound);ctrlEl.appendChild(next);
+  }
+}
+
+function dealRound(){
+  if(bet<=0||bet>balance)return;
+  balance-=bet;doubleUsed=false;holeHidden=true;
+  playerHand=[draw(),draw()];dealerHand=[draw(),draw()];
+  phase="player";msgEl.textContent="";
+  Sfx.play("card");render();
+  if(isBJ(playerHand)){holeHidden=false;dealerPlay();return;}
+  setControls();
+}
+
+function playerHit(){
+  playerHand.push(draw());Sfx.play("card");render();
+  if(handValue(playerHand)>21){settle("bust");return;}
+  setControls();
+}
+function playerDouble(){
+  if(balance<bet)return;
+  balance-=bet;bet*=2;doubleUsed=true;
+  playerHand.push(draw());Sfx.play("card");render();
+  if(handValue(playerHand)>21){settle("bust");return;}
+  playerStand();
+}
+function playerStand(){dealerPlay();}
+
+function dealerPlay(){
+  holeHidden=false;phase="dealer";render();setControls();
+  const step=()=>{
+    if(handValue(dealerHand)<17){dealerHand.push(draw());Sfx.play("card");render();setTimeout(step,600);}
+    else{settle("done");}
+  };
+  setTimeout(step,500);
+}
+
+function settle(result){
+  phase="roundEnd";holeHidden=false;render();
+  const pv=handValue(playerHand),dv=handValue(dealerHand);
+  let outcome;
+  if(result==="bust"){outcome="你爆牌，莊家贏";Sfx.play("lose");}
+  else if(isBJ(playerHand)&&isBJ(dealerHand)){outcome="雙方黑傑克，和局";balance+=bet;Sfx.play("push");}
+  else if(isBJ(playerHand)){balance+=bet+Math.floor(bet*1.5);outcome="黑傑克！賠 1.5 倍";Sfx.play("win");}
+  else if(dv>21){balance+=bet*2;outcome="莊家爆牌，你贏";Sfx.play("win");}
+  else if(pv>dv){balance+=bet*2;outcome="你贏了！";Sfx.play("win");}
+  else if(pv<dv){outcome="莊家較接近，你輸";Sfx.play("lose");}
+  else{balance+=bet;outcome="和局，退回下注";Sfx.play("push");}
+  best=Math.max(best,balance);saveBalance();saveBest();
+  msgEl.textContent=outcome;render();
+  bet=0;setControls();
+  if(balance<10)showGameOver();
+}
+
+function nextRound(){
+  msgEl.textContent="";playerHand=[];dealerHand=[];bet=0;phase="bet";holeHidden=true;
+  render();setControls();
+}
+function showGameOver(){
+  document.getElementById("rBal").textContent=balance;
+  document.getElementById("rBest").textContent=best;
+  setTimeout(()=>document.getElementById("result").classList.add("show"),700);
+}
+
+function toggleMute(){Sfx.muted=!Sfx.muted;document.getElementById("iconOn").style.display=Sfx.muted?"none":"block";document.getElementById("iconOff").style.display=Sfx.muted?"block":"none";}
+
+function bind(){
+  document.getElementById("startBtn").addEventListener("click",()=>{Sfx.init();Sfx.audio&&Sfx.audio.resume&&Sfx.audio.resume();document.getElementById("menu").classList.remove("show");nextRound();});
+  document.getElementById("againBtn").addEventListener("click",()=>{Sfx.init();balance=1000;best=Math.max(best,balance);saveBalance();saveBest();document.getElementById("result").classList.remove("show");nextRound();});
+  document.getElementById("menuBtn").addEventListener("click",()=>{document.getElementById("result").classList.remove("show");document.getElementById("menu").classList.add("show");});
+  document.getElementById("muteBtn").addEventListener("click",toggleMute);
+}
+
+loadSave();buildDeck();bind();render();
+</script>
+
+<!-- infucoco-watermark -->
+<img src="../../assets/images/infucoco-mascot-mark.png" alt="infucoco" style="position:fixed;right:8px;bottom:8px;width:40px;opacity:.9;pointer-events:none;z-index:99999;border-radius:12px;box-shadow:0 4px 14px #0009;image-rendering:auto">
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>笨鳥先飛</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+  html,body{margin:0;padding:0;height:100%;background:#1a2332;overflow:hidden;font-family:"Microsoft JhengHei","PingFang TC",sans-serif;}
+  #wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;}
+  canvas{display:block;background:#8fd3ff;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,.5);touch-action:manipulation;}
+</style>
+</head>
+<body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<div id="wrap"><canvas id="cv"></canvas></div>
+<script>
+(function(){
+  const cv=document.getElementById('cv');
+  const ctx=cv.getContext('2d');
+  let W,H,DPR;
+  function resize(){
+    DPR=window.devicePixelRatio||1;
+    const maxW=Math.min(window.innerWidth,480);
+    const maxH=Math.min(window.innerHeight,760);
+    // keep flappy aspect ~ 3:4
+    W=maxW; H=maxH;
+    cv.style.width=W+'px'; cv.style.height=H+'px';
+    cv.width=W*DPR; cv.height=H*DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  window.addEventListener('resize',resize);
+  resize();
+
+  const GRAV=0.45, FLAP=-7.5, PIPE_W=64, GAP=150, PIPE_SPD=2.2, GROUND_H=60;
+
+  let state='title'; // title | play | over
+  let bird, pipes, score, best=0, clouds, groundX, t=0;
+
+  function reset(){
+    bird={x:W*0.28,y:H/2,vy:0,r:14,rot:0};
+    pipes=[]; score=0; t=0;
+    clouds=[];
+    for(let i=0;i<5;i++) clouds.push({x:Math.random()*W,y:Math.random()*H*0.6,w:40+Math.random()*60,s:0.2+Math.random()*0.4});
+    groundX=0;
+    spawnPipe(true);
+  }
+  function spawnPipe(initial){
+    const top=Math.random()*(H-GROUND_H-GAP-120)+60;
+    const x=initial? W+100 : W+PIPE_W;
+    pipes.push({x:x,top:top,passed:false});
+  }
+
+  function flap(){
+    if(state==='title'){ reset(); state='play'; }
+    else if(state==='play'){ bird.vy=FLAP; }
+    else if(state==='over'){ return; }
+  }
+
+  cv.addEventListener('pointerdown',e=>{e.preventDefault(); flap();});
+  window.addEventListener('keydown',e=>{
+    if(e.code==='Space'||e.code==='ArrowUp'){ e.preventDefault(); flap(); }
+    if(state==='over' && e.code==='Enter'){ reset(); state='play'; }
+  });
+
+  function drawBackground(){
+    const g=ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,'#5bb8e8'); g.addColorStop(0.6,'#a8dcf5'); g.addColorStop(1,'#dff3ff');
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    // clouds
+    ctx.fillStyle='rgba(255,255,255,0.85)';
+    clouds.forEach(c=>{
+      ctx.beginPath();
+      ctx.ellipse(c.x,c.y,c.w,c.w*0.4,0,0,Math.PI*2);
+      ctx.ellipse(c.x+c.w*0.5,c.y+4,c.w*0.7,c.w*0.3,0,0,Math.PI*2);
+      ctx.fill();
+    });
+  }
+  function drawPipes(){
+    pipes.forEach(p=>{
+      const grad=ctx.createLinearGradient(p.x,0,p.x+PIPE_W,0);
+      grad.addColorStop(0,'#3a9d3a'); grad.addColorStop(0.5,'#5cc85c'); grad.addColorStop(1,'#2d7a2d');
+      ctx.fillStyle=grad;
+      // top pipe
+      ctx.fillRect(p.x,0,PIPE_W,p.top);
+      ctx.fillRect(p.x-4,p.top-22,PIPE_W+8,22);
+      // bottom pipe
+      const by=p.top+GAP;
+      ctx.fillRect(p.x,by,PIPE_W,H-GROUND_H-by);
+      ctx.fillRect(p.x-4,by,PIPE_W+8,22);
+      // outline
+      ctx.strokeStyle='rgba(0,60,0,0.4)'; ctx.lineWidth=2;
+      ctx.strokeRect(p.x,0,PIPE_W,p.top);
+      ctx.strokeRect(p.x-4,p.top-22,PIPE_W+8,22);
+      ctx.strokeRect(p.x,by,PIPE_W,H-GROUND_H-by);
+      ctx.strokeRect(p.x-4,by,PIPE_W+8,22);
+    });
+  }
+  function drawGround(){
+    ctx.fillStyle='#ded895'; ctx.fillRect(0,H-GROUND_H,W,GROUND_H);
+    ctx.fillStyle='#8bc34a'; ctx.fillRect(0,H-GROUND_H,W,10);
+    ctx.fillStyle='#c9b96a';
+    for(let x=-(groundX%24);x<W;x+=24){
+      ctx.beginPath(); ctx.moveTo(x,H-GROUND_H+10); ctx.lineTo(x+12,H-GROUND_H); ctx.lineTo(x+24,H-GROUND_H+10); ctx.fill();
+    }
+  }
+  function drawBird(){
+    ctx.save();
+    ctx.translate(bird.x,bird.y);
+    ctx.rotate(bird.rot);
+    // body
+    ctx.fillStyle='#ffd93d';
+    ctx.beginPath(); ctx.ellipse(0,0,16,12,0,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#c79a00'; ctx.lineWidth=1.5; ctx.stroke();
+    // wing
+    ctx.fillStyle='#ff8c42';
+    const wy=Math.sin(t*0.5)*3;
+    ctx.beginPath(); ctx.ellipse(-3,wy,7,5,-0.2,0,Math.PI*2); ctx.fill();
+    // eye
+    ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(6,-4,4.5,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#000'; ctx.beginPath(); ctx.arc(7.5,-4,2.2,0,Math.PI*2); ctx.fill();
+    // beak
+    ctx.fillStyle='#ff5252';
+    ctx.beginPath(); ctx.moveTo(12,0); ctx.lineTo(20,2); ctx.lineTo(12,5); ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+  function drawText(){
+    ctx.textAlign='center';
+    if(state==='title'){
+      ctx.fillStyle='#fff'; ctx.font='bold 42px "Microsoft JhengHei"';
+      ctx.strokeStyle='rgba(0,0,0,0.4)'; ctx.lineWidth=4;
+      ctx.strokeText('笨鳥先飛',W/2,H*0.3);
+      ctx.fillText('笨鳥先飛',W/2,H*0.3);
+      ctx.font='18px "Microsoft JhengHei"';
+      ctx.strokeText('點擊 / 空白鍵 拍翅',W/2,H*0.3+40);
+      ctx.fillText('點擊 / 空白鍵 拍翅',W/2,H*0.3+40);
+      ctx.strokeText('穿過水管空隙得分',W/2,H*0.3+68);
+      ctx.fillText('穿過水管空隙得分',W/2,H*0.3+68);
+    } else {
+      ctx.fillStyle='#fff'; ctx.font='bold 40px "Microsoft JhengHei"';
+      ctx.strokeStyle='rgba(0,0,0,0.4)'; ctx.lineWidth=4;
+      ctx.strokeText(score,W/2,80); ctx.fillText(score,W/2,80);
+    }
+    if(state==='over'){
+      ctx.fillStyle='rgba(0,0,0,0.5)'; ctx.fillRect(0,0,W,H);
+      ctx.fillStyle='#ff5252'; ctx.font='bold 36px "Microsoft JhengHei"';
+      ctx.strokeStyle='rgba(0,0,0,0.6)'; ctx.lineWidth=4;
+      ctx.strokeText('遊戲結束',W/2,H*0.35); ctx.fillText('遊戲結束',W/2,H*0.35);
+      ctx.fillStyle='#fff'; ctx.font='22px "Microsoft JhengHei"';
+      ctx.strokeText('得分：'+score,W/2,H*0.35+45); ctx.fillText('得分：'+score,W/2,H*0.35+45);
+      ctx.strokeText('最佳：'+best,W/2,H*0.35+78); ctx.fillText('最佳：'+best,W/2,H*0.35+78);
+      ctx.font='18px "Microsoft JhengHei"';
+      const bw=180,bh=48,bx=W/2-bw/2,by=H*0.6;
+      ctx.fillStyle='#4caf50'; ctx.fillRect(bx,by,bw,bh);
+      ctx.strokeStyle='#2e7d32'; ctx.lineWidth=2; ctx.strokeRect(bx,by,bw,bh);
+      ctx.fillStyle='#fff'; ctx.strokeStyle='rgba(0,0,0,0.5)'; ctx.lineWidth=3;
+      ctx.strokeText('重新開始',W/2,by+31); ctx.fillText('重新開始',W/2,by+31);
+    }
+  }
+  function update(){
+    t++;
+    clouds.forEach(c=>{ c.x-=c.s; if(c.x<-c.w*2){ c.x=W+c.w; c.y=Math.random()*H*0.6; }});
+    if(state!=='play') return;
+    groundX+=PIPE_SPD;
+    bird.vy+=GRAV; bird.y+=bird.vy;
+    bird.rot=Math.max(-0.5,Math.min(1.2,bird.vy*0.08));
+    if(bird.y<0){ bird.y=0; bird.vy=0; }
+    pipes.forEach(p=>{ p.x-=PIPE_SPD; });
+    if(pipes.length && pipes[0].x<-PIPE_W){ pipes.shift(); }
+    const lastP=pipes[pipes.length-1];
+    if(lastP.x < W-200) spawnPipe(false);
+    // score
+    pipes.forEach(p=>{ if(!p.passed && p.x+PIPE_W < bird.x){ p.passed=true; score++; }});
+    // collision
+    if(bird.y+bird.r >= H-GROUND_H){ gameOver(); }
+    for(const p of pipes){
+      if(bird.x+bird.r > p.x && bird.x-bird.r < p.x+PIPE_W){
+        if(bird.y-bird.r < p.top || bird.y+bird.r > p.top+GAP){ gameOver(); break; }
+      }
+    }
+  }
+  function gameOver(){ state='over'; best=Math.max(best,score); }
+  function loop(){
+    update();
+    drawBackground();
+    drawPipes();
+    drawGround();
+    drawBird();
+    drawText();
+    requestAnimationFrame(loop);
+  }
+  reset(); loop();
+})();
+</script>
+</body>
+</html>

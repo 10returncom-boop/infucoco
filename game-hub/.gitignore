@@ -1,0 +1,28 @@
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build
+dist/
+build/
+*.min.css
+*.min.js
+
+# Temp
+*.tmp
+*.bak
+_backup/
+_shots/

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>霓虹跳跳彈 — 攀升閃躲</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0e17'/%3E%3Ccircle cx='32' cy='36' r='14' fill='%2353c7ff'/%3E%3Cpath d='M20 20 L26 26 L32 20 L38 26 L44 20' stroke='%23f0c040' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+:root{--bg:#070a12;--ink:#e8ecf5;--dim:#8fa0bd;--teal:#2dd4bf;--pink:#ff6b9d;--gold:#f0c040;--cyan:#53c7ff;--line:#22304a;--panel:#0e1524}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Segoe UI",system-ui,sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:none}
+#vignette{position:fixed;inset:0;pointer-events:none;z-index:5;background:radial-gradient(ellipse at center,transparent 55%,rgba(2,4,9,.7) 100%)}
+#wrap{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:6;padding:10px}
+#top{display:flex;align-items:center;gap:8px;width:min(430px,94vw);flex-wrap:wrap}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:7px 12px;font-size:14px}
+.chip b{color:var(--gold);font-variant-numeric:tabular-nums}
+.chip .k{font-size:11px;color:var(--dim)}
+.spacer{flex:1}
+#muteBtn{width:44px;height:44px;border-radius:10px;background:var(--panel);border:1px solid var(--line);color:var(--dim);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s}
+#muteBtn:hover{color:var(--ink);border-color:var(--teal)}
+#board{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:0 0 50px rgba(83,199,255,.08)}
+#tipBar{font-size:12px;color:var(--dim);letter-spacing:.1em}
+.overlay{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;flex-direction:column;background:radial-gradient(ellipse at 50% 40%,#0d1526,#05070d 80%);padding:24px;text-align:center}
+.overlay.show{display:flex}
+.logo{font-size:clamp(40px,9vw,62px);font-weight:900;letter-spacing:.06em}.logo .n{color:var(--cyan)}.logo .t{color:var(--pink)}
+.tag{color:var(--dim);letter-spacing:.3em;margin-top:12px;font-size:15px}
+.bigBtn{margin-top:30px;background:linear-gradient(180deg,#53c7ff,#2a8fd6);color:#04121c;border:none;border-radius:14px;padding:16px 52px;font-size:19px;font-weight:800;letter-spacing:.15em;cursor:pointer;transition:.18s;box-shadow:0 10px 30px rgba(83,199,255,.26)}
+.bigBtn:hover{transform:translateY(-2px)}
+.help{display:grid;grid-template-columns:1fr;gap:8px;margin-top:26px;font-size:14px;color:var(--dim);max-width:360px;text-align:left}
+.help .row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.result .big{font-size:clamp(32px,7vw,50px);font-weight:900}.result .big.win{color:var(--pink)}
+.stat{display:flex;gap:26px;justify-content:center;margin:24px 0 8px}
+.stat .v{font-size:28px;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums}
+.stat .k{font-size:12px;color:var(--dim);margin-top:4px;letter-spacing:.1em}
+.rowbtns{display:flex;gap:14px;margin-top:20px;flex-wrap:wrap;justify-content:center}
+.ghostBtn{background:transparent;border:1px solid var(--line);color:var(--dim);border-radius:12px;padding:14px 28px;font-size:15px;letter-spacing:.08em;cursor:pointer;transition:.15s;min-width:120px}
+.ghostBtn:hover{color:var(--ink);border-color:var(--cyan)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<div id="wrap">
+  <div id="top">
+    <div class="chip"><span class="k">高度</span> <b id="hudH">0</b>m</div>
+    <div class="chip"><span class="k">分數</span> <b id="hudS">0</b></div>
+    <div class="spacer"></div>
+    <button id="muteBtn" aria-label="聲音開關">
+      <svg id="iconOn" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+      <svg id="iconOff" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+    </button>
+  </div>
+  <canvas id="board"></canvas>
+  <div id="tipBar">←/→ 或滑鼠移動 · 手機按住左右半屏 · 鑽過尖刺縫隙</div>
+</div>
+<div id="vignette"></div>
+<div class="overlay show" id="menu">
+  <div class="logo"><span class="n">霓虹</span><span class="t">跳跳彈</span></div>
+  <div class="tag">BOUNCE · 攀升閃躲</div>
+  <button class="bigBtn" id="startBtn">開始遊戲</button>
+  <div class="help">
+    <div class="row"><span>彈珠自動向上彈跳</span><span>你只管左右閃</span></div>
+    <div class="row"><span>鑽過尖刺縫隙</span><span>撞到尖刺結束</span></div>
+    <div class="row"><span>收集星星</span><span>+10 分</span></div>
+    <div class="row"><span>爬越高越好</span><span>最佳高度紀錄</span></div>
+  </div>
+</div>
+<div class="overlay" id="result">
+  <div class="result">
+    <div class="big win" id="resTitle">撞到尖刺！</div>
+    <div class="stat">
+      <div class="s"><div class="v" id="rH">0</div><div class="k">高度(m)</div></div>
+      <div class="s"><div class="v" id="rS">0</div><div class="k">分數</div></div>
+      <div class="s"><div class="v" id="rBestH">0</div><div class="k">最佳高度</div></div>
+    </div>
+    <div class="rowbtns">
+      <button class="ghostBtn" id="againBtn">再玩一次</button>
+      <button class="ghostBtn" id="menuBtn">主選單</button>
+    </div>
+  </div>
+</div>
+<script>
+"use strict";
+const Sfx={audio:null,muted:false};
+Sfx.init=()=>{if(!Sfx.audio){const AC=window.AudioContext||window.webkitAudioContext;if(AC)Sfx.audio=new AC();}};
+Sfx.beep=(f,d,type,v,slide)=>{if(Sfx.muted||!Sfx.audio)return;try{const t=Sfx.audio.currentTime,o=Sfx.audio.createOscillator(),g=Sfx.audio.createGain();o.type=type||"square";o.frequency.setValueAtTime(f,t);if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+d);g.gain.setValueAtTime(v||.1,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(Sfx.audio.destination);o.start(t);o.stop(t+d+.02);}catch(e){}};
+Sfx.play=n=>{if(Sfx.muted)return;if(n==="star")Sfx.beep(880,.09,"sine",.13,1320);else if(n==="die")Sfx.beep(200,.5,"sawtooth",.18,50);else if(n==="start")Sfx.beep(440,.08,"sine",.1);else if(n==="bump")Sfx.beep(180,.05,"square",.08);};
+
+let W,H,dpr,ctx,state="menu";
+let ball={x:0,wy:0,r:13,bob:0},hazards=[],stars=[],parts=[];
+let bestH=0,bestS=0;
+let lastT=0,wallW=26,upSpeed=210,nextHazY=0,nextStarY=0;
+const keys={left:false,right:false};
+function resize(){const cv=document.getElementById("board");W=Math.min(window.innerWidth*.92,420);H=Math.min(window.innerHeight-150,620);if(H<440)H=440;dpr=Math.min(devicePixelRatio||1,2);cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+"px";cv.style.height=H+"px";ctx=cv.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);}
+function setState(s){state=s;document.getElementById("menu").classList.toggle("show",s==="menu");document.getElementById("result").classList.toggle("show",s==="over");}
+function newGame(){ball={x:W/2,wy:0,r:13,bob:0};hazards=[];stars=[];parts=[];nextHazY=240;nextStarY=120;setState("play");Sfx.play("start");}
+function screenY(wy){return H*0.72-(wy-ball.wy);}
+function spawnAhead(){while(nextHazY<ball.wy+H){const gapW=Math.max(100,W-wallW*2-120);const gapX=wallW+20+Math.random()*(W-wallW*2-40-gapW);hazards.push({y:nextHazY,gapX,gapW,hit:false});nextHazY+=190+Math.random()*120;}while(nextStarY<ball.wy+H){stars.push({y:nextStarY,x:wallW+30+Math.random()*(W-wallW*2-60),got:false});nextStarY+=160+Math.random()*160;}}
+function endGame(){setState("over");const h=Math.floor(ball.wy/10);bestH=Math.max(bestH,h);bestS=Math.max(bestS,score());try{localStorage.setItem("ngBounce_bestH",String(bestH));localStorage.setItem("ngBounce_bestS",String(bestS));}catch(e){}document.getElementById("rH").textContent=h;document.getElementById("rS").textContent=score();document.getElementById("rBestH").textContent=bestH;Sfx.play("die");}
+function score(){return Math.floor(ball.wy/10)+stars.filter(s=>s.got).length*10;}
+function updateHud(){document.getElementById("hudH").textContent=Math.floor(ball.wy/10);document.getElementById("hudS").textContent=score();}
+function update(dt){if(state!=="play")return;ball.wy+=upSpeed*dt;ball.bob+=dt*6;let dir=0;if(keys.left)dir-=1;if(keys.right)dir+=1;if(touchDir!==0)dir=touchDir;if(dir!==0){ball.x+=dir*300*dt;}else if(mouseTX!=null){ball.x+=(mouseTX-ball.x)*Math.min(1,dt*10);}ball.x=Math.max(wallW+ball.r,Math.min(W-wallW-ball.r,ball.x));spawnAhead();for(const hz of hazards){if(hz.hit)continue;const band=14;if(Math.abs(ball.wy-hz.y)<band+ball.r){if(ball.x-ball.r<hz.gapX||ball.x+ball.r>hz.gapX+hz.gapW){hz.hit=true;endGame();return;}}}for(const s of stars){if(s.got)continue;const dx=ball.x-s.x,dy=screenY(s.y)-screenY(ball.wy);if(dx*dx+dy*dy<(ball.r+13)*(ball.r+13)){s.got=true;Sfx.play("star");for(let i=0;i<8;i++){const a=Math.random()*Math.PI*2;parts.push({x:s.x,y:screenY(s.y),vx:Math.cos(a)*120,vy:Math.sin(a)*120,life:.4,color:"#f0c040"});}}}for(let i=parts.length-1;i>=0;i--){const p=parts[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;if(p.life<=0)parts.splice(i,1);}updateHud();}
+function draw(){const c=ctx;c.clearRect(0,0,W,H);c.fillStyle="#0a0e17";c.fillRect(0,0,W,H);c.strokeStyle="#22304a";c.lineWidth=2;c.beginPath();c.moveTo(wallW,0);c.lineTo(wallW,H);c.moveTo(W-wallW,0);c.lineTo(W-wallW,H);c.stroke();for(const hz of hazards){const sy=screenY(hz.y);if(sy<-30||sy>H+30)continue;c.fillStyle="#ff6b9d";c.beginPath();c.moveTo(wallW,sy-13);c.lineTo(hz.gapX,sy);c.lineTo(wallW,sy+13);c.fill();c.beginPath();c.moveTo(W-wallW,sy-13);c.lineTo(hz.gapX+hz.gapW,sy);c.lineTo(W-wallW,sy+13);c.fill();}for(const s of stars){if(s.got)continue;const sy=screenY(s.y);if(sy<-20||sy>H+20)continue;c.fillStyle="#f0c040";c.beginPath();for(let i=0;i<5;i++){const a=-Math.PI/2+i*Math.PI*2/5;const px=s.x+Math.cos(a)*9,py=sy+Math.sin(a)*9;i===0?c.moveTo(px,py):c.lineTo(px,py);}c.closePath();c.fill();}for(const p of parts){c.globalAlpha=Math.max(0,p.life*2.5);c.fillStyle=p.color;c.beginPath();c.arc(p.x,p.y,3,0,Math.PI*2);c.fill();}c.globalAlpha=1;const bx=ball.x,by=screenY(ball.wy)+Math.sin(ball.bob)*3;c.shadowColor="#53c7ff";c.shadowBlur=18;c.fillStyle="#53c7ff";c.beginPath();c.arc(bx,by,ball.r,0,Math.PI*2);c.fill();c.shadowBlur=0;c.fillStyle="rgba(255,255,255,.7)";c.beginPath();c.arc(bx-4,by-4,3.5,0,Math.PI*2);c.fill();}
+let mouseTX=null,touchDir=0;
+function loop(t){const dt=Math.min((t-lastT)/1000,.05);lastT=t;update(dt);draw();requestAnimationFrame(loop);}
+function bind(){addEventListener("keydown",e=>{const k=e.key.toLowerCase();if(k==="arrowleft"||k==="a"){keys.left=true;e.preventDefault();}if(k==="arrowright"||k==="d"){keys.right=true;e.preventDefault();}});addEventListener("keyup",e=>{const k=e.key.toLowerCase();if(k==="arrowleft"||k==="a")keys.left=false;if(k==="arrowright"||k==="d")keys.right=false;});const cv=document.getElementById("board");cv.addEventListener("mousemove",e=>{const rect=cv.getBoundingClientRect();mouseTX=e.clientX-rect.left;touchDir=0;});cv.addEventListener("touchstart",e=>{const rect=cv.getBoundingClientRect();const x=e.touches[0].clientX-rect.left;touchDir=x<rect.width/2?-1:1;mouseTX=null;},{passive:true});cv.addEventListener("touchmove",e=>e.preventDefault(),{passive:false});cv.addEventListener("touchend",()=>{touchDir=0;});document.getElementById("startBtn").addEventListener("click",()=>{Sfx.init();if(Sfx.audio&&Sfx.audio.resume)Sfx.audio.resume();newGame();});document.getElementById("againBtn").addEventListener("click",()=>{Sfx.init();newGame();});document.getElementById("menuBtn").addEventListener("click",()=>setState("menu"));document.getElementById("muteBtn").addEventListener("click",()=>{Sfx.muted=!Sfx.muted;document.getElementById("iconOn").style.display=Sfx.muted?"none":"block";document.getElementById("iconOff").style.display=Sfx.muted?"block":"none";});}
+function init(){resize();addEventListener("resize",resize);bind();bestH=parseInt(localStorage.getItem("ngBounce_bestH")||"0",10)||0;bestS=parseInt(localStorage.getItem("ngBounce_bestS")||"0",10)||0;setState("menu");lastT=performance.now();requestAnimationFrame(loop);}
+window.addEventListener("DOMContentLoaded",init);
+</script>
+
+<!-- infucoco-watermark -->
+<img src="../../assets/images/infucoco-mascot-mark.png" alt="infucoco" style="position:fixed;right:8px;bottom:8px;width:40px;opacity:.9;pointer-events:none;z-index:99999;border-radius:12px;box-shadow:0 4px 14px #0009;image-rendering:auto">
+</body>
+</html>

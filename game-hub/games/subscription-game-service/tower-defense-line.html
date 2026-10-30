@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>塔防戰線 TOWERLINES — 策略塔防</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0e17'/%3E%3Cpath d='M20 52 L20 26 L32 16 L44 26 L44 52 Z' fill='%2353c7ff'/%3E%3Cpath d='M24 52 L40 52 L40 30 L24 30 Z' fill='%23f0c040'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+:root{--bg:#070a12;--ink:#e8ecf5;--dim:#8fa0bd;--teal:#2dd4bf;--pink:#ff6b9d;--gold:#f0c040;--red:#ff4040;--cyan:#53c7ff;--line:#22304a;--panel:#0e1524}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Segoe UI",system-ui,sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:none}
+#vignette{position:fixed;inset:0;pointer-events:none;z-index:5;background:radial-gradient(ellipse at center,transparent 55%,rgba(2,4,9,.7) 100%)}
+#wrap{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:14px;z-index:6}
+#topbar{width:100%;max-width:680px;display:flex;align-items:center;gap:10px}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:7px 13px;font-size:14px;white-space:nowrap}
+.chip b{font-variant-numeric:tabular-nums}
+#goldV{color:var(--gold)}#lifeV{color:var(--pink)}#waveV{color:var(--cyan)}
+.spacer{flex:1}
+#waveBtn{background:linear-gradient(180deg,#53c7ff,#2a8fd6);color:#04121c;border:none;border-radius:10px;padding:8px 20px;font-size:14px;font-weight:800;letter-spacing:.08em;cursor:pointer;transition:.15s}
+#waveBtn:hover{filter:brightness(1.08)}
+#muteBtn{width:40px;height:40px;border-radius:10px;background:var(--panel);border:1px solid var(--line);color:var(--dim);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s}
+#muteBtn:hover{color:var(--ink);border-color:var(--teal)}
+#mapWrap{position:relative;background:#0b101d;border:1px solid var(--line);border-radius:14px;box-shadow:0 0 40px rgba(83,199,255,.07)}
+canvas#map{display:block;border-radius:14px}
+#towerBar{width:100%;max-width:680px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.tbtn{background:var(--panel);border:2px solid var(--line);border-radius:12px;padding:8px 14px;cursor:pointer;transition:.15s;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:96px}
+.tbtn:hover{border-color:var(--teal);transform:translateY(-2px)}
+.tbtn.sel{border-color:var(--teal);background:#12202f}
+.tbtn .nm{font-size:13px;font-weight:700}
+.tbtn .cs{font-size:12px;color:var(--gold)}
+.tbtn .ic{font-size:0}
+.tbtn .ic svg{width:22px;height:22px}
+#upgradePanel{position:absolute;background:rgba(12,18,30,.96);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13px;display:none;z-index:8;box-shadow:0 10px 30px rgba(0,0,0,.5);min-width:150px}
+#upgradePanel .up-name{font-weight:800;font-size:14px;margin-bottom:6px}
+#upgradePanel .up-stat{color:var(--dim);font-size:12px;margin-bottom:8px;line-height:1.5}
+#upgradePanel button{display:block;width:100%;margin-top:6px;padding:8px;border-radius:8px;border:1px solid var(--line);background:#16203a;color:var(--ink);cursor:pointer;font-size:13px;transition:.15s}
+#upgradePanel button:hover{border-color:var(--teal)}
+#upgradePanel .up-close{background:transparent;color:var(--dim)}
+.overlay{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;flex-direction:column;background:radial-gradient(ellipse at 50% 40%,#0d1526,#05070d 80%);padding:24px;text-align:center}
+.overlay.show{display:flex}
+.logo{font-size:clamp(36px,7.5vw,60px);font-weight:900;letter-spacing:.1em}.logo .t{color:var(--teal)}.logo .l{color:var(--gold)}
+.tag{color:var(--dim);letter-spacing:.3em;margin-top:12px;font-size:15px}
+.bigBtn{margin-top:34px;background:linear-gradient(180deg,#2dd4bf,#1aa18f);color:#04211c;border:none;border-radius:14px;padding:16px 52px;font-size:19px;font-weight:800;letter-spacing:.15em;cursor:pointer;transition:.18s;box-shadow:0 10px 30px rgba(45,212,191,.26)}
+.bigBtn:hover{transform:translateY(-2px)}
+.help{display:grid;grid-template-columns:1fr;gap:8px 0;margin-top:28px;font-size:14px;color:var(--dim);max-width:380px}
+.help .row{display:flex;justify-content:space-between;align-items:center}
+.result .big{font-size:clamp(36px,7vw,54px);font-weight:900}.result .big.win{color:var(--teal)}
+.stat{display:flex;gap:30px;justify-content:center;margin:28px 0 10px}
+.stat .v{font-size:30px;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums}
+.stat .k{font-size:12px;color:var(--dim);margin-top:4px;letter-spacing:.1em}
+.rowbtns{display:flex;gap:14px;margin-top:22px}
+.ghostBtn{background:transparent;border:1px solid var(--line);color:var(--dim);border-radius:12px;padding:14px 30px;font-size:15px;letter-spacing:.08em;cursor:pointer;transition:.15s}
+.ghostBtn:hover{color:var(--ink);border-color:var(--teal)}
+@media (max-width:640px){.tbtn{min-width:80px;padding:6px 8px}.chip{padding:5px 9px;font-size:12px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<div id="wrap">
+  <div id="topbar">
+    <div class="chip">金幣 <b id="goldV">150</b></div>
+    <div class="chip">生命 <b id="lifeV">20</b></div>
+    <div class="chip">波次 <b id="waveV">0 / 10</b></div>
+    <div class="spacer"></div>
+    <button id="waveBtn">開始波次</button>
+    <button id="muteBtn" aria-label="聲音開關">
+      <svg id="iconOn" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+      <svg id="iconOff" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+    </button>
+  </div>
+  <div id="mapWrap">
+    <canvas id="map"></canvas>
+    <div id="upgradePanel"></div>
+  </div>
+  <div id="towerBar"></div>
+</div>
+<div id="vignette"></div>
+<div class="overlay show" id="menu">
+  <div class="logo"><span class="t">塔防</span><span class="l">戰線</span></div>
+  <div class="tag">TOWERLINES · 策略塔防</div>
+  <button class="bigBtn" id="startBtn">建立防線</button>
+  <div class="help">
+    <div class="row"><span>點選下方砲塔</span><span>點擊空地建造</span></div>
+    <div class="row"><span>點擊已建砲塔</span><span>升級 / 出售</span></div>
+    <div class="row"><span>消滅敵人獲得金幣</span><span>守住 10 波獲勝</span></div>
+  </div>
+</div>
+<div class="overlay" id="result">
+  <div class="result">
+    <div class="big win" id="resTitle">防守結束</div>
+    <div class="stat">
+      <div class="s"><div class="v" id="rGold">0</div><div class="k">剩餘金幣</div></div>
+      <div class="s"><div class="v" id="rWave">0</div><div class="k">波次</div></div>
+      <div class="s"><div class="v" id="rKill">0</div><div class="k">擊殺</div></div>
+    </div>
+    <div class="rowbtns">
+      <button class="ghostBtn" id="againBtn">再守一次</button>
+      <button class="ghostBtn" id="menuBtn">主選單</button>
+    </div>
+  </div>
+</div>
+<script>
+"use strict";
+/* ===== 塔防戰線 TowerLines — 策略塔防 ===== */
+const Sfx={audio:null,muted:false};
+Sfx.init=()=>{if(!Sfx.audio){const AC=window.AudioContext||window.webkitAudioContext;if(AC)Sfx.audio=new AC();}};
+Sfx.beep=(f,d,type,v,slide)=>{if(Sfx.muted||!Sfx.audio)return;try{const t=Sfx.audio.currentTime,o=Sfx.audio.createOscillator(),g=Sfx.audio.createGain();o.type=type||"square";o.frequency.setValueAtTime(f,t);if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+d);g.gain.setValueAtTime(v||.1,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(Sfx.audio.destination);o.start(t);o.stop(t+d+.02);}catch(e){}};
+Sfx.play=n=>{if(Sfx.muted)return;if(n==="place")Sfx.beep(400,.1,"square",.14,600);else if(n==="shoot")Sfx.beep(700,.04,"square",.04,400);else if(n==="boom")Sfx.beep(160,.15,"sawtooth",.12,50);else if(n==="gold")Sfx.beep(880,.08,"sine",.12,1320);else if(n==="wave")Sfx.beep(300,.2,"square",.12,600);else if(n==="lose")Sfx.beep(220,.5,"sawtooth",.16,60);else if(n==="win")Sfx.beep(520,.18,"sine",.16,780);};
+
+// 地圖
+const COLS=14,ROWS=9,CS=48;
+const PATH=[{x:0,y:4},{x:3,y:4},{x:3,y:1},{x:7,y:1},{x:7,y:7},{x:11,y:7},{x:11,y:4},{x:13,y:4}];
+function pathPx(){return PATH.map(p=>({x:p.x*CS+CS/2,y:p.y*CS+CS/2}));}
+function isPath(i,j){return PATH.some(p=>p.x===i&&p.y===j);}
+
+// 砲塔定義
+const TOWERS={
+  cannon:{name:"砲台",cost:50,color:"#53c7ff",range:130,dmg:26,rate:.9,speed:420,icon:'<svg viewBox="0 0 24 24" fill="#53c7ff"><path d="M12 4 L12 20 M4 12 H20"/><circle cx="12" cy="12" r="5" fill="#0a1220" stroke="#53c7ff" stroke-width="2"/></svg>'},
+  laser:{name:"雷射",cost:75,color:"#ff4040",range:110,dmg:10,rate:.18,speed:900,icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#ff4040" stroke-width="3" stroke-linecap="round"><line x1="12" y1="20" x2="12" y2="12"/><line x1="4" y1="14" x2="20" y2="14"/></svg>'},
+  frost:{name:"冰塔",cost:60,color:"#2dd4bf",range:120,dmg:7,rate:.7,speed:500,slow:1.5,icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round"><path d="M12 3 L12 21 M12 6 L14.5 8.5 M12 6 L9.5 8.5 M12 14 L14.5 16.5 M12 14 L9.5 16.5"/></svg>'},
+  sniper:{name:"狙擊",cost:120,color:"#f0c040",range:200,dmg:70,rate:1.8,speed:1000,icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#f0c040" stroke-width="2"><circle cx="10" cy="14" r="5"/><line x1="14" y1="10" x2="22" y2="2" stroke-width="3"/></svg>'},
+};
+const TORDER=["cannon","laser","frost","sniper"];
+
+const G={state:"menu",gold:150,lives:20,wave:0,totalWaves:10,towers:[],enemies:[],projs:[],parts:[],spawnQueue:[],spawnT:0,waveActive:false,buildType:null,sel:null,kills:0};
+
+function newGame(){G.gold=150;G.lives=20;G.wave=0;G.towers=[];G.enemies=[];G.projs=[];G.parts=[];G.spawnQueue=[];G.waveActive=false;G.buildType=null;G.sel=null;G.kills=0;setState("play");updateHud();renderBar();}
+function setState(s){G.state=s;document.getElementById("menu").classList.toggle("show",s==="menu");document.getElementById("result").classList.toggle("show",s==="over");}
+function startWave(){
+  if(G.waveActive||G.state!=="play")return;
+  if(G.wave>=G.totalWaves)return;
+  G.wave++;G.waveActive=true;Sfx.play("wave");
+  G.spawnQueue=[];
+  const wave=G.wave;
+  const count=6+wave*2;
+  for(let i=0;i<count;i++){
+    let t="normal";
+    const r=Math.random();
+    if(wave>=3&&r<.2)t="fast";
+    if(wave>=4&&r<.35)t="tank";
+    if(wave>=6&&r>.9)t="boss";
+    G.spawnQueue.push(t);
+  }
+  updateHud();
+}
+function update(dt){
+  if(G.state!=="play")return;
+  // 生成
+  if(G.waveActive&&G.spawnQueue.length){
+    G.spawnT-=dt;
+    if(G.spawnT<=0){G.spawnT=.55;spawnEnemy(G.spawnQueue.shift());}
+  }
+  if(G.waveActive&&!G.spawnQueue.length&&!G.enemies.length){
+    G.waveActive=false;
+    if(G.wave>=G.totalWaves){endGame(true);return;}
+    G.gold+=60+wave*15;Sfx.play("gold");updateHud();
+  }
+  updateEnemies(dt);
+  updateTowers(dt);
+  updateProjs(dt);
+  updateParts(dt);
+}
+function spawnEnemy(type){
+  const w=G.wave;
+  const base={x:PATH[0].x*CS+CS/2,y:PATH[0].y*CS+CS/2,hp:0,maxHp:0,speed:0,r:0,gold:0,way:1,progress:0,slow:0,type};
+  if(type==="normal"){base.hp=40+w*10;base.maxHp=base.hp;base.speed=70;base.r=11;base.gold=12;base.color="#ff6b9d";}
+  else if(type==="fast"){base.hp=26+w*7;base.maxHp=base.hp;base.speed=135;base.r=9;base.gold=14;base.color="#f0c040";}
+  else if(type==="tank"){base.hp=120+w*25;base.maxHp=base.hp;base.speed=45;base.r=15;base.gold=22;base.color="#ff4040";}
+  else{base.hp=600+w*80;base.maxHp=base.hp;base.speed=34;base.r=20;base.gold=60;base.color="#c77bff";}
+  G.enemies.push(base);
+}
+function updateEnemies(dt){
+  const pts=pathPx();
+  for(let i=G.enemies.length-1;i>=0;i--){
+    const e=G.enemies[i];
+    e.slow=Math.max(0,e.slow-dt);
+    const sp=e.speed*(e.slow>0?.4:1);
+    const target=pts[e.way];
+    const dx=target.x-e.x,dy=target.y-e.y;
+    const d=Math.hypot(dx,dy);
+    const step=sp*dt;
+    if(d<=step){e.x=target.x;e.y=target.y;e.way++;if(e.way>=pts.length){G.enemies.splice(i,1);G.lives--;Sfx.play("boom");if(G.lives<=0)endGame(false);updateHud();continue;}}
+    else{e.x+=dx/d*step;e.y+=dy/d*step;}
+    e.progress=e.way;
+  }
+}
+function updateTowers(dt){
+  for(const t of G.towers){
+    t.timer-=dt;
+    // 找目標：路徑進度最大且在射程內
+    let best=null,bbp=-1;
+    for(const e of G.enemies){const d=Math.hypot(e.x-t.x,e.y-t.y);if(d<=t.range&&e.progress>bbp){bbp=e.progress;best=e;}}
+    t.target=best;
+    if(best&&t.timer<=0){
+      t.timer=t.rate;
+      const d=Math.hypot(best.x-t.x,best.y-t.y)||1;
+      if(t.type==="laser"){t.damage(best);G.projs.push({x:t.x,y:t.y,vx:(best.x-t.x)/d*100,vy:(best.y-t.y)/d*100,life:.12,type:"laser",tower:t});}
+      else{G.projs.push({x:t.x,y:t.y,vx:(best.x-t.x)/d*t.speed,vy:(best.y-t.y)/d*t.speed,life:1,type:t.type,tower:t});}
+      Sfx.play("shoot");
+    }
+  }
+}
+function updateProjs(dt){
+  for(let i=G.projs.length-1;i>=0;i--){
+    const p=G.projs[i];
+    p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;
+    if(p.life<=0){G.projs.splice(i,1);continue;}
+    if(p.type==="laser"){const t=p.tower;if(t.target&&Math.hypot(t.target.x-t.x,t.target.y-t.y)<=t.range+8){hitEnemy(t.target,t.damage(t.target));}}
+    let hit=false;
+    for(const e of G.enemies){if(Math.hypot(e.x-p.x,e.y-p.y)<e.r+4){hitEnemy(e,p.tower.damage(e));hit=true;break;}}
+    if(hit)G.projs.splice(i,1);
+  }
+}
+function hitEnemy(e,dmg){
+  e.hp-=dmg;
+  burst(e.x,e.y,3,e.type==="boss"?"#c77bff":"#ffffff");
+  if(e.hp<=0){
+    G.kills++;G.gold+=e.gold;
+    explosion(e.x,e.y,e.color);
+    Sfx.play("boom");Sfx.play("gold");
+    G.enemies.splice(G.enemies.indexOf(e),1);
+    updateHud();
+  }
+}
+function burst(x,y,n,c){for(let i=0;i<n;i++)G.parts.push({x,y,vx:(Math.random()-.5)*120,vy:(Math.random()-.5)*120,life:.25,c,r:2});}
+function explosion(x,y,c){for(let i=0;i<16;i++){const a=Math.random()*6.28,sp=Math.random()*150+30;G.parts.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:.4,c,r:2+Math.random()*3});}}
+function updateParts(dt){for(let i=G.parts.length-1;i>=0;i--){const p=G.parts[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;if(p.life<=0)G.parts.splice(i,1);}}
+function endGame(win){G.state="over";Sfx.play(win?"win":"lose");document.getElementById("rGold").textContent=G.gold;document.getElementById("rWave").textContent=Math.min(G.wave,G.totalWaves);document.getElementById("rKill").textContent=G.kills;document.getElementById("resTitle").textContent=win?"防守成功":"防守失敗";document.getElementById("resTitle").className="big "+(win?"win":"lose");setState("over");}
+function updateHud(){document.getElementById("goldV").textContent=G.gold;document.getElementById("lifeV").textContent=G.lives;document.getElementById("waveV").textContent=`${G.wave} / ${G.totalWaves}`;document.getElementById("waveBtn").style.display=(G.waveActive||G.wave>=G.totalWaves)?"none":"block";}
+
+// 砲塔升級 / 建造
+function makeTower(type,tx,ty){
+  const def=TOWERS[type];
+  const t={type,x:tx*CS+CS/2,y:ty*CS+CS/2,tx,ty,level:1,range:def.range,dmg:def.dmg,rate:def.rate,speed:def.speed,slow:def.slow||0,timer:0,target:null};
+  t.damage=function(e){const dmg=def.dmg*(1+.5*(t.level-1));if(def.slow)e.slow=def.slow;return dmg;};
+  return t;
+}
+function placeTower(type,tx,ty){
+  const def=TOWERS[type];
+  if(G.gold<def.cost)return;
+  const t=makeTower(type,tx,ty);
+  G.towers.push(t);G.gold-=def.cost;Sfx.play("place");updateHud();
+}
+function upgradeCost(t){return Math.round(TOWERS[t.type].cost*.6*t.level);}
+function buildable(tx,ty){if(isPath(tx,ty))return false;return !G.towers.some(t=>t.tx===tx&&t.ty===ty);}
+function tileAtPixel(x,y){const tx=Math.floor(x/CS),ty=Math.floor(y/CS);if(tx<0||tx>=COLS||ty<0||ty>=ROWS)return null;return{tx,ty};}
+
+// 渲染
+function renderBar(){const bar=document.getElementById("towerBar");bar.innerHTML="";for(const k of TORDER){const d=TOWERS[k];const b=document.createElement("div");b.className="tbtn";b.dataset.type=k;b.innerHTML=`<span class="ic">${d.icon}</span><span class="nm">${d.name}</span><span class="cs">$${d.cost}</span>`;b.addEventListener("click",()=>{G.buildType=G.buildType===k?null:k;G.sel=null;hideUpgrade();document.querySelectorAll(".tbtn").forEach(x=>x.classList.toggle("sel",x.dataset.type===G.buildType));});bar.appendChild(b);}}
+function showUpgrade(t){const d=TOWERS[t.type];const panel=document.getElementById("upgradePanel");const px=t.x,py=t.y;panel.innerHTML=`<div class="up-name" style="color:${d.color}">${d.name} Lv.${t.level}</div><div class="up-stat">傷害 ${Math.round(d.dmg*(1+.5*(t.level-1)))} · 射程 ${Math.round(d.range)}</div>`;if(t.level<3){panel.innerHTML+=`<button id="upBtn">升級 $${upgradeCost(t)}</button>`;}panel.innerHTML+=`<button id="sellBtn">出售 $${Math.round(TOWERS[t.type].cost*.7*t.level)}</button><button class="up-close" id="closeBtn">關閉</button>`;
+  // 定位
+  const wrap=document.getElementById("mapWrap").getBoundingClientRect();
+  const cw=CS*COLS;
+  let left=px;if(left>cw-170)left=px-180;let top=py;if(top>CS*ROWS-140)top=py-160;
+  panel.style.left=left+"px";panel.style.top=top+"px";panel.style.display="block";
+  document.getElementById("upBtn").addEventListener("click",e=>{e.stopPropagation();if(G.gold>=upgradeCost(t)&&t.level<3){G.gold-=upgradeCost(t);t.level++;t.range=TOWERS[t.type].range+14*t.level;t.dmg=TOWERS[t.type].dmg*(1+.5*(t.level-1));Sfx.play("place");updateHud();showUpgrade(t);}});
+  document.getElementById("sellBtn").addEventListener("click",e=>{e.stopPropagation();G.gold+=Math.round(TOWERS[t.type].cost*.7*t.level);G.towers.splice(G.towers.indexOf(t),1);G.sel=null;hideUpgrade();updateHud();});
+  document.getElementById("closeBtn").addEventListener("click",e=>{e.stopPropagation();G.sel=null;hideUpgrade();});
+}
+function hideUpgrade(){document.getElementById("upgradePanel").style.display="none";}
+
+function draw(){
+  const c=canvas.getContext("2d");c.clearRect(0,0,COLS*CS,ROWS*CS);
+  // 背景格
+  for(let j=0;j<ROWS;j++)for(let i=0;i<COLS;i++){const shade=((i*3+j*5)%7)/10;c.fillStyle=`rgb(${Math.round(14+shade*6)},${Math.round(19+shade*8)},${Math.round(31+shade*12)})`;c.fillRect(i*CS,j*CS,CS,CS);c.strokeStyle="rgba(255,255,255,.03)";c.strokeRect(i*CS+.5,j*CS+.5,CS,CS);}
+  // 路徑
+  const pts=pathPx();c.strokeStyle="#1c2740";c.lineWidth=CS-10;c.lineJoin="round";c.lineCap="round";c.beginPath();c.moveTo(pts[0].x,pts[0].y);for(let i=1;i<pts.length;i++)c.lineTo(pts[i].x,pts[i].y);c.stroke();c.strokeStyle="#26324f";c.lineWidth=CS-18;c.beginPath();c.moveTo(pts[0].x,pts[0].y);for(let i=1;i<pts.length;i++)c.lineTo(pts[i].x,pts[i].y);c.stroke();
+  // 入口出口
+  c.fillStyle="#46d67a";c.beginPath();c.arc(pts[pts.length-1].x,pts[pts.length-1].y,13,0,7);c.fill();c.strokeStyle="rgba(70,214,122,.5)";c.lineWidth=3;c.beginPath();c.arc(pts[pts.length-1].x,pts[pts.length-1].y,20,0,7);c.stroke();
+  c.fillStyle="#ff6b9d";c.beginPath();c.arc(pts[0].x,pts[0].y,13,0,7);c.fill();
+  // 建造預覽
+  if(G.buildType){const m=mouseTile;if(m){const d=TOWERS[G.buildType];const cx=m.tx*CS+CS/2,cy=m.ty*CS+CS/2;c.strokeStyle=buildable(m.tx,m.ty)?"rgba(45,212,191,.8)":"rgba(255,64,64,.8)";c.lineWidth=2;c.setLineDash([5,4]);c.beginPath();c.arc(cx,cy,d.range,0,7);c.stroke();c.setLineDash([]);c.fillStyle=buildable(m.tx,m.ty)?d.color:"#ff4040";c.globalAlpha=.35;c.beginPath();c.arc(cx,cy,16,0,7);c.fill();c.globalAlpha=1;}}
+  // 塔
+  for(const t of G.towers){drawTower(c,t);if(G.sel===t){c.strokeStyle="rgba(255,255,255,.25)";c.lineWidth=1.5;c.setLineDash([5,4]);c.beginPath();c.arc(t.x,t.y,t.range,0,7);c.stroke();c.setLineDash([]);}}
+  // 敵人
+  for(const e of G.enemies){drawEnemy(c,e);}
+  // 投射物
+  for(const p of G.projs){if(p.type==="laser"){c.strokeStyle="rgba(255,64,64,.7)";c.lineWidth=2;c.beginPath();c.moveTo(p.tower.x,p.tower.y);c.lineTo(p.x,p.y);c.stroke();}else{c.fillStyle=p.tower.type==="frost"?"#2dd4bf":p.tower.type==="sniper"?"#f0c040":"#53c7ff";c.beginPath();c.arc(p.x,p.y,3,0,7);c.fill();}}
+  // 粒子
+  for(const p of G.parts){c.globalAlpha=Math.max(0,p.life/.4);c.fillStyle=p.c;c.beginPath();c.arc(p.x,p.y,p.r,0,7);c.fill();c.globalAlpha=1;}
+}
+function drawTower(c,t){const d=TOWERS[t.type];c.save();c.translate(t.x,t.y);c.fillStyle="#0a1220";c.beginPath();c.arc(0,0,17,0,7);c.fill();c.strokeStyle=d.color;c.lineWidth=3;c.beginPath();c.arc(0,0,14,0,7);c.stroke();// 砲管朝向
+  let ang=-Math.PI/2;if(t.target)ang=Math.atan2(t.target.y-t.y,t.target.x-t.x);c.rotate(ang);c.fillStyle=d.color;if(t.type==="laser"){c.fillRect(0,-3,20,6);}else if(t.type==="sniper"){c.fillRect(0,-2,26,4);}else{c.fillRect(0,-4,18,8);}
+  c.restore();if(t.level>1){c.fillStyle="#f0c040";c.font="700 10px sans-serif";c.textAlign="center";c.fillText("★"+(t.level-1),t.x,t.y-20);}}
+function drawEnemy(c,e){c.save();c.translate(e.x,e.y);c.fillStyle=e.color;c.beginPath();c.arc(0,0,e.r,0,7);c.fill();c.fillStyle="#0a1220";c.beginPath();c.arc(0,0,e.r*.45,0,7);c.fill();if(e.slow>0){c.strokeStyle="#2dd4bf";c.lineWidth=2;c.beginPath();c.arc(0,0,e.r+4,0,7);c.stroke();}// 血條
+  c.fillStyle="rgba(0,0,0,.5)";c.fillRect(-e.r-2,-e.r-10,(e.r+2)*2,4);c.fillStyle="#ff4040";c.fillRect(-e.r-2,-e.r-10,(e.r+2)*2*Math.max(0,e.hp/e.maxHp),4);c.restore();}
+
+let canvas,mouseTile=null;
+function initCanvas(){canvas=document.getElementById("map");const w=COLS*CS,h=ROWS*CS;const dpr=Math.min(devicePixelRatio||1,2);canvas.width=w*dpr;canvas.height=h*dpr;canvas.style.width=w+"px";canvas.style.height=h+"px";const c=canvas.getContext("2d");c.setTransform(dpr,0,0,dpr,0,0);}
+function mapClick(e){const r=canvas.getBoundingClientRect();const x=e.clientX-r.left,y=e.clientY-r.top;const t=tileAtPixel(x,y);if(!t)return;if(G.buildType&&buildable(t.tx,t.ty)){placeTower(G.buildType,t.tx,t.ty);return;}const hit=G.towers.find(tw=>tw.tx===t.tx&&tw.ty===t.ty);if(hit){G.sel=hit;G.buildType=null;document.querySelectorAll(".tbtn").forEach(x=>x.classList.remove("sel"));showUpgrade(hit);}else{G.sel=null;hideUpgrade();}}
+function bind(){document.getElementById("startBtn").addEventListener("click",()=>{Sfx.init();Sfx.audio&&Sfx.audio.resume&&Sfx.audio.resume();newGame();});document.getElementById("againBtn").addEventListener("click",newGame);document.getElementById("menuBtn").addEventListener("click",()=>setState("menu"));document.getElementById("muteBtn").addEventListener("click",toggleMute);document.getElementById("waveBtn").addEventListener("click",startWave);canvas.addEventListener("mousemove",e=>{const r=canvas.getBoundingClientRect();mouseTile=tileAtPixel(e.clientX-r.left,e.clientY-r.top);});canvas.addEventListener("mouseleave",()=>mouseTile=null);canvas.addEventListener("mousedown",mapClick);}
+function toggleMute(){Sfx.muted=!Sfx.muted;document.getElementById("iconOn").style.display=Sfx.muted?"none":"block";document.getElementById("iconOff").style.display=Sfx.muted?"block":"none";}
+function loop(t){const dt=Math.min((t-lastT)/1000,.05);lastT=t;update(dt);if(G.state==="play"||true)draw();requestAnimationFrame(loop);}let lastT=0;
+function init(){initCanvas();bind();renderBar();lastT=performance.now();requestAnimationFrame(loop);}
+window.addEventListener("DOMContentLoaded",init);
+</script>
+
+<!-- infucoco-watermark -->
+<img src="../../assets/images/infucoco-mascot-mark.png" alt="infucoco" style="position:fixed;right:8px;bottom:8px;width:40px;opacity:.9;pointer-events:none;z-index:99999;border-radius:12px;box-shadow:0 4px 14px #0009;image-rendering:auto">
+</body>
+</html>

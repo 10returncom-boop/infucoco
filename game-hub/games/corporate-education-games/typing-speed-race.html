@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>打字衝刺</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23202030'/%3E%3Crect x='8' y='16' width='48' height='30' rx='5' fill='%23fdfbf7'/%3E%3Ctext x='32' y='38' font-size='16' font-weight='900' text-anchor='middle' fill='%23222' font-family='monospace'%3Eabc%3C/text%3E%3Crect x='12' y='52' width='12' height='5' rx='2' fill='%23ef5a6b'/%3E%3Crect x='40' y='52' width='12' height='5' rx='2' fill='%234f7cf0'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+  :root{--bg:#202030;--panel:#2b2b42;--ink:#f0f0fa;--muted:#a3a3c9;--accent:#ffd54a;--good:#5fe08a;}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,"Segoe UI",monospace;
+    min-height:100vh;color:var(--ink);display:flex;justify-content:center;padding:14px;
+    background:radial-gradient(circle at 80% 10%, rgba(239,90,107,.1), transparent 45%), var(--bg);
+    user-select:none;}
+  .app{width:100%;max-width:520px;}
+  .head{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+  .head h1{margin:0;font-size:23px;letter-spacing:2px;}
+  .head .en{font-size:11px;color:var(--muted);letter-spacing:3px;}
+  .spacer{flex:1;}
+  .chip{background:var(--panel);border-radius:12px;padding:6px 12px;text-align:center;}
+  .chip .lbl{font-size:9px;color:var(--muted);letter-spacing:1px;}
+  .chip .val{font-size:18px;font-weight:900;line-height:1.1;}
+  .btn{appearance:none;border:none;cursor:pointer;color:var(--ink);background:var(--panel);border-radius:12px;
+    padding:8px 13px;font-size:13px;font-weight:700;font-family:inherit;min-height:44px;}
+  .btn:hover{background:#38385a;}
+  .btn.primary{background:linear-gradient(180deg,#ef5a6b,#c23a52);}
+  .btn.primary:hover{filter:brightness(1.1);}
+  .ic{display:none;}
+  .btn:not(.muted) .ic-on{display:block;}
+  .btn.muted .ic-off{display:block;}
+
+  .cvwrap{width:100%;aspect-ratio:480/420;background:var(--panel);border-radius:16px;overflow:hidden;position:relative;
+    box-shadow:0 18px 40px rgba(0,0,0,.45);}
+  canvas{position:absolute;inset:0;width:100%;height:100%;}
+  .inputline{margin-top:12px;display:flex;gap:8px;align-items:center;background:var(--panel);border-radius:12px;padding:6px 10px;}
+  .inputline input{flex:1;background:transparent;border:none;outline:none;color:var(--ink);font-size:18px;font-family:inherit;min-height:40px;}
+  .inputline .hint{color:var(--muted);font-size:11px;}
+  .hint{margin-top:10px;text-align:center;font-size:11.5px;color:var(--muted);}
+  .overlay{position:fixed;inset:0;background:rgba(12,12,22,.85);display:none;align-items:center;justify-content:center;z-index:50;padding:20px;backdrop-filter:blur(3px);}
+  .overlay.open{display:flex;}
+  .modal{max-width:330px;width:100%;text-align:center;background:var(--panel);border-radius:20px;padding:26px;border:1px solid rgba(255,255,255,.08);}
+  .modal h2{margin:0 0 8px;font-size:26px;color:var(--accent);}
+  .modal p{margin:4px 0 18px;color:var(--muted);font-size:14px;}
+  .modal .btn{padding:12px 26px;font-size:15px;}
+</style>
+</head>
+<body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<div class="app">
+  <div class="head">
+    <h1>打字衝刺</h1><span class="en">TYPE RUSH</span>
+    <div class="spacer"></div>
+    <div class="chip"><div class="lbl">得分</div><div class="val" id="score">0</div></div>
+    <div class="chip"><div class="lbl">生命</div><div class="val" id="lives">3</div></div>
+    <div class="chip"><div class="lbl">最佳</div><div class="val" id="best">0</div></div>
+    <button class="btn" id="muteBtn" title="音效"><svg class="ic ic-on" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 010 7M18 6a8.5 8.5 0 010 12" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg><svg class="ic ic-off" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor"/><path d="M16 9l6 6M22 9l-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg></button>
+    <button class="btn primary" id="newBtn">開始</button>
+  </div>
+  <div class="cvwrap"><canvas id="cv"></canvas></div>
+  <div class="inputline">
+    <input id="typeInput" autocomplete="off" spellcheck="false" placeholder="輸入單字…">
+    <span class="hint">按 Enter</span>
+  </div>
+  <div class="hint">在單字掉落到底之前輸入並按下 Enter 消除 · 錯過一個少一條生命</div>
+</div>
+<div class="overlay" id="endOverlay">
+  <div class="modal">
+    <h2>生命耗盡</h2>
+    <p id="endMsg">得分 0</p>
+    <button class="btn primary" id="againBtn">再來一次</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var W=480,H=420;
+  var cv=document.getElementById('cv');cv.width=W;cv.height=H;
+  var ctx=cv.getContext('2d');
+  var WORDS=['apple','brain','cloud','dance','earth','flame','grape','house','ivory','jelly','knife','lemon','mouse','night','ocean','piano','queen','river','stone','tiger','uncle','video','water','youth','zebra','magic','light','storm','pearl','fox','lion','wolf','star','moon','sun','tree','rock','fire','wind','rain','gold','blue','red','green','fast','slow','jump','run','walk'];
+  var words=[],score=0,lives=3,over=false,speed=70,spawnT=0;
+  var best=Number(localStorage.getItem('gTypeBest')||0);
+  var muted=localStorage.getItem('gTypeMuted')==='1';
+  var input=document.getElementById('typeInput');
+  document.getElementById('best').textContent=best;
+
+  var actx=null, audioReady=false;
+  function ensureAudio(){
+    if(!actx){ try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} }
+    if(actx&&actx.state==='suspended') actx.resume();
+  }
+  ['pointerdown','keydown','touchstart','click'].forEach(function(ev){ window.addEventListener(ev,function(){ audioReady=true; ensureAudio(); },true); });
+  function audio(){ if(audioReady) ensureAudio(); }
+  function tone(f,d,t,v,del){ if(muted||!actx)return; var tt=actx.currentTime+(del||0);
+    var o=actx.createOscillator(),g=actx.createGain(); o.type=t||'triangle'; o.frequency.value=f;
+    g.gain.setValueAtTime(.0001,tt); g.gain.exponentialRampToValueAtTime(v||.12,tt+.01); g.gain.exponentialRampToValueAtTime(.0001,tt+d);
+    o.connect(g);g.connect(actx.destination);o.start(tt);o.stop(tt+d+.02); }
+  var sHit=function(){tone(520,.08,'triangle',.14);tone(780,.1,'triangle',.1,.06);};
+  var sMiss=function(){tone(200,.12,'sawtooth',.12);};
+  var sEnd=function(){[392,523,659].forEach(function(f,i){tone(f,.14,'triangle',.12,i*.09);});};
+
+  function reset(){
+    words=[];score=0;lives=3;over=false;speed=70;spawnT=0;
+    document.getElementById('score').textContent='0';
+    document.getElementById('lives').textContent='3';
+    document.getElementById('endOverlay').classList.remove('open');
+    input.value='';input.disabled=false;
+    input.focus();
+  }
+  function update(dt){
+    if(over)return;
+    spawnT-=dt;
+    if(spawnT<=0){ spawnT=Math.max(.5,1.4-Math.min(1.0,score*0.01));
+      var w=WORDS[Math.floor(Math.random()*WORDS.length)];
+      words.push({t:w,x:20+Math.random()*(W-140),y:-20,speed:speed+Math.min(50,score*0.4)});
+    }
+    for(var i=words.length-1;i>=0;i--){
+      var o=words[i]; o.y+=o.speed*dt;
+      if(o.y>H-30){ words.splice(i,1); lives--; document.getElementById('lives').textContent=lives; sMiss(); if(lives<=0){end();return;} }
+    }
+    speed=Math.min(160,70+score*0.25);
+  }
+  function submit(){
+    if(over)return;
+    var val=input.value.trim().toLowerCase();
+    if(!val){return;}
+    var hit=false;
+    for(var i=0;i<words.length;i++){
+      if(words[i].t===val){ words.splice(i,1); hit=true; break; }
+    }
+    if(hit){ score+=10; document.getElementById('score').textContent=score; sHit();
+      if(score>best){best=score;localStorage.setItem('gTypeBest',String(best));document.getElementById('best').textContent=best;} }
+    input.value='';
+  }
+  function end(){
+    over=true; sEnd();
+    document.getElementById('endMsg').textContent='得分 '+score+' · 最佳 '+best;
+    document.getElementById('endOverlay').classList.add('open');
+    input.disabled=true;
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#252540';ctx.fillRect(0,0,W,H);
+    // 底部線
+    ctx.strokeStyle='rgba(95,224,138,.6)';ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(0,H-22);ctx.lineTo(W,H-22);ctx.stroke();
+    for(var i=0;i<words.length;i++){
+      var o=words[i];
+      ctx.fillStyle='#ffd54a';ctx.font='18px monospace';ctx.textAlign='center';
+      ctx.fillText(o.t,o.x,o.y);
+    }
+    if(over){
+      ctx.fillStyle='rgba(0,0,0,.4)';ctx.fillRect(0,0,W,H);
+      ctx.fillStyle='#ffd54a';ctx.font='26px monospace';ctx.textAlign='center';
+      ctx.fillText('GAME OVER',W/2,H/2);
+    }
+  }
+
+  var runningFlag=false,last=performance.now();
+  function loop(ts){
+    var dt=Math.min(.033,(ts-last)/1000);last=ts;
+    update(dt);draw();
+    requestAnimationFrame(loop);
+  }
+
+  input.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); submit(); } });
+  document.getElementById('newBtn').addEventListener('click',function(){audio();reset();});
+  document.getElementById('againBtn').addEventListener('click',function(){reset();});
+  document.getElementById('muteBtn').addEventListener('click',function(){muted=!muted;localStorage.setItem('gTypeMuted',muted?'1':'0');document.getElementById('muteBtn').classList.toggle('muted',muted);});
+
+  reset();
+  if(!runningFlag){runningFlag=true;requestAnimationFrame(loop);}
+})();
+</script>
+
+<!-- infucoco-watermark -->
+<img src="../../assets/images/infucoco-mascot-mark.png" alt="infucoco" style="position:fixed;right:8px;bottom:8px;width:40px;opacity:.9;pointer-events:none;z-index:99999;border-radius:12px;box-shadow:0 4px 14px #0009;image-rendering:auto">
+</body>
+</html>

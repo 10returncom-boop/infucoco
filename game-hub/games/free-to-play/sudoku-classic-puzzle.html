@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>數獨 Sudoku</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Microsoft JhengHei", "PingFang TC", "Heiti TC", system-ui, sans-serif;
+    background: linear-gradient(160deg, #14532d 0%, #052e16 100%);
+    color: #ecfdf5;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 12px; min-height: 100%; user-select: none;
+  }
+  h1 { font-size: 22px; margin: 4px 0 2px; letter-spacing: 3px; }
+  .subtitle { font-size: 12px; color: #a7f3d0; margin-bottom: 10px; }
+  .panel {
+    background: rgba(6,78,59,.7); border: 1px solid #10b981;
+    border-radius: 10px; padding: 10px 14px; margin-bottom: 10px;
+    display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center;
+  }
+  select, button {
+    font-family: inherit; font-size: 14px;
+    background: #064e3b; color: #ecfdf5; border: 1px solid #10b981;
+    border-radius: 6px; padding: 6px 12px; cursor: pointer;
+  }
+  button:hover { background: #047857; }
+  button.primary { background: #059669; border-color: #34d399; }
+  button.primary:hover { background: #10b981; }
+  .hud { display: flex; gap: 18px; align-items: center; font-variant-numeric: tabular-nums; }
+  .hud .box {
+    background: #022c22; border: 1px solid #10b981; border-radius: 6px;
+    padding: 4px 12px; font-size: 18px; font-weight: bold; min-width: 90px; text-align: center;
+  }
+  .hud .label { font-size: 11px; color: #6ee7b7; display:block; }
+  #board-wrap {
+    background: #a7f3d0; padding: 6px; border-radius: 8px;
+    max-width: 100%;
+  }
+  #board {
+    display: grid; grid-template-columns: repeat(9, 1fr);
+    width: min(90vw, 480px); aspect-ratio: 1;
+    border: 2px solid #064e3b;
+  }
+  .cell {
+    display: flex; align-items: center; justify-content: center;
+    font-size: clamp(16px, 4.5vw, 26px); font-weight: bold;
+    background: #f0fdf4; color: #064e3b; cursor: pointer;
+    border-right: 1px solid #86efac; border-bottom: 1px solid #86efac;
+  }
+  .cell:nth-child(9n){ border-right: none; }
+  .cell.row-bottom { border-bottom: 2px solid #064e3b; }
+  .cell.col-right { border-right: 2px solid #064e3b; }
+  .cell.highlight { background: #bbf7d0; }
+  .cell.same-num { background: #86efac; }
+  .cell.selected { background: #fde68a !important; }
+  .cell.given { color: #064e3b; cursor: default; }
+  .cell.user { color: #1d4ed8; }
+  .cell.error { color: #dc2626 !important; background: #fee2e2 !important; }
+  #numpad {
+    display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 6px;
+    margin-top: 12px; width: min(90vw, 480px);
+  }
+  #numpad button {
+    width: 100%; min-width: 0; aspect-ratio: 1; font-size: clamp(14px, 4vw, 20px); font-weight: bold;
+    background: #064e3b; border: 1px solid #34d399; border-radius: 8px; padding: 0;
+    overflow: hidden;
+  }
+  #numpad button:active { background: #10b981; }
+  #numpad button:disabled { opacity: .3; cursor: default; }
+  .help { font-size: 12px; color: #a7f3d0; margin-top: 10px; max-width: 560px; line-height: 1.6; text-align: center; }
+  .banner {
+    display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    padding: 14px 28px; border-radius: 10px; font-size: 20px; font-weight: bold; z-index: 100;
+    box-shadow: 0 8px 24px rgba(0,0,0,.5); background: #f59e0b; color: #111;
+  }
+</style>
+</head>
+<body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+  <h1>數獨</h1>
+  <div class="subtitle">Sudoku · 9×9 邏輯填數字</div>
+
+  <div class="panel">
+    <label>難度：
+      <select id="difficulty">
+        <option value="easy">簡單</option>
+        <option value="medium" selected>中等</option>
+        <option value="hard">困難</option>
+      </select>
+    </label>
+    <button class="primary" id="newPuzzle">換一題</button>
+    <button id="checkBtn">檢查</button>
+    <button id="eraseBtn">清除儲存格</button>
+  </div>
+
+  <div class="hud panel">
+    <div class="box"><span class="label">進度</span><span id="progress">0/81</span></div>
+    <div class="box"><span class="label">計時</span><span id="timer">0</span></div>
+  </div>
+
+  <div id="board-wrap"><div id="board"></div></div>
+  <div id="numpad"></div>
+
+  <div class="help">
+    點選空格後用鍵盤 1-9 輸入、0 或 Backspace 清除；也可點下方數字鍵。相鄰行/列/九宮格與相同數字會突顯。
+  </div>
+  <div class="banner" id="banner"></div>
+
+<script>
+(function(){
+  // ---- Sudoku engine ----
+  const SIZE = 9;
+  const DIGITS = [1,2,3,4,5,6,7,8,9];
+
+  function emptyGrid(){ return Array.from({length:9},()=>Array(9).fill(0)); }
+
+  function shuffle(arr){
+    for (let i=arr.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [arr[i],arr[j]]=[arr[j],arr[i]];
+    }
+    return arr;
+  }
+
+  function isValid(g, r, c, n){
+    for (let i=0;i<9;i++){
+      if (g[r][i]===n || g[i][c]===n) return false;
+    }
+    const br = Math.floor(r/3)*3, bc = Math.floor(c/3)*3;
+    for (let i=0;i<3;i++) for (let j=0;j<3;j++){
+      if (g[br+i][bc+j]===n) return false;
+    }
+    return true;
+  }
+
+  function fillGrid(g){
+    for (let idx=0; idx<81; idx++){
+      const r = Math.floor(idx/9), c = idx%9;
+      if (g[r][c]===0){
+        const nums = shuffle(DIGITS.slice());
+        for (const n of nums){
+          if (isValid(g,r,c,n)){
+            g[r][c]=n;
+            if (fillGrid(g)) return true;
+            g[r][c]=0;
+          }
+        }
+        return false;
+      }
+    }
+    return true;
+  }
+
+  // count solutions up to `limit`
+  function countSolutions(g, limit){
+    let count = 0;
+    function solve(){
+      if (count >= limit) return;
+      // find empty cell with fewest candidates
+      let best=-1, bestR=-1, bestC=-1, bestCands=null;
+      for (let r=0;r<9;r++) for (let c=0;c<9;c++){
+        if (g[r][c]===0){
+          const cands = [];
+          for (let n=1;n<=9;n++) if (isValid(g,r,c,n)) cands.push(n);
+          if (best===-1 || cands.length < bestCands.length){
+            best = r*9+c; bestR=r; bestC=c; bestCands=cands;
+            if (cands.length<=1) break;
+          }
+        }
+      }
+      if (best===-1){ count++; return; }
+      for (const n of bestCands){
+        g[bestR][bestC]=n;
+        solve();
+        g[bestR][bestC]=0;
+        if (count>=limit) return;
+      }
+    }
+    solve();
+    return count;
+  }
+
+  function generatePuzzle(holes){
+    const solution = emptyGrid();
+    fillGrid(solution);
+    const puzzle = solution.map(row=>row.slice());
+    // dig holes in random order; keep only if puzzle still has unique solution
+    const positions = shuffle([...Array(81).keys()]);
+    let removed = 0;
+    for (const pos of positions){
+      if (removed >= holes) break;
+      const r = Math.floor(pos/9), c = pos%9;
+      if (puzzle[r][c]===0) continue;
+      const backup = puzzle[r][c];
+      puzzle[r][c] = 0;
+      // verify uniqueness by copying
+      const trial = puzzle.map(row=>row.slice());
+      if (countSolutions(trial, 2) !== 1){
+        puzzle[r][c] = backup; // put back, no longer unique
+      } else {
+        removed++;
+      }
+    }
+    return { puzzle, solution };
+  }
+
+  // ---- UI state ----
+  const boardEl = document.getElementById('board');
+  const numpadEl = document.getElementById('numpad');
+  const progressEl = document.getElementById('progress');
+  const timerEl = document.getElementById('timer');
+  const bannerEl = document.getElementById('banner');
+  const diffSel = document.getElementById('difficulty');
+
+  const HOLES = { easy: 35, medium: 45, hard: 52 };
+
+  let puzzle = [], solution = [], userGrid = [];
+  let selected = null;
+  let timer = 0, timerId = null, started = false, finished = false;
+  let cellEls = [];
+
+  function startTimer(){
+    if (timerId) return;
+    timerId = setInterval(()=>{ timer++; timerEl.textContent = timer; }, 1000);
+  }
+
+  function newGame(){
+    bannerEl.style.display = 'none';
+    timer = 0; timerEl.textContent = '0';
+    if (timerId){ clearInterval(timerId); timerId=null; }
+    started = false; finished = false;
+    const { puzzle: p, solution: s } = generatePuzzle(HOLES[diffSel.value]);
+    puzzle = p; solution = s;
+    userGrid = p.map(row=>row.slice());
+    selected = null;
+    render();
+  }
+
+  function render(){
+    boardEl.innerHTML = '';
+    cellEls = [];
+    for (let r=0;r<9;r++){
+      cellEls[r] = [];
+      for (let c=0;c<9;c++){
+        const el = document.createElement('div');
+        el.className = 'cell';
+        if ((r+1)%3===0 && r<8) el.classList.add('row-bottom');
+        if ((c+1)%3===0 && c<8) el.classList.add('col-right');
+        el.dataset.r = r; el.dataset.c = c;
+        boardEl.appendChild(el);
+        cellEls[r][c] = el;
+        el.addEventListener('click', ()=>selectCell(r,c));
+      }
+    }
+    numpadEl.innerHTML='';
+    for (let n=1;n<=9;n++){
+      const b = document.createElement('button');
+      b.textContent = n;
+      b.addEventListener('click', ()=>inputNumber(n));
+      numpadEl.appendChild(b);
+    }
+    paint();
+  }
+
+  function paint(){
+    let filled = 0;
+    for (let r=0;r<9;r++) for (let c=0;c<9;c++){
+      const el = cellEls[r][c];
+      const val = userGrid[r][c];
+      el.textContent = val===0 ? '' : val;
+      el.classList.remove('given','user','error','selected','highlight','same-num');
+      if (puzzle[r][c]!==0){
+        el.classList.add('given');
+      } else if (val!==0){
+        filled++;
+        // mark wrong against solution if check mode
+        if (val !== solution[r][c]) el.classList.add('error');
+        else el.classList.add('user');
+      }
+    }
+    // highlights
+    if (selected){
+      const [sr,sc] = selected;
+      const selVal = userGrid[sr][sc];
+      cellEls[sr][sc].classList.add('selected');
+      for (let i=0;i<9;i++){
+        cellEls[sr][i].classList.add('highlight');
+        cellEls[i][sc].classList.add('highlight');
+      }
+      const br = Math.floor(sr/3)*3, bc = Math.floor(sc/3)*3;
+      for (let i=0;i<3;i++) for (let j=0;j<3;j++) cellEls[br+i][bc+j].classList.add('highlight');
+      if (selVal!==0){
+        for (let r=0;r<9;r++) for (let c=0;c<9;c++){
+          if (userGrid[r][c]===selVal) cellEls[r][c].classList.add('same-num');
+        }
+      }
+    }
+    progressEl.textContent = filled + '/81';
+  }
+
+  function selectCell(r,c){
+    if (finished) return;
+    if (puzzle[r][c]!==0) return; // given cell not editable, but still highlight
+    selected = [r,c];
+    paint();
+  }
+
+  function inputNumber(n){
+    if (finished) return;
+    if (!selected) return;
+    const [r,c] = selected;
+    if (puzzle[r][c]!==0) return;
+    if (!started){ started=true; startTimer(); }
+    userGrid[r][c] = n;
+    paint();
+    checkComplete();
+  }
+
+  function erase(){
+    if (finished || !selected) return;
+    const [r,c] = selected;
+    if (puzzle[r][c]!==0) return;
+    userGrid[r][c] = 0;
+    paint();
+  }
+
+  function checkComplete(){
+    for (let r=0;r<9;r++) for (let c=0;c<9;c++){
+      if (userGrid[r][c] !== solution[r][c]) return;
+    }
+    finished = true;
+    clearInterval(timerId); timerId=null;
+    bannerEl.textContent = `🎉 過關！用時 ${timer} 秒`;
+    bannerEl.style.display = 'block';
+  }
+
+  function manualCheck(){
+    // just repaint with error highlight (paint already compares); force repaint
+    paint();
+  }
+
+  // keyboard
+  document.addEventListener('keydown', (e)=>{
+    if (e.key>='1' && e.key<='9'){ inputNumber(parseInt(e.key)); }
+    else if (e.key==='0' || e.key==='Backspace' || e.key==='Delete'){ erase(); }
+    else if (e.key==='ArrowUp' && selected){
+      selected = [(selected[0]+8)%9, selected[1]]; paint();
+    } else if (e.key==='ArrowDown' && selected){
+      selected = [(selected[0]+1)%9, selected[1]]; paint();
+    } else if (e.key==='ArrowLeft' && selected){
+      selected = [selected[0], (selected[1]+8)%9]; paint();
+    } else if (e.key==='ArrowRight' && selected){
+      selected = [selected[0], (selected[1]+1)%9]; paint();
+    }
+  });
+
+  document.getElementById('newPuzzle').addEventListener('click', newGame);
+  document.getElementById('checkBtn').addEventListener('click', manualCheck);
+  document.getElementById('eraseBtn').addEventListener('click', erase);
+  diffSel.addEventListener('change', newGame);
+
+  newGame();
+})();
+</script>
+</body>
+</html>

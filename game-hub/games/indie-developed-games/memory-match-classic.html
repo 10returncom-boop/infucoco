@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>記憶翻牌 · Memory</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:radial-gradient(900px 600px at 50% -10%,#1a1426,#0b0b10);color:#f2f2f5;font-family:"PingFang TC","Microsoft JhengHei",sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:16px}
+h1{font-size:22px;letter-spacing:2px;margin:6px 0 4px}h1 span{color:#b07cff}
+.sub{color:#8a8a96;font-size:12px;margin-bottom:12px}
+.hud{display:flex;gap:8px;width:100%;max-width:420px;margin-bottom:10px}
+.stat{flex:1;background:#16161f;border:1px solid #26263a;border-radius:10px;padding:8px;text-align:center}
+.stat .k{font-size:11px;color:#8a8a96}.stat .v{font-size:18px;font-weight:700}
+#grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:100%;max-width:420px}
+.card{aspect-ratio:1;background:#241d33;border:1px solid #3a2f55;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:34px;cursor:pointer;transition:transform .2s;user-select:none}
+.card.flip{background:#342a4d}
+.card.done{background:#2e5b3f;border-color:#3ddc84}
+.btns{display:flex;gap:8px;margin-top:12px;width:100%;max-width:420px}
+button{flex:1;background:#1d1d2b;color:#fff;border:1px solid #2e2e44;border-radius:10px;padding:10px 0;font-size:14px;cursor:pointer}
+</style></head><body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<h1>記憶<span>翻牌</span></h1><div class="sub">翻開兩張相同的牌配對</div>
+<div class="hud">
+  <div class="stat"><div class="k">步數</div><div class="v" id="moves">0</div></div>
+  <div class="stat"><div class="k">配對</div><div class="v" id="pairs">0/8</div></div>
+  <div class="stat"><div class="k">時間</div><div class="v" id="time">0:00</div></div>
+</div>
+<div id="grid"></div>
+<div class="btns"><button onclick="restart()">重新開始</button></div>
+<script>
+const EMO=['🍎','🚀','🐱','🌈','🎁','⚽','🎵','👑'];
+let first=null,lock=false,moves,pairs,t,start;
+const grid=document.getElementById('grid');
+function restart(){
+  grid.innerHTML='';first=null;lock=false;moves=0;pairs=0;
+  clearInterval(t);start=Date.now();upd();
+  const cards=[...EMO,...EMO].sort(()=>Math.random()-0.5);
+  cards.forEach(em=>{
+    const c=document.createElement('div');
+    c.className='card';c.dataset.em=em;
+    c.addEventListener('click',()=>flip(c));
+    grid.appendChild(c);
+  });
+  t=setInterval(()=>{
+    const s=Math.floor((Date.now()-start)/1000);
+    document.getElementById('time').textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+  },500);
+}
+function flip(c){
+  if(lock||c.classList.contains('flip')||c.classList.contains('done'))return;
+  c.classList.add('flip');c.textContent=c.dataset.em;
+  if(!first){first=c;return}
+  moves++;upd();
+  if(first.dataset.em===c.dataset.em){
+    first.classList.add('done');c.classList.add('done');
+    pairs++;first=null;
+    if(pairs===8){clearInterval(t);setTimeout(()=>alert('過關！步數 '+moves),200)}
+  }else{
+    lock=true;
+    const a=first;setTimeout(()=>{a.classList.remove('flip');a.textContent='';c.classList.remove('flip');c.textContent='';lock=false;first=null},600);
+  }
+}
+function upd(){
+  document.getElementById('moves').textContent=moves;
+  document.getElementById('pairs').textContent=pairs+'/8';
+}
+restart();
+</script>
+<!-- infucoco-watermark -->
+<img src="../../assets/images/infucoco-mascot-mark.png" alt="infucoco" style="position:fixed;right:8px;bottom:8px;width:40px;opacity:.9;pointer-events:none;z-index:99999;border-radius:12px;box-shadow:0 4px 14px #0009;image-rendering:auto">
+</body></html>

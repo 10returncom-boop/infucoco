@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>打磚塊 Breakout</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    height: 100%;
+    font-family: "Microsoft JhengHei", "PingFang TC", "Heiti TC", sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+    color: #f1f5f9;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: none;
+  }
+  #wrap {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px;
+  }
+  #hud {
+    width: min(94vw, 720px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  .hud-item {
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 10px;
+    padding: 6px 14px;
+    text-align: center;
+    min-width: 80px;
+  }
+  .hud-item .label { font-size: 11px; color: #94a3b8; }
+  .hud-item .value { font-size: 18px; font-weight: bold; color: #fff; }
+  #lives { color: #f87171; letter-spacing: 2px; font-size: 18px; }
+  #stage {
+    position: relative;
+    width: min(94vw, 720px);
+    height: min(78vh, 520px);
+  }
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.35);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 12px;
+  }
+  #overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(15,23,42,.9);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    text-align: center;
+    padding: 24px;
+    z-index: 5;
+  }
+  #overlay.hidden { display: none; }
+  #overlay h2 { font-size: clamp(26px, 5vw, 40px); color: #fbbf24; }
+  #overlay p { color: #cbd5e1; line-height: 1.7; font-size: 14px; max-width: 420px; }
+  #overlay button {
+    padding: 12px 32px;
+    font-size: 16px;
+    font-family: inherit;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #f59e0b;
+    color: #1e293b;
+    font-weight: bold;
+  }
+  #overlay button:active { transform: scale(.96); }
+  #hint { font-size: 12px; color: #94a3b8; }
+</style>
+</head>
+<body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<div id="wrap">
+  <div id="hud">
+    <div class="hud-item"><div class="label">分數</div><div class="value" id="score">0</div></div>
+    <div class="hud-item"><div class="label">關卡</div><div class="value" id="level">1</div></div>
+    <div class="hud-item"><div class="label">生命</div><div class="value" id="lives">♥♥♥</div></div>
+  </div>
+  <div id="stage">
+    <canvas id="game"></canvas>
+    <div id="overlay">
+      <h2 id="ovTitle">打磚塊</h2>
+      <p id="ovText">移動滑鼠或使用 ← → 方向鍵控制底板，反彈小球擊破所有磚塊。<br>手機可左右滑動控制底板。球掉落會失去一條命，共 3 條命。</p>
+      <button id="ovBtn">開始遊戲</button>
+    </div>
+  </div>
+  <div id="hint">提示：擊破所有磚塊後進入下一關，球速會加快。</div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var canvas = document.getElementById("game");
+  var ctx = canvas.getContext("2d");
+  var stage = document.getElementById("stage");
+  var overlay = document.getElementById("overlay");
+  var ovTitle = document.getElementById("ovTitle");
+  var ovText = document.getElementById("ovText");
+  var ovBtn = document.getElementById("ovBtn");
+  var scoreEl = document.getElementById("score");
+  var levelEl = document.getElementById("level");
+  var livesEl = document.getElementById("lives");
+
+  var W = 0, H = 0;
+  var paddle, ball, bricks;
+  var score = 0, lives = 3, level = 1;
+  var state = "title"; // title | play | levelup | gameover | win
+  var keyLeft = false, keyRight = false;
+  var rafId = null;
+
+  var BRICK_COLORS = ["#f87171","#fb923c","#facc15","#4ade80","#38bdf8","#a78bfa"];
+
+  function resize() {
+    var rect = stage.getBoundingClientRect();
+    var dpr = window.devicePixelRatio || 1;
+    W = rect.width;
+    H = rect.height;
+    canvas.width = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (paddle) {
+      paddle.w = Math.min(120, W * 0.18);
+      paddle.x = Math.min(Math.max(paddle.x, paddle.w/2), W - paddle.w/2);
+    }
+    if (state !== "title") draw();
+  }
+
+  function makePaddle() {
+    return { w: Math.min(120, W*0.18), h: 14, x: W/2, y: H - 30, speed: 8 };
+  }
+
+  function makeBall() {
+    var sp = 4 + (level - 1) * 0.8;
+    var ang = -Math.PI / 2 + (Math.random() * 0.6 - 0.3);
+    return {
+      r: 8,
+      x: W/2,
+      y: H - 50,
+      vx: Math.cos(ang) * sp,
+      vy: Math.sin(ang) * sp
+    };
+  }
+
+  function buildBricks() {
+    bricks = [];
+    var rows = Math.min(4 + level, 7);
+    var cols = 8;
+    var pad = 6;
+    var marginTop = 50;
+    var bw = (W - pad * (cols + 1)) / cols;
+    var bh = 18;
+    for (var r = 0; r < rows; r++) {
+      for (var c = 0; c < cols; c++) {
+        bricks.push({
+          x: pad + c * (bw + pad),
+          y: marginTop + r * (bh + pad),
+          w: bw,
+          h: bh,
+          color: BRICK_COLORS[r % BRICK_COLORS.length],
+          alive: true
+        });
+      }
+    }
+  }
+
+  function resetRound() {
+    paddle = makePaddle();
+    ball = makeBall();
+  }
+
+  function startGame() {
+    score = 0; lives = 3; level = 1;
+    buildBricks();
+    resetRound();
+    state = "play";
+    overlay.classList.add("hidden");
+    updateHUD();
+    if (!rafId) loop();
+  }
+
+  function updateHUD() {
+    scoreEl.textContent = score;
+    levelEl.textContent = level;
+    livesEl.textContent = lives > 0 ? "♥".repeat(lives) : "—";
+  }
+
+  function gameOver() {
+    state = "gameover";
+    ovTitle.textContent = "遊戲結束";
+    ovText.innerHTML = "最終分數：" + score + "，到達關卡 " + level + "。";
+    ovBtn.textContent = "重新開始";
+    overlay.classList.remove("hidden");
+  }
+
+  function levelUp() {
+    level++;
+    if (level > 9) {
+      // treat completing level 9 as win
+      state = "win";
+      ovTitle.textContent = "過關！";
+      ovText.innerHTML = "你破關了！總分：" + score;
+      ovBtn.textContent = "再玩一次";
+      overlay.classList.remove("hidden");
+      return;
+    }
+    buildBricks();
+    resetRound();
+    state = "levelup";
+    ovTitle.textContent = "第 " + level + " 關";
+    ovText.innerHTML = "球速提升了！按下繼續。";
+    ovBtn.textContent = "繼續";
+    overlay.classList.remove("hidden");
+  }
+
+  function update() {
+    if (state !== "play") return;
+
+    // paddle keyboard
+    if (keyLeft) paddle.x -= paddle.speed;
+    if (keyRight) paddle.x += paddle.speed;
+    paddle.x = Math.min(Math.max(paddle.x, paddle.w/2), W - paddle.w/2);
+
+    // ball move
+    ball.x += ball.vx;
+    ball.y += ball.vy;
+
+    // wall collisions
+    if (ball.x - ball.r < 0) { ball.x = ball.r; ball.vx = Math.abs(ball.vx); }
+    if (ball.x + ball.r > W) { ball.x = W - ball.r; ball.vx = -Math.abs(ball.vx); }
+    if (ball.y - ball.r < 0) { ball.y = ball.r; ball.vy = Math.abs(ball.vy); }
+
+    // paddle collision
+    if (ball.vy > 0 &&
+        ball.y + ball.r >= paddle.y - paddle.h/2 &&
+        ball.y + ball.r <= paddle.y + paddle.h/2 + 6 &&
+        ball.x >= paddle.x - paddle.w/2 - ball.r &&
+        ball.x <= paddle.x + paddle.w/2 + ball.r) {
+      ball.y = paddle.y - paddle.h/2 - ball.r;
+      var rel = (ball.x - paddle.x) / (paddle.w/2);
+      var speed = Math.hypot(ball.vx, ball.vy);
+      var ang = rel * (Math.PI / 3); // up to 60deg
+      ball.vx = Math.sin(ang) * speed;
+      ball.vy = -Math.abs(Math.cos(ang) * speed);
+    }
+
+    // brick collisions
+    for (var i = 0; i < bricks.length; i++) {
+      var b = bricks[i];
+      if (!b.alive) continue;
+      if (ball.x + ball.r > b.x && ball.x - ball.r < b.x + b.w &&
+          ball.y + ball.r > b.y && ball.y - ball.r < b.y + b.h) {
+        b.alive = false;
+        score += 10;
+        updateHUD();
+        // determine bounce direction
+        var overlapX = Math.min(ball.x + ball.r - b.x, b.x + b.w - (ball.x - ball.r));
+        var overlapY = Math.min(ball.y + ball.r - b.y, b.y + b.h - (ball.y - ball.r));
+        if (overlapX < overlapY) ball.vx = -ball.vx;
+        else ball.vy = -ball.vy;
+        break;
+      }
+    }
+
+    // ball fell
+    if (ball.y - ball.r > H) {
+      lives--;
+      updateHUD();
+      if (lives <= 0) { gameOver(); }
+      else { resetRound(); }
+    }
+
+    // all bricks cleared
+    var remain = 0;
+    for (var j = 0; j < bricks.length; j++) if (bricks[j].alive) remain++;
+    if (remain === 0) levelUp();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // bricks
+    if (bricks) {
+      for (var i = 0; i < bricks.length; i++) {
+        var b = bricks[i];
+        if (!b.alive) continue;
+        ctx.fillStyle = b.color;
+        ctx.fillRect(b.x, b.y, b.w, b.h);
+      }
+    }
+
+    // paddle
+    if (paddle && state !== "title") {
+      ctx.fillStyle = "#38bdf8";
+      roundRect(paddle.x - paddle.w/2, paddle.y - paddle.h/2, paddle.w, paddle.h, 6);
+    }
+
+    // ball
+    if (ball && state !== "title") {
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2);
+      ctx.fillStyle = "#fbbf24";
+      ctx.fill();
+    }
+  }
+
+  function roundRect(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.arcTo(x+w, y, x+w, y+h, r);
+    ctx.arcTo(x+w, y+h, x, y+h, r);
+    ctx.arcTo(x, y+h, x, y, r);
+    ctx.arcTo(x, y, x+w, y, r);
+    ctx.fill();
+  }
+
+  function loop() {
+    update();
+    draw();
+    rafId = requestAnimationFrame(loop);
+  }
+
+  // Input: keyboard
+  window.addEventListener("keydown", function(e){
+    if (e.key === "ArrowLeft") { keyLeft = true; e.preventDefault(); }
+    if (e.key === "ArrowRight") { keyRight = true; e.preventDefault(); }
+  });
+  window.addEventListener("keyup", function(e){
+    if (e.key === "ArrowLeft") keyLeft = false;
+    if (e.key === "ArrowRight") keyRight = false;
+  });
+
+  // Input: mouse
+  stage.addEventListener("mousemove", function(e){
+    if (state !== "play" || !paddle) return;
+    var rect = canvas.getBoundingClientRect();
+    var mx = e.clientX - rect.left;
+    paddle.x = Math.min(Math.max(mx, paddle.w/2), W - paddle.w/2);
+  });
+
+  // Input: touch
+  stage.addEventListener("touchmove", function(e){
+    if (state !== "play" || !paddle) return;
+    e.preventDefault();
+    var rect = canvas.getBoundingClientRect();
+    var tx = e.touches[0].clientX - rect.left;
+    paddle.x = Math.min(Math.max(tx, paddle.w/2), W - paddle.w/2);
+  }, { passive: false });
+
+  ovBtn.addEventListener("click", function(){
+    if (state === "title" || state === "gameover" || state === "win") {
+      startGame();
+    } else if (state === "levelup") {
+      state = "play";
+      overlay.classList.add("hidden");
+    }
+  });
+
+  window.addEventListener("resize", resize);
+  resize();
+  // initial draw for title screen (empty board)
+  draw();
+})();
+</script>
+</body>
+</html>

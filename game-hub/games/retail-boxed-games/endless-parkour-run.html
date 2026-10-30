@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>無盡跑酷跳躍</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: -apple-system, "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: #1a1a2e;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  #game-container {
+    position: relative;
+    width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  canvas {
+    display: block;
+    background: linear-gradient(to bottom, #87CEEB 0%, #b8e4f0 60%, #e8d5b7 100%);
+    border-radius: 4px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.4);
+  }
+  .overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.55);
+    z-index: 10;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+  }
+  .overlay h1 {
+    font-size: 2.2em;
+    margin-bottom: 12px;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+  }
+  .overlay p {
+    font-size: 1.05em;
+    line-height: 1.8;
+    margin-bottom: 8px;
+    opacity: 0.95;
+  }
+  .overlay .score-display {
+    font-size: 1.4em;
+    margin: 10px 0;
+    font-weight: bold;
+    color: #ffd700;
+  }
+  .btn {
+    margin-top: 18px;
+    padding: 12px 36px;
+    font-size: 1.15em;
+    font-family: inherit;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(238,90,36,0.5);
+    transition: transform 0.15s;
+  }
+  .btn:hover { transform: scale(1.05); }
+  .btn:active { transform: scale(0.97); }
+  .hidden { display: none !important; }
+  #hud {
+    position: absolute;
+    top: 12px; left: 16px;
+    color: #fff;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+    z-index: 5;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<div id="game-container">
+  <canvas id="game"></canvas>
+  <div id="hud">
+    <div>距離：<span id="hud-score">0</span> m</div>
+    <div style="font-size:0.75em;margin-top:4px;opacity:0.85;">最高分：<span id="hud-high">0</span> m</div>
+  </div>
+
+  <div id="title-screen" class="overlay">
+    <h1>🏃 無盡跑酷跳躍</h1>
+    <p>操作說明：</p>
+    <p>␣ 空白鍵 / ↑ 上鍵 / 點擊畫面 — 跳躍</p>
+    <p>在空中再按一次 — 二段跳</p>
+    <p>閃躲仙人掌與箱子，跑得越遠越好！</p>
+    <button class="btn" id="btn-start">開始遊戲</button>
+  </div>
+
+  <div id="gameover-screen" class="overlay hidden">
+    <h1>💥 遊戲結束</h1>
+    <div class="score-display">本次距離：<span id="final-score">0</span> m</div>
+    <p style="color:#ffd700;">最高分：<span id="final-high">0</span> m</p>
+    <button class="btn" id="btn-restart">重新開始</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  const container = document.getElementById('game-container');
+
+  let W = 0, H = 0, groundY = 0;
+  let dpr = window.devicePixelRatio || 1;
+
+  // Game state
+  const STATE = { TITLE: 0, PLAYING: 1, OVER: 2 };
+  let state = STATE.TITLE;
+
+  let score = 0;
+  let highScore = parseInt(localStorage.getItem('runnerHigh') || '0', 10);
+  let speed = 5;
+  const baseSpeed = 5;
+  const maxSpeed = 14;
+
+  // Player
+  const player = {
+    x: 80,
+    y: 0,
+    w: 36,
+    h: 48,
+    vy: 0,
+    jumping: false,
+    jumpsLeft: 2,
+    runFrame: 0
+  };
+
+  // Obstacles
+  let obstacles = [];
+  let spawnTimer = 0;
+  let spawnInterval = 90;
+
+  // Clouds / background
+  let clouds = [];
+  let cloudsTimer = 0;
+  let hills = [];
+
+  // Resize
+  function resize() {
+    W = container.clientWidth;
+    H = container.clientHeight;
+    dpr = window.devicePixelRatio || 1;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    groundY = H - 60;
+    player.y = groundY - player.h;
+    initBackground();
+  }
+
+  function initBackground() {
+    clouds = [];
+    for (let i = 0; i < 5; i++) {
+      clouds.push({
+        x: Math.random() * W,
+        y: 30 + Math.random() * (H * 0.3),
+        r: 20 + Math.random() * 25,
+        speed: 0.3 + Math.random() * 0.5
+      });
+    }
+    hills = [];
+    for (let i = 0; i < 6; i++) {
+      hills.push({
+        x: i * (W / 3),
+        h: 40 + Math.random() * 60,
+        w: 180 + Math.random() * 120
+      });
+    }
+  }
+
+  window.addEventListener('resize', resize);
+
+  // Input
+  function jump() {
+    if (state === STATE.TITLE) return;
+    if (state === STATE.OVER) return;
+    if (player.jumpsLeft > 0) {
+      player.vy = player.jumpsLeft === 2 ? -14 : -12;
+      player.jumping = true;
+      player.jumpsLeft--;
+    }
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.code === 'Space' || e.code === 'ArrowUp') {
+      e.preventDefault();
+      if (state === STATE.PLAYING) jump();
+    }
+  });
+
+  canvas.addEventListener('pointerdown', function(e) {
+    e.preventDefault();
+    if (state === STATE.PLAYING) jump();
+  });
+
+  document.getElementById('btn-start').addEventListener('click', function(e) {
+    e.stopPropagation();
+    startGame();
+  });
+  document.getElementById('btn-restart').addEventListener('click', function(e) {
+    e.stopPropagation();
+    startGame();
+  });
+
+  function startGame() {
+    state = STATE.PLAYING;
+    score = 0;
+    speed = baseSpeed;
+    obstacles = [];
+    spawnTimer = 0;
+    spawnInterval = 90;
+    player.y = groundY - player.h;
+    player.vy = 0;
+    player.jumping = false;
+    player.jumpsLeft = 2;
+    document.getElementById('title-screen').classList.add('hidden');
+    document.getElementById('gameover-screen').classList.add('hidden');
+  }
+
+  function gameOver() {
+    state = STATE.OVER;
+    if (score > highScore) {
+      highScore = Math.floor(score);
+      localStorage.setItem('runnerHigh', String(highScore));
+    }
+    document.getElementById('final-score').textContent = Math.floor(score);
+    document.getElementById('final-high').textContent = highScore;
+    document.getElementById('gameover-screen').classList.remove('hidden');
+  }
+
+  // Obstacle types: cactus (tall), box (low), platform (floating)
+  function spawnObstacle() {
+    const typeRoll = Math.random();
+    let obs;
+    if (typeRoll < 0.45) {
+      // Cactus
+      const h = 40 + Math.random() * 40;
+      obs = { type: 'cactus', x: W + 20, y: groundY - h, w: 22, h: h };
+    } else if (typeRoll < 0.8) {
+      // Box
+      const s = 28 + Math.random() * 16;
+      obs = { type: 'box', x: W + 20, y: groundY - s, w: s, h: s };
+    } else {
+      // Floating platform (must jump onto or under)
+      const pw = 60 + Math.random() * 40;
+      const py = groundY - 80 - Math.random() * 40;
+      obs = { type: 'platform', x: W + 20, y: py, w: pw, h: 14 };
+    }
+    obstacles.push(obs);
+  }
+
+  function rectHit(a, b) {
+    return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+  }
+
+  function update() {
+    if (state !== STATE.PLAYING) return;
+
+    // Speed up
+    speed += 0.002;
+    if (speed > maxSpeed) speed = maxSpeed;
+    score += speed * 0.1;
+
+    // Player physics
+    player.vy += 0.6; // gravity
+    player.y += player.vy;
+    if (player.y >= groundY - player.h) {
+      player.y = groundY - player.h;
+      player.vy = 0;
+      player.jumping = false;
+      player.jumpsLeft = 2;
+    }
+    player.runFrame += 0.2;
+
+    // Spawn obstacles
+    spawnTimer++;
+    if (spawnTimer >= spawnInterval) {
+      spawnTimer = 0;
+      spawnObstacle();
+      // Randomize next spawn, tighter with speed
+      const base = 100 - (speed - baseSpeed) * 5;
+      spawnInterval = Math.max(45, base + Math.random() * 50);
+    }
+
+    // Move obstacles
+    for (let i = obstacles.length - 1; i >= 0; i--) {
+      const o = obstacles[i];
+      o.x -= speed;
+      if (o.x + o.w < -20) {
+        obstacles.splice(i, 1);
+        continue;
+      }
+      // Collision
+      const ph = player.h - 4; // small hitbox forgiveness
+      const pw = player.w - 4;
+      const pBox = { x: player.x + 2, y: player.y + 2, w: pw, h: ph };
+      if (rectHit(pBox, o)) {
+        // For platform: only collide if hitting from below/sides, standing on top is OK-ish
+        // Simple: all collide unless player is clearly above platform
+        if (o.type === 'platform' && pBox.y + pBox.h <= o.y + 4) {
+          // standing on platform - land on it
+          player.y = o.y - player.h;
+          player.vy = 0;
+          player.jumping = false;
+          player.jumpsLeft = 2;
+        } else {
+          gameOver();
+        }
+      }
+    }
+
+    // Clouds drift
+    for (const c of clouds) {
+      c.x -= c.speed;
+      if (c.x < -c.r * 2) c.x = W + c.r * 2;
+    }
+  }
+
+  function drawCloud(c) {
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+    ctx.arc(c.x + c.r * 0.8, c.y + 4, c.r * 0.7, 0, Math.PI * 2);
+    ctx.arc(c.x - c.r * 0.8, c.y + 6, c.r * 0.6, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function drawHill(x, y, w, h) {
+    ctx.fillStyle = '#7ec850';
+    ctx.beginPath();
+    ctx.ellipse(x + w / 2, y, w / 2, h, 0, Math.PI, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function drawPlayer() {
+    // Body
+    const px = player.x;
+    const py = player.y;
+    const legPhase = Math.sin(player.runFrame * 4);
+    // Body
+    ctx.fillStyle = '#e74c3c';
+    ctx.fillRect(px + 8, py + 14, 20, 22);
+    // Head
+    ctx.fillStyle = '#f5cba7';
+    ctx.beginPath();
+    ctx.arc(px + 18, py + 8, 10, 0, Math.PI * 2);
+    ctx.fill();
+    // Eye
+    ctx.fillStyle = '#333';
+    ctx.beginPath();
+    ctx.arc(px + 22, py + 7, 2, 0, Math.PI * 2);
+    ctx.fill();
+    // Legs (animated)
+    ctx.strokeStyle = '#2c3e50';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(px + 12, py + 36);
+    ctx.lineTo(px + 12 + legPhase * 6, py + 48);
+    ctx.moveTo(px + 24, py + 36);
+    ctx.lineTo(px + 24 - legPhase * 6, py + 48);
+    ctx.stroke();
+    // Arms
+    ctx.strokeStyle = '#e74c3c';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(px + 10, py + 18);
+    ctx.lineTo(px + 4 - legPhase * 5, py + 26);
+    ctx.moveTo(px + 26, py + 18);
+    ctx.lineTo(px + 32 + legPhase * 5, py + 26);
+    ctx.stroke();
+  }
+
+  function drawObstacle(o) {
+    if (o.type === 'cactus') {
+      ctx.fillStyle = '#27ae60';
+      ctx.fillRect(o.x, o.y, o.w, o.h);
+      // arms
+      ctx.fillRect(o.x - 8, o.y + o.h * 0.3, 8, 6);
+      ctx.fillRect(o.x + o.w, o.y + o.h * 0.5, 8, 6);
+    } else if (o.type === 'box') {
+      ctx.fillStyle = '#8b5a2b';
+      ctx.fillRect(o.x, o.y, o.w, o.h);
+      ctx.strokeStyle = '#5d3a1a';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(o.x, o.y, o.w, o.h);
+      ctx.beginPath();
+      ctx.moveTo(o.x, o.y);
+      ctx.lineTo(o.x + o.w, o.y + o.h);
+      ctx.moveTo(o.x + o.w, o.y);
+      ctx.lineTo(o.x, o.y + o.h);
+      ctx.stroke();
+    } else if (o.type === 'platform') {
+      ctx.fillStyle = '#9b59b6';
+      ctx.fillRect(o.x, o.y, o.w, o.h);
+      ctx.fillStyle = '#8e44ad';
+      ctx.fillRect(o.x, o.y + o.h - 4, o.w, 4);
+    }
+  }
+
+  function draw() {
+    // Sky gradient already via CSS, but redraw canvas bg
+    const grad = ctx.createLinearGradient(0, 0, 0, H);
+    grad.addColorStop(0, '#87CEEB');
+    grad.addColorStop(0.6, '#b8e4f0');
+    grad.addColorStop(1, '#e8d5b7');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    // Clouds
+    for (const c of clouds) drawCloud(c);
+
+    // Hills
+    for (const h of hills) {
+      drawHill(h.x, groundY, h.w, h.h);
+    }
+
+    // Ground
+    ctx.fillStyle = '#a0784a';
+    ctx.fillRect(0, groundY, W, H - groundY);
+    ctx.fillStyle = '#7ec850';
+    ctx.fillRect(0, groundY, W, 6);
+
+    // Obstacles
+    for (const o of obstacles) drawObstacle(o);
+
+    // Player
+    drawPlayer();
+
+    // HUD update
+    document.getElementById('hud-score').textContent = Math.floor(score);
+    document.getElementById('hud-high').textContent = highScore;
+  }
+
+  function loop() {
+    update();
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  resize();
+  loop();
+})();
+</script>
+</body>
+</html>

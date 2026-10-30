@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>踩地雷 · Minesweeper</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:radial-gradient(900px 600px at 50% -10%,#1c1a10,#0b0b10);color:#f2f2f5;font-family:"PingFang TC","Microsoft JhengHei",sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:16px}
+h1{font-size:22px;letter-spacing:2px;margin:6px 0 10px}h1 span{color:#ffd76a}
+.hud{display:flex;gap:8px;width:100%;max-width:380px;margin-bottom:10px}
+.stat{flex:1;background:#16161f;border:1px solid #26263a;border-radius:10px;padding:8px;text-align:center}
+.stat .k{font-size:11px;color:#8a8a96}.stat .v{font-size:18px;font-weight:700}
+#grid{display:grid;grid-template-columns:repeat(9,1fr);gap:3px;width:100%;max-width:380px}
+.cell{aspect-ratio:1;background:#26263a;border-radius:5px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;cursor:pointer;user-select:none}
+.cell.open{background:#14141d;cursor:default}
+.cell.boom{background:#e6533c}
+.btns{display:flex;gap:8px;margin-top:12px;width:100%;max-width:380px}
+button{flex:1;background:#1d1d2b;color:#fff;border:1px solid #2e2e44;border-radius:10px;padding:10px 0;font-size:14px;cursor:pointer}
+.tip{color:#8a8a96;font-size:12px;margin-top:10px;text-align:center;line-height:1.6}
+</style></head><body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<h1>踩<span>地雷</span></h1>
+<div class="hud">
+  <div class="stat"><div class="k">剩餘地雷</div><div class="v" id="mine">10</div></div>
+  <div class="stat"><div class="k">狀態</div><div class="v" id="st">進行中</div></div>
+</div>
+<div id="grid"></div>
+<div class="btns"><button onclick="restart()">重新開始</button></div>
+<div class="tip">左鍵翻開；長按 / 右鍵插旗子（手機長按）</div>
+<script>
+const R=9,C=9,MINES=10;
+let g,opened,flagged,gameOver;
+const grid=document.getElementById('grid');
+function restart(){
+  g=Array.from({length:R},()=>[]);opened=new Set();flagged=new Set();gameOver=false;
+  document.getElementById('st').textContent='進行中';
+  document.getElementById('mine').textContent=MINES;
+  grid.innerHTML='';
+  // place mines
+  let placed=0;
+  while(placed<MINES){
+    const r=Math.floor(Math.random()*R),c=Math.floor(Math.random()*C);
+    if(!g[r])g[r]=[];
+    if(g[r][c]!=='*'){g[r][c]='*';placed++}
+  }
+  for(let r=0;r<R;r++)for(let c=0;c<C;c++){
+    if(g[r][c]==='*')continue;
+    let n=0;
+    for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){
+      const nr=r+dr,nc=c+dc;
+      if(nr>=0&&nr<R&&nc>=0&&nc<C&&g[nr][nc]==='*')n++;
+    }
+    g[r][c]=n;
+  }
+  for(let r=0;r<R;r++)for(let c=0;c<C;c++){
+    const d=document.createElement('div');
+    d.className='cell';d.dataset.r=r;d.dataset.c=c;
+    d.addEventListener('click',()=>open(r,c,d));
+    d.addEventListener('contextmenu',e=>{e.preventDefault();flag(r,c,d)});
+    let t;
+    d.addEventListener('touchstart',()=>{t=setTimeout(()=>flag(r,c,d),500)},{passive:true});
+    d.addEventListener('touchend',()=>clearTimeout(t),{passive:true});
+    grid.appendChild(d);
+  }
+}
+function open(r,c,d){
+  if(gameOver||flagged.has(r+','+c)||opened.has(r+','+c))return;
+  if(g[r][c]==='*'){
+    gameOver=true;d.classList.add('boom');d.textContent='💣';
+    document.getElementById('st').textContent='爆炸了';
+    revealAll();return;
+  }
+  flood(r,c);
+  if(opened.size===R*C-MINES)win();
+}
+function flood(r,c){
+  const key=r+','+c;
+  if(opened.has(key))return;
+  if(r<0||r>=R||c<0||c>=C||g[r][c]==='*'||flagged.has(key))return;
+  opened.add(key);
+  const d=grid.children[r*C+c];d.classList.add('open');
+  d.textContent=g[r][c]||'';
+  const colors=['','#4fc3f7','#3ddc84','#ffd76a','#ff9a5a','#ff5a7a','#b07cff','#fff','#888'];
+  d.style.color=colors[g[r][c]]||'#fff';
+  if(g[r][c]===0)for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++)flood(r+dr,c+dc);
+}
+function flag(r,c,d){
+  if(gameOver||opened.has(r+','+c))return;
+  const key=r+','+c;
+  if(flagged.has(key)){flagged.delete(key);d.textContent=''}
+  else{flagged.add(key);d.textContent='🚩'}
+  document.getElementById('mine').textContent=MINES-flagged.size;
+}
+function revealAll(){
+  for(let r=0;r<R;r++)for(let c=0;c<C;c++){
+    if(g[r][c]==='*'){const d=grid.children[r*C+c];d.classList.add('open');d.textContent='💣'}
+  }
+}
+function win(){gameOver=true;document.getElementById('st').textContent='過關！'}
+restart();
+</script>
+<!-- infucoco-watermark -->
+<img src="../../assets/images/infucoco-mascot-mark.png" alt="infucoco" style="position:fixed;right:8px;bottom:8px;width:40px;opacity:.9;pointer-events:none;z-index:99999;border-radius:12px;box-shadow:0 4px 14px #0009;image-rendering:auto">
+</body></html>

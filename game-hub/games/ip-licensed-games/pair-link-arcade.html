@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>霓虹連連看 — 配對消除</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0e17'/%3E%3Ccircle cx='22' cy='26' r='10' fill='%232dd4bf'/%3E%3Ccircle cx='42' cy='38' r='10' fill='%23ff6b9d'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+:root{--bg:#070a12;--ink:#e8ecf5;--dim:#8fa0bd;--teal:#2dd4bf;--pink:#ff6b9d;--gold:#f0c040;--cyan:#53c7ff;--line:#22304a;--panel:#0e1524}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Segoe UI",system-ui,sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+#vignette{position:fixed;inset:0;pointer-events:none;z-index:5;background:radial-gradient(ellipse at center,transparent 55%,rgba(2,4,9,.7) 100%)}
+#wrap{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;z-index:6;padding:8px}
+#top{display:flex;align-items:center;gap:8px;width:min(94vw,420px)}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px 11px;font-size:13px;white-space:nowrap}
+.chip b{color:var(--gold);font-variant-numeric:tabular-nums}
+.chip .k{font-size:10px;color:var(--dim)}
+.spacer{flex:1}
+#muteBtn{width:40px;height:40px;border-radius:10px;background:var(--panel);border:1px solid var(--line);color:var(--dim);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;flex:none}
+#muteBtn:hover{color:var(--ink);border-color:var(--teal)}
+#board{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px;box-shadow:0 0 50px rgba(255,107,157,.08)}
+.grid{display:grid;gap:5px}
+.tile{border-radius:8px;background:#141d31;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .08s,border-color .12s}
+.tile:active{transform:scale(.92)}
+.tile.sel{border-color:var(--gold);box-shadow:0 0 12px rgba(240,192,64,.5);transform:scale(.95)}
+.tile.gone{visibility:hidden}
+#fx{position:absolute;inset:0;pointer-events:none;z-index:5}
+#tipBar{font-size:11px;color:var(--dim);letter-spacing:.08em;text-align:center}
+.overlay{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;flex-direction:column;background:radial-gradient(ellipse at 50% 40%,#0d1526,#05070d 80%);padding:24px;text-align:center}
+.overlay.show{display:flex}
+.logo{font-size:clamp(36px,9vw,56px);font-weight:900;letter-spacing:.06em}.logo .n{color:var(--pink)}.logo .t{color:var(--teal)}
+.tag{color:var(--dim);letter-spacing:.3em;margin-top:10px;font-size:14px}
+.bigBtn{margin-top:24px;background:linear-gradient(180deg,#ff6b9d,#d63d72);color:#2a0413;border:none;border-radius:14px;padding:15px 48px;font-size:18px;font-weight:800;letter-spacing:.15em;cursor:pointer;transition:.18s;box-shadow:0 10px 30px rgba(255,107,157,.26)}
+.bigBtn:hover{transform:translateY(-2px)}
+.sizeRow{display:flex;gap:10px;margin-top:20px}
+.sizeBtn{background:var(--panel);border:1px solid var(--line);color:var(--dim);border-radius:12px;padding:11px 20px;font-size:15px;cursor:pointer;transition:.15s}
+.sizeBtn.active{border-color:var(--gold);color:var(--gold)}
+.help{display:grid;grid-template-columns:1fr;gap:7px;margin-top:22px;font-size:13px;color:var(--dim);max-width:340px;text-align:left}
+.help .row{display:flex;justify-content:space-between;gap:12px}
+.result .big{font-size:clamp(30px,7vw,48px);font-weight:900}.result .big.win{color:var(--teal)}
+.stat{display:flex;gap:26px;justify-content:center;margin:22px 0 6px}
+.stat .v{font-size:26px;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums}
+.stat .k{font-size:11px;color:var(--dim);margin-top:4px;letter-spacing:.1em}
+.rowbtns{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap;justify-content:center}
+.ghostBtn{background:transparent;border:1px solid var(--line);color:var(--dim);border-radius:12px;padding:13px 26px;font-size:14px;letter-spacing:.08em;cursor:pointer;transition:.15s}
+.ghostBtn:hover{color:var(--ink);border-color:var(--teal)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<div id="wrap">
+  <div id="top">
+    <div class="chip"><span class="k">分數</span> <b id="scoreV">0</b></div>
+    <div class="chip"><b id="timeV">00:00</b></div>
+    <div class="chip"><span class="k">剩餘</span> <b id="leftV">0</b></div>
+    <div class="spacer"></div>
+    <button id="muteBtn" aria-label="聲音開關">
+      <svg id="iconOn" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+      <svg id="iconOff" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+    </button>
+  </div>
+  <div id="board"><div class="grid" id="grid"></div><svg id="fx"></svg></div>
+  <div id="tipBar">點兩個相同圖案 · 轉彎≤2 次可連通即消除 · 無解自動洗牌</div>
+</div>
+<div id="vignette"></div>
+
+<div class="overlay show" id="menu">
+  <div class="logo"><span class="n">霓虹</span><span class="t">連連看</span></div>
+  <div class="tag">MATCH · 配對消除</div>
+  <div class="sizeRow">
+    <button class="sizeBtn" data-r="6" data-c="8">6×8 輕鬆</button>
+    <button class="sizeBtn active" data-r="8" data-c="8">8×8 經典</button>
+  </div>
+  <button class="bigBtn" id="startBtn">開始遊戲</button>
+  <div class="help">
+    <div class="row"><span>規則</span><span>點兩個相同圖案，連線轉彎不超過 2 次即消除</span></div>
+    <div class="row"><span>連消</span><span>連續配對加分越高</span></div>
+    <div class="row"><span>提示</span><span>無路可連時自動洗牌重排</span></div>
+  </div>
+</div>
+
+<div class="overlay" id="result">
+  <div class="result">
+    <div class="big win" id="resTitle">全部消除！</div>
+    <div class="stat">
+      <div class="s"><div class="v" id="rScore">0</div><div class="k">分數</div></div>
+      <div class="s"><div class="v" id="rTime">00:00</div><div class="k">用時</div></div>
+      <div class="s"><div class="v" id="rBest">0</div><div class="k">最佳</div></div>
+    </div>
+    <div class="rowbtns">
+      <button class="ghostBtn" id="againBtn">再玩一次</button>
+      <button class="ghostBtn" id="menuBtn">主選單</button>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+const Sfx={audio:null,muted:false};
+Sfx.init=()=>{if(!Sfx.audio){const AC=window.AudioContext||window.webkitAudioContext;if(AC)Sfx.audio=new AC();}};
+Sfx.beep=(f,d,type,v,slide)=>{if(Sfx.muted||!Sfx.audio)return;try{const t=Sfx.audio.currentTime,o=Sfx.audio.createOscillator(),g=Sfx.audio.createGain();o.type=type||"square";o.frequency.setValueAtTime(f,t);if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+d);g.gain.setValueAtTime(v||.1,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(Sfx.audio.destination);o.start(t);o.stop(t+d+.02);}catch(e){}};
+Sfx.play=n=>{if(Sfx.muted)return;if(n==="pick")Sfx.beep(320,.05,"square",.05);else if(n==="match")Sfx.beep(520,.09,"sine",.12,760);else if(n==="err")Sfx.beep(180,.12,"sawtooth",.08,120);else if(n==="shuffle")Sfx.beep(400,.1,"triangle",.1,600);else if(n==="win"){Sfx.beep(523,.15,"sine",.14);setTimeout(()=>Sfx.beep(659,.15,"sine",.14),140);setTimeout(()=>Sfx.beep(784,.3,"sine",.14),280);}};
+
+/* 圖案：內聯 SVG 幾何 */
+const SHAPES=[
+ {c:"#2dd4bf",s:'<circle cx="16" cy="16" r="9"/>'},
+ {c:"#ff6b9d",s:'<rect x="8" y="8" width="16" height="16" rx="3"/>'},
+ {c:"#53c7ff",s:'<path d="M16 7 L25 25 L7 25 Z"/>'},
+ {c:"#f0c040",s:'<path d="M16 6 L25 16 L16 26 L7 16 Z"/>'},
+ {c:"#c77bff",s:'<path d="M16 6 L24 10.5 L24 21.5 L16 26 L8 21.5 L8 10.5 Z"/>'},
+ {c:"#ff9f43",s:'<circle cx="16" cy="16" r="9" fill="none" stroke-width="3.5"/>'},
+ {c:"#7ee787",s:'<path d="M13 7 h6 v6 h6 v6 h-6 v6 h-6 v-6 h-6 v-6 h6 Z"/>'},
+ {c:"#5eead4",s:'<path d="M16 6 l2.7 6.2 6.8.5 -5.2 4.4 1.6 6.6 -5.9-3.6 -5.9 3.6 1.6-6.6 -5.2-4.4 6.8-.5 Z"/>'}
+];
+function svgFor(i){const sh=SHAPES[i%SHAPES.length];return '<svg width="62%" height="62%" viewBox="0 0 32 32"><g fill="'+sh.c+'" stroke="none">'+sh.s+'</g></svg>';}
+
+let R=8,C=8,grid,sel,score,combo,seconds,timerId,state="play",left;
+const gridEl=document.getElementById("grid");
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function newBoard(){
+  const total=R*C;
+  const pairs=total/2;
+  const pool=[];
+  for(let i=0;i<pairs;i++){const sym=i%SHAPES.length;pool.push(sym,sym);}
+  shuffle(pool);
+  grid=[];let k=0;
+  for(let r=0;r<R;r++){grid[r]=[];for(let c=0;c<C;c++)grid[r][c]=pool[k++];}
+  sel=null;score=0;combo=0;seconds=0;left=pairs;state="play";
+  clearInterval(timerId);timerId=setInterval(tick,1000);
+  render();updateHud();
+}
+function tick(){seconds++;document.getElementById("timeV").textContent=fmt(seconds);}
+function fmt(s){return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");}
+function render(){
+  const size=Math.min(window.innerWidth*.94,420);
+  const cs=Math.floor((size-8*(C+1))/C);
+  gridEl.style.gridTemplateColumns="repeat("+C+","+cs+"px)";
+  gridEl.innerHTML="";
+  for(let r=0;r<R;r++)for(let c=0;c<C;c++){
+    const d=document.createElement("div");
+    d.className="tile";d.style.height=cs+"px";d.style.width=cs+"px";
+    if(grid[r][c]===0){d.classList.add("gone");}
+    else{
+      d.innerHTML=svgFor(grid[r][c]);
+      if(sel&&sel.r===r&&sel.c===c)d.classList.add("sel");
+      d.addEventListener("click",()=>onTile(r,c));
+    }
+    gridEl.appendChild(d);
+  }
+}
+function updateHud(){
+  document.getElementById("scoreV").textContent=score;
+  document.getElementById("timeV").textContent=fmt(seconds);
+  document.getElementById("leftV").textContent=left;
+}
+function canConnect(sr,sc,tr,tc){
+  if(grid[sr][sc]!==grid[tr][tc])return false;
+  if(sr===tr&&sc===tc)return false;
+  const D=[[0,1],[1,0],[0,-1],[-1,0]];
+  const minTurn=Array.from({length:R},()=>Array.from({length:C},()=>[Infinity,Infinity,Infinity,Infinity]));
+  const q=[];
+  for(let d=0;d<4;d++){
+    const nr=sr+D[d][0],nc=sc+D[d][1];
+    if(nr===tr&&nc===tc)return true;
+    if(nr>=0&&nr<R&&nc>=0&&nc<C&&grid[nr][nc]===0){minTurn[nr][nc][d]=0;q.push([nr,nc,d,0]);}
+  }
+  while(q.length){
+    const [r,c,d,t]=q.shift();
+    let nr=r+D[d][0],nc=c+D[d][1];
+    if(nr===tr&&nc===tc)return true;
+    if(nr>=0&&nr<R&&nc>=0&&nc<C&&grid[nr][nc]===0&&t<minTurn[nr][nc][d]){minTurn[nr][nc][d]=t;q.push([nr,nc,d,t]);}
+    for(const nd of [(d+1)%4,(d+3)%4]){
+      if(t+1>2)continue;
+      nr=r+D[nd][0];nc=c+D[nd][1];
+      if(nr===tr&&nc===tc)return true;
+      if(nr>=0&&nr<R&&nc>=0&&nc<C&&grid[nr][nc]===0&&t+1<minTurn[nr][nc][nd]){minTurn[nr][nc][nd]=t+1;q.push([nr,nc,nd,t+1]);}
+    }
+  }
+  return false;
+}
+function hasAnyMove(){
+  const seen={};
+  for(let r=0;r<R;r++)for(let c=0;c<C;c++){
+    if(grid[r][c]===0)continue;
+    const s=grid[r][c];
+    if(seen[s]){for(const pos of seen[s]){if(canConnect(r,c,pos[0],pos[1]))return true;}}
+    (seen[s]=seen[s]||[]).push([r,c]);
+  }
+  return false;
+}
+function onTile(r,c){
+  if(state!=="play"||grid[r][c]===0)return;
+  if(!sel){sel={r,c};Sfx.play("pick");render();return;}
+  if(sel.r===r&&sel.c===c){sel=null;render();return;}
+  if(grid[sel.r][sel.c]===grid[r][c]&&canConnect(sel.r,sel.c,r,c)){
+    drawFx(sel.r,sel.c,r,c);
+    grid[sel.r][sel.c]=0;grid[r][c]=0;
+    combo++;score+=10*combo;left--;
+    Sfx.play("match");sel=null;render();updateHud();
+    if(left===0){winGame();return;}
+    if(!hasAnyMove())autoShuffle();
+  }else{
+    combo=0;Sfx.play("err");
+    sel={r,c};render();
+  }
+}
+function autoShuffle(){
+  const rem=[];
+  for(let r=0;r<R;r++)for(let c=0;c<C;c++)if(grid[r][c]!==0)rem.push(grid[r][c]);
+  shuffle(rem);
+  let k=0;
+  for(let r=0;r<R;r++)for(let c=0;c<C;c++)if(grid[r][c]!==0)grid[r][c]=rem[k++];
+  Sfx.play("shuffle");render();
+}
+function center(r,c){
+  const t=gridEl.children[r*C+c];
+  const br=gridEl.getBoundingClientRect(),tr=t.getBoundingClientRect();
+  return [tr.left-br.left+tr.width/2,tr.top-br.top+tr.height/2];
+}
+function drawFx(r1,c1,r2,c2){
+  const svg=document.getElementById("fx");
+  const br=document.getElementById("board").getBoundingClientRect();
+  svg.setAttribute("width",br.width);svg.setAttribute("height",br.height);
+  const p1=center(r1,c1),p2=center(r2,c2);
+  svg.innerHTML='<line x1="'+p1[0]+'" y1="'+p1[1]+'" x2="'+p2[0]+'" y2="'+p2[1]+'" stroke="#f0c040" stroke-width="3" stroke-linecap="round"/>';
+  setTimeout(()=>{svg.innerHTML="";},350);
+}
+function winGame(){
+  state="win";clearInterval(timerId);Sfx.play("win");
+  let best=parseInt(localStorage.getItem("ngMatch_best")||"0",10)||0;
+  if(score>best){best=score;localStorage.setItem("ngMatch_best",String(best));}
+  document.getElementById("rScore").textContent=score;
+  document.getElementById("rTime").textContent=fmt(seconds);
+  document.getElementById("rBest").textContent=best;
+  setTimeout(()=>document.getElementById("result").classList.add("show"),500);
+}
+function backMenu(){state="menu";clearInterval(timerId);document.getElementById("result").classList.remove("show");document.getElementById("menu").classList.add("show");}
+function bind(){
+  document.querySelectorAll(".sizeBtn").forEach(b=>b.addEventListener("click",()=>{
+    document.querySelectorAll(".sizeBtn").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");R=parseInt(b.dataset.r,10);C=parseInt(b.dataset.c,10);Sfx.play("pick");
+  }));
+  document.getElementById("startBtn").addEventListener("click",()=>{Sfx.init();Sfx.audio&&Sfx.audio.resume&&Sfx.audio.resume;document.getElementById("menu").classList.remove("show");newBoard();});
+  document.getElementById("againBtn").addEventListener("click",newBoard);
+  document.getElementById("menuBtn").addEventListener("click",backMenu);
+  document.getElementById("muteBtn").addEventListener("click",toggleMute);
+  addEventListener("resize",render);
+}
+function toggleMute(){Sfx.muted=!Sfx.muted;document.getElementById("iconOn").style.display=Sfx.muted?"none":"block";document.getElementById("iconOff").style.display=Sfx.muted?"block":"none";}
+window.addEventListener("DOMContentLoaded",bind);
+</script>
+
+<!-- infucoco-watermark -->
+<img src="../../assets/images/infucoco-mascot-mark.png" alt="infucoco" style="position:fixed;right:8px;bottom:8px;width:40px;opacity:.9;pointer-events:none;z-index:99999;border-radius:12px;box-shadow:0 4px 14px #0009;image-rendering:auto">
+</body>
+</html>

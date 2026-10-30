@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>三消消消樂</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23232333'/%3E%3Ccircle cx='20' cy='20' r='9' fill='%23ef5a6b'/%3E%3Crect x='34' y='14' width='18' height='18' rx='5' fill='%234f7cf0'/%3E%3Cpath d='M20 38l6 10h-12z' fill='%235fe08a'/%3E%3Ccircle cx='48' cy='48' r='9' fill='%23ffd54a'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+  :root{--bg:#1d1d2b;--panel:#282840;--ink:#f1f2fa;--muted:#9a9bbd;--accent:#ffd54a;
+    --c1:#ef5a6b;--c2:#f0953f;--c3:#ffd54a;--c4:#5fe08a;--c5:#3fc6f0;--c6:#b06ae0;}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,"Segoe UI",sans-serif;
+    min-height:100vh;color:var(--ink);display:flex;justify-content:center;padding:14px;
+    background:radial-gradient(circle at 20% 20%, rgba(176,106,224,.12), transparent 45%), var(--bg);
+    user-select:none;}
+  .app{width:100%;max-width:440px;}
+  .head{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+  .head h1{margin:0;font-size:23px;letter-spacing:2px;}
+  .head .en{font-size:11px;color:var(--muted);letter-spacing:3px;}
+  .spacer{flex:1;}
+  .chip{background:var(--panel);border-radius:12px;padding:6px 12px;text-align:center;}
+  .chip .lbl{font-size:9px;color:var(--muted);letter-spacing:1px;}
+  .chip .val{font-size:18px;font-weight:900;line-height:1.1;}
+  .btn{appearance:none;border:none;cursor:pointer;color:var(--ink);background:var(--panel);border-radius:12px;
+    padding:8px 13px;font-size:13px;font-weight:700;font-family:inherit;min-height:44px;}
+  .btn:hover{background:#333355;}
+  .btn.primary{background:linear-gradient(180deg,#b06ae0,#7c46b8);}
+  .btn.primary:hover{filter:brightness(1.1);}
+  .ic{display:none;}
+  .btn:not(.muted) .ic-on{display:block;}
+  .btn.muted .ic-off{display:block;}
+
+  .cvwrap{width:min(92vw,400px);margin:0 auto;position:relative;border-radius:16px;overflow:hidden;
+    background:var(--panel);box-shadow:0 18px 40px rgba(0,0,0,.45);}
+  canvas{display:block;width:100%;height:auto;touch-action:none;cursor:pointer;}
+  .hint{margin-top:10px;text-align:center;font-size:11.5px;color:var(--muted);}
+  .overlay{position:fixed;inset:0;background:rgba(14,12,24,.84);display:none;align-items:center;justify-content:center;z-index:50;padding:20px;backdrop-filter:blur(3px);}
+  .overlay.open{display:flex;}
+  .modal{max-width:330px;width:100%;text-align:center;background:var(--panel);border-radius:20px;padding:26px;border:1px solid rgba(255,255,255,.08);}
+  .modal h2{margin:0 0 8px;font-size:26px;color:var(--accent);}
+  .modal p{margin:4px 0 18px;color:var(--muted);font-size:14px;}
+  .modal .btn{padding:12px 26px;font-size:15px;}
+</style>
+</head>
+<body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<div class="app">
+  <div class="head">
+    <h1>三消消消樂</h1><span class="en">MATCH-3</span>
+    <div class="spacer"></div>
+    <div class="chip"><div class="lbl">得分</div><div class="val" id="score">0</div></div>
+    <div class="chip"><div class="lbl">目標</div><div class="val" id="goal">2000</div></div>
+    <div class="chip"><div class="lbl">最佳</div><div class="val" id="best">0</div></div>
+    <button class="btn" id="muteBtn" title="音效"><svg class="ic ic-on" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 010 7M18 6a8.5 8.5 0 010 12" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg><svg class="ic ic-off" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor"/><path d="M16 9l6 6M22 9l-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg></button>
+    <button class="btn primary" id="newBtn">新局</button>
+  </div>
+  <div class="cvwrap"><canvas id="cv"></canvas></div>
+  <div class="hint">點選兩顆相鄰寶石交換，三個以上連成線即可消除</div>
+</div>
+<div class="overlay" id="endOverlay">
+  <div class="modal">
+    <h2 id="endTitle">完成目標</h2>
+    <p id="endMsg">得分 0</p>
+    <button class="btn primary" id="againBtn">再玩一局</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var R=8,C=8,S=52,GAP=3,PAD=10;
+  var cv=document.getElementById('cv');
+  var ctx=cv.getContext('2d');
+  var COLS=['#ef5a6b','#f0953f','#ffd54a','#5fe08a','#3fc6f0','#b06ae0'];
+
+  var board,score,goal,best=Number(localStorage.getItem('gMatchBest')||0),over=false,lock=false;
+  var selected=null;
+  var bestCombo=0;
+  document.getElementById('best').textContent=best;
+  var muted=localStorage.getItem('gMatchMuted')==='1';
+
+  var actx=null;
+  function audio(){ if(!actx){try{actx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}} if(actx&&actx.state==='suspended')actx.resume(); }
+  function tone(f,d,t,v,del){ if(muted||!actx)return; var tt=actx.currentTime+(del||0);
+    var o=actx.createOscillator(),g=actx.createGain(); o.type=t||'triangle'; o.frequency.value=f;
+    g.gain.setValueAtTime(.0001,tt); g.gain.exponentialRampToValueAtTime(v||.12,tt+.01); g.gain.exponentialRampToValueAtTime(.0001,tt+d);
+    o.connect(g);g.connect(actx.destination);o.start(tt);o.stop(tt+d+.02); }
+  var sSel=function(){tone(320,.05,'square',.08);};
+  var sSwap=function(){tone(200,.05,'square',.06);};
+  var sClear=function(n){for(var i=0;i<n;i++)tone(500+i*40,.07,'triangle',.12,i*.03);};
+  var sDrop=function(){tone(150,.05,'square',.05);};
+  var sWin=function(){[523,659,784,1047,1319].forEach(function(f,i){tone(f,.14,'triangle',.13,i*.09);});};
+  var sFail=function(){tone(180,.1,'sawtooth',.08);};
+
+  function size(){
+    cv.width=PAD*2+C*S+(C-1)*GAP;
+    cv.height=PAD*2+R*S+(R-1)*GAP;
+  }
+  function px(col,row){ return {x:PAD+col*(S+GAP),y:PAD+row*(S+GAP)}; }
+
+  function reset(){
+    board=[];
+    for(var r=0;r<R;r++){ board[r]=[]; for(var c=0;c<C;c++) board[r][c]=Math.floor(Math.random()*COLS.length); }
+    // 消除初始自動生成的連線
+    while(clearMatches(true)){ fillGaps(); }
+    score=0;over=false;selected=null;lock=false;bestCombo=0;
+    goal=2000+Math.floor(best/1000)*1000;
+    document.getElementById('score').textContent='0';
+    document.getElementById('goal').textContent=goal;
+    document.getElementById('endOverlay').classList.remove('open');
+    size();draw();
+  }
+
+  function matches(){
+    var set=[];
+    // 橫向
+    for(var r=0;r<R;r++){
+      var run=1;
+      for(var c=1;c<=C;c++){
+        if(c<C && board[r][c]===board[r][c-1]){ run++; }
+        else { if(run>=3) for(var k=c-run;k<c;k++) set.push(r*C+k); run=1; }
+      }
+    }
+    // 縱向
+    for(var c=0;c<C;c++){
+      var run=1;
+      for(var r=1;r<=R;r++){
+        if(r<R && board[r][c]===board[r-1][c]){ run++; }
+        else { if(run>=3) for(var k=r-run;k<r;k++) set.push(k*C+c); run=1; }
+      }
+    }
+    return set;
+  }
+  function clearMatches(silent){
+    var set=matches();
+    if(!set.length) return false;
+    set.forEach(function(i){ board[(i/C)|0][i%C]=-1; });
+    if(!silent){ var n=set.length; var pts=n*10*Math.max(1,bestCombo); score+=pts; document.getElementById('score').textContent=score; if(score>best){best=score;localStorage.setItem('gMatchBest',String(best));document.getElementById('best').textContent=best;} sClear(n); }
+    return true;
+  }
+  function fillGaps(){
+    // 每列下落
+    for(var c=0;c<C;c++){
+      var write=R-1;
+      for(var r=R-1;r>=0;r--){ if(board[r][c]!==-1){ board[write][c]=board[r][c]; write--; } }
+      for(var r=write;r>=0;r--){ board[r][c]=Math.floor(Math.random()*COLS.length); }
+    }
+  }
+
+  // 交換兩格
+  function trySwap(r1,c1,r2,c2){
+    // 相鄰
+    if(Math.abs(r1-r2)+Math.abs(c1-c2)!==1) return;
+    lock=true;
+    var t=board[r1][c1]; board[r1][c1]=board[r2][c2]; board[r2][c2]=t;
+    if(matches().length){
+      sSwap();
+      var combo=1;
+      setTimeout(function(){ clearMatches(); fillGaps(); resolveChain(combo); },140);
+    } else {
+      // 換回
+      sFail();
+      var a=board[r1][c1]; board[r1][c1]=board[r2][c2]; board[r2][c2]=a;
+      setTimeout(function(){ lock=false; draw(); },140);
+    }
+  }
+  function resolveChain(combo){
+    bestCombo=combo;
+    clearMatches();
+    fillGaps();
+    draw();
+    if(matches().length){ setTimeout(function(){ resolveChain(combo+1); },200); }
+    else {
+      setTimeout(function(){ lock=false; checkGoal(); },150);
+    }
+  }
+  function checkGoal(){
+    if(score>=goal && !over){ over=true; sWin();
+      document.getElementById('endTitle').textContent='達成目標！';
+      document.getElementById('endMsg').textContent='得分 '+score+' · 最高連鎖 '+bestCombo;
+      document.getElementById('endOverlay').classList.add('open');
+    }
+  }
+
+  // ---------- 繪製 ----------
+  function draw(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    ctx.fillStyle='#262638';ctx.fillRect(0,0,cv.width,cv.height);
+    for(var r=0;r<R;r++)for(var c=0;c<C;c++){
+      var v=board[r][c]; if(v<0) continue;
+      var p=px(c,r);
+      ctx.fillStyle=COLS[v];
+      roundRect(p.x,p.y,S,S,10);
+      ctx.fill();
+      ctx.fillStyle='rgba(255,255,255,.28)';
+      roundRect(p.x+4,p.y+3,S-8,6,3);
+      ctx.fill();
+      ctx.fillStyle='rgba(255,255,255,.5)';
+      ctx.beginPath();ctx.arc(p.x+S*.5,p.y+S*.5,S*.14,0,7);ctx.fill();
+      if(selected && selected.r===r && selected.c===c){
+        ctx.strokeStyle='#fff';ctx.lineWidth=3;roundRect(p.x-2,p.y-2,S+4,S+4,11);ctx.stroke();
+      }
+    }
+  }
+  function roundRect(x,y,w,h,r){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);
+    ctx.closePath();
+  }
+
+  // ---------- 互動 ----------
+  function canvasPos(e){
+    var rect=cv.getBoundingClientRect();
+    var scale=cv.width/rect.width;
+    var x=(e.clientX-rect.left)*scale, y=(e.clientY-rect.top)*scale;
+    var c=Math.round((x-PAD)/(S+GAP)), r=Math.round((y-PAD)/(S+GAP));
+    if(c<0||c>=C||r<0||r>=R) return null;
+    return {r:r,c:c};
+  }
+  function onTap(e){
+    if(over||lock) return;
+    audio();
+    var p=canvasPos(e); if(!p) return;
+    if(!selected){ selected=p; sSel(); draw(); return; }
+    if(selected.r===p.r&&selected.c===p.c){ selected=null; draw(); return; }
+    trySwap(selected.r,selected.c,p.r,p.c);
+    selected=null;
+  }
+
+  cv.addEventListener('pointerdown',function(e){onTap(e);});
+  document.getElementById('newBtn').addEventListener('click',function(){audio();reset();});
+  document.getElementById('againBtn').addEventListener('click',function(){reset();});
+  document.getElementById('muteBtn').addEventListener('click',function(){muted=!muted;localStorage.setItem('gMatchMuted',muted?'1':'0');document.getElementById('muteBtn').classList.toggle('muted',muted);});
+
+  reset();
+})();
+</script>
+
+<!-- infucoco-watermark -->
+<img src="../../assets/images/infucoco-mascot-mark.png" alt="infucoco" style="position:fixed;right:8px;bottom:8px;width:40px;opacity:.9;pointer-events:none;z-index:99999;border-radius:12px;box-shadow:0 4px 14px #0009;image-rendering:auto">
+</body>
+</html>

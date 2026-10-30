@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>霓虹打地鼠 — 揮槌敲擊</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0e17'/%3E%3Cellipse cx='32' cy='44' rx='18' ry='7' fill='%2322304a'/%3E%3Ccircle cx='32' cy='34' r='13' fill='%232dd4bf'/%3E%3Ccircle cx='27' cy='32' r='2' fill='%23071018'/%3E%3Ccircle cx='37' cy='32' r='2' fill='%23071018'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+:root{--bg:#070a12;--ink:#e8ecf5;--dim:#8fa0bd;--teal:#2dd4bf;--pink:#ff6b9d;--gold:#f0c040;--cyan:#53c7ff;--line:#22304a;--panel:#0e1524}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Segoe UI",system-ui,sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:none}
+#vignette{position:fixed;inset:0;pointer-events:none;z-index:5;background:radial-gradient(ellipse at center,transparent 55%,rgba(2,4,9,.7) 100%)}
+#wrap{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:6;padding:12px}
+#top{display:flex;align-items:center;gap:8px;width:min(460px,94vw);flex-wrap:wrap}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:7px 12px;font-size:14px}
+.chip b{color:var(--gold);font-variant-numeric:tabular-nums}
+.chip .k{font-size:11px;color:var(--dim)}
+.spacer{flex:1}
+#muteBtn{width:44px;height:44px;border-radius:10px;background:var(--panel);border:1px solid var(--line);color:var(--dim);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s}
+#muteBtn:hover{color:var(--ink);border-color:var(--teal)}
+#board{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:0 0 50px rgba(45,212,191,.08);cursor:crosshair}
+#tipBar{font-size:12px;color:var(--dim);letter-spacing:.12em}
+.overlay{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;flex-direction:column;background:radial-gradient(ellipse at 50% 40%,#0d1526,#05070d 80%);padding:24px;text-align:center}
+.overlay.show{display:flex}
+.logo{font-size:clamp(40px,9vw,64px);font-weight:900;letter-spacing:.06em}.logo .n{color:var(--teal)}.logo .t{color:var(--gold)}
+.tag{color:var(--dim);letter-spacing:.3em;margin-top:12px;font-size:15px}
+.bigBtn{margin-top:32px;background:linear-gradient(180deg,#2dd4bf,#1a9c8c);color:#04121c;border:none;border-radius:14px;padding:16px 52px;font-size:19px;font-weight:800;letter-spacing:.15em;cursor:pointer;transition:.18s;box-shadow:0 10px 30px rgba(45,212,191,.26)}
+.bigBtn:hover{transform:translateY(-2px)}
+.help{display:grid;grid-template-columns:1fr;gap:8px;margin-top:28px;font-size:14px;color:var(--dim);max-width:360px;text-align:left}
+.help .row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.result .big{font-size:clamp(34px,7vw,52px);font-weight:900}.result .big.win{color:var(--teal)}
+.stat{display:flex;gap:30px;justify-content:center;margin:26px 0 8px}
+.stat .v{font-size:30px;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums}
+.stat .k{font-size:12px;color:var(--dim);margin-top:4px;letter-spacing:.1em}
+.rowbtns{display:flex;gap:14px;margin-top:20px;flex-wrap:wrap;justify-content:center}
+.ghostBtn{background:transparent;border:1px solid var(--line);color:var(--dim);border-radius:12px;padding:14px 28px;font-size:15px;letter-spacing:.08em;cursor:pointer;transition:.15s;min-width:120px}
+.ghostBtn:hover{color:var(--ink);border-color:var(--teal)}
+@media (min-width:768px){#board{width:min(460px,92vw)!important}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<div id="wrap">
+  <div id="top">
+    <div class="chip"><span class="k">分數</span> <b id="scoreV">0</b></div>
+    <div class="chip"><span class="k">時間</span> <b id="timeV">60</b></div>
+    <div class="chip"><span class="k">連擊</span> <b id="comboV">0</b></div>
+    <div class="spacer"></div>
+    <button id="muteBtn" aria-label="聲音開關">
+      <svg id="iconOn" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+      <svg id="iconOff" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+    </button>
+  </div>
+  <canvas id="board"></canvas>
+  <div id="tipBar">點冒頭的地鼠 · 金鼠高分 · 別敲炸彈</div>
+</div>
+<div id="vignette"></div>
+<div class="overlay show" id="menu">
+  <div class="logo"><span class="n">霓虹</span><span class="t">打地鼠</span></div>
+  <div class="tag">WHACK · 揮槌敲擊</div>
+  <button class="bigBtn" id="startBtn">開始遊戲</button>
+  <div class="help">
+    <div class="row"><span>一般地鼠</span><span>+10 分</span></div>
+    <div class="row"><span>金色地鼠</span><span>+50 分</span></div>
+    <div class="row"><span>黑色炸彈</span><span>-20 分</span></div>
+    <div class="row"><span>連擊敲中</span><span>額外加分</span></div>
+    <div class="row"><span>限時 60 秒</span><span>越快越難</span></div>
+  </div>
+</div>
+<div class="overlay" id="result">
+  <div class="result">
+    <div class="big win" id="resTitle">時間到！</div>
+    <div class="stat">
+      <div class="s"><div class="v" id="rScore">0</div><div class="k">分數</div></div>
+      <div class="s"><div class="v" id="rBest">0</div><div class="k">最佳</div></div>
+      <div class="s"><div class="v" id="rHits">0</div><div class="k">敲中</div></div>
+    </div>
+    <div class="rowbtns">
+      <button class="ghostBtn" id="againBtn">再玩一次</button>
+      <button class="ghostBtn" id="menuBtn">主選單</button>
+    </div>
+  </div>
+</div>
+<script>
+"use strict";
+const GAME_TIME=60;
+const Sfx={audio:null,muted:false};
+Sfx.init=()=>{if(!Sfx.audio){const AC=window.AudioContext||window.webkitAudioContext;if(AC)Sfx.audio=new AC();}};
+Sfx.beep=(f,d,type,v,slide)=>{if(Sfx.muted||!Sfx.audio)return;try{const t=Sfx.audio.currentTime,o=Sfx.audio.createOscillator(),g=Sfx.audio.createGain();o.type=type||"square";o.frequency.setValueAtTime(f,t);if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+d);g.gain.setValueAtTime(v||.1,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(Sfx.audio.destination);o.start(t);o.stop(t+d+.02);}catch(e){}};
+Sfx.play=n=>{if(Sfx.muted)return;if(n==="hit")Sfx.beep(520,.07,"square",.12);else if(n==="gold"){Sfx.beep(660,.08,"sine",.14);Sfx.beep(990,.12,"sine",.12);}else if(n==="bomb")Sfx.beep(160,.35,"sawtooth",.18,50);else if(n==="over")Sfx.beep(330,.5,"sawtooth",.15,110);else if(n==="start")Sfx.beep(440,.08,"sine",.1);};
+
+let box,dpr,ctx,state;
+let score=0,best=0,timeLeft=GAME_TIME,combo=0,hits=0;
+let moles=[],particles=[],popups=[];
+let spawnTimer=0,lastT=0;
+function resize(){const cv=document.getElementById("board");box=Math.min(window.innerWidth*.92,440);dpr=Math.min(devicePixelRatio||1,2);cv.width=box*dpr;cv.height=box*dpr;cv.style.width=box+"px";cv.style.height=box+"px";ctx=cv.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);}
+function holePos(i){const pad=box*0.10,g=(box-pad*2)/3;return{x:pad+(i%3+0.5)*g,y:pad+(Math.floor(i/3)+0.5)*g,cell:g};}
+function lerp(a,b,t){return a+(b-a)*t;}
+function setState(s){state=s;document.getElementById("menu").classList.toggle("show",s==="menu");document.getElementById("result").classList.toggle("show",s==="over");}
+function updateHud(){document.getElementById("scoreV").textContent=score;document.getElementById("timeV").textContent=Math.ceil(timeLeft);document.getElementById("comboV").textContent=combo;}
+function newGame(){score=0;timeLeft=GAME_TIME;combo=0;hits=0;moles=[];particles=[];popups=[];spawnTimer=400;setState("play");updateHud();Sfx.play("start");}
+function trySpawn(){const diff=1-timeLeft/GAME_TIME;const active=moles.filter(m=>m.state!=="hit").length;const maxM=1+Math.round(diff*2);if(active>=maxM)return;const free=[];for(let i=0;i<9;i++)if(!moles.some(m=>m.hole===i))free.push(i);if(!free.length)return;const hole=free[Math.floor(Math.random()*free.length)];const r=Math.random();let type=0;if(r<0.14)type=2;else if(r<0.32)type=1;moles.push({hole,type,life:lerp(1150,620,diff),rise:0,state:"rise",hitT:0});}
+function endGame(){setState("over");best=Math.max(best,score);try{localStorage.setItem("ngWhack_best",String(best));}catch(e){}document.getElementById("rScore").textContent=score;document.getElementById("rBest").textContent=best;document.getElementById("rHits").textContent=hits;Sfx.play("over");}
+function burst(p,color){for(let i=0;i<10;i++){const a=Math.random()*Math.PI*2,sp=60+Math.random()*160;particles.push({x:p.x,y:p.y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-60,life:.5,color});}}
+function popup(p,text,color){popups.push({x:p.x,y:p.y-20,text,color,life:.8});}
+function whack(holeIdx){const m=moles.find(m=>m.hole===holeIdx&&(m.state==="up"||m.state==="rise"));const p=holePos(holeIdx);if(!m){if(combo>0){combo=0;updateHud();}return;}m.state="hit";m.hitT=.18;if(m.type===2){score=Math.max(0,score-20);combo=0;Sfx.play("bomb");popup(p,"-20","#ff4040");burst(p,"#ff4040");}else{const base=m.type===1?50:10;combo++;hits++;const bonus=Math.min(combo-1,10)*2;const pts=base+bonus;score+=pts;Sfx.play(m.type===1?"gold":"hit");popup(p,"+"+pts,m.type===1?"#f0c040":"#2dd4bf");burst(p,m.type===1?"#f0c040":"#2dd4bf");}updateHud();}
+function update(dt){if(state!=="play")return;timeLeft-=dt;if(timeLeft<=0){timeLeft=0;updateHud();endGame();return;}spawnTimer-=dt*1000;if(spawnTimer<=0){trySpawn();const diff=1-timeLeft/GAME_TIME;spawnTimer=lerp(880,360,diff);}for(let i=moles.length-1;i>=0;i--){const m=moles[i];if(m.state==="rise"){m.rise+=dt*7;if(m.rise>=1){m.rise=1;m.state="up";}}else if(m.state==="up"){m.life-=dt*1000;if(m.life<=0)m.state="retreat";}else if(m.state==="retreat"){m.rise-=dt*6;if(m.rise<=0){moles.splice(i,1);continue;}}else if(m.state==="hit"){m.hitT-=dt;m.rise-=dt*9;if(m.hitT<=0||m.rise<=0){moles.splice(i,1);continue;}}}for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=500*dt;p.life-=dt;if(p.life<=0)particles.splice(i,1);}for(let i=popups.length-1;i>=0;i--){const p=popups[i];p.y-=40*dt;p.life-=dt;if(p.life<=0)popups.splice(i,1);}updateHud();}
+function draw(){const c=ctx;c.clearRect(0,0,box,box);for(let i=0;i<9;i++){const p=holePos(i);c.fillStyle="rgba(0,0,0,.5)";c.beginPath();c.ellipse(p.x,p.y,p.cell*.34,p.cell*.17,0,0,Math.PI*2);c.fill();c.strokeStyle="#22304a";c.lineWidth=2;c.stroke();}for(const m of moles){const p=holePos(m.hole);const r=p.cell*.30;const rise=m.rise*p.cell*.30;const my=p.y-rise;const squash=m.state==="hit"?0.75:1;c.save();c.translate(p.x,my);c.scale(1,squash);if(m.type===2){c.fillStyle="#1a2233";c.beginPath();c.arc(0,0,r,0,Math.PI*2);c.fill();c.strokeStyle="#ff6b9d";c.lineWidth=2;c.stroke();c.strokeStyle="#8fa0bd";c.lineWidth=2;c.beginPath();c.moveTo(0,-r);c.quadraticCurveTo(6,-r-10,12,-r-8);c.stroke();c.fillStyle="#ffd75c";c.beginPath();c.arc(12,-r-8,2.5,0,Math.PI*2);c.fill();}else{c.fillStyle=m.type===1?"#f0c040":"#2dd4bf";c.beginPath();c.arc(0,0,r,0,Math.PI*2);c.fill();c.fillStyle="rgba(255,255,255,.25)";c.beginPath();c.arc(-r*.3,-r*.3,r*.5,0,Math.PI*2);c.fill();c.fillStyle="#071018";c.beginPath();c.arc(-r*.32,-r*.1,r*.12,0,Math.PI*2);c.fill();c.beginPath();c.arc(r*.32,-r*.1,r*.12,0,Math.PI*2);c.fill();c.strokeStyle="#071018";c.lineWidth=1.5;c.beginPath();c.arc(0,r*.15,r*.25,0.15,Math.PI-0.15);c.stroke();}c.restore();}for(const p of particles){c.globalAlpha=Math.max(0,p.life*2);c.fillStyle=p.color;c.beginPath();c.arc(p.x,p.y,3,0,Math.PI*2);c.fill();}c.globalAlpha=1;for(const p of popups){c.globalAlpha=Math.max(0,p.life*1.4);c.fillStyle=p.color;c.font="800 20px 'Noto Sans TC',sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillText(p.text,p.x,p.y);}c.globalAlpha=1;}
+function loop(t){const dt=Math.min((t-lastT)/1000,.05);lastT=t;update(dt);draw();requestAnimationFrame(loop);}
+function bind(){const cv=document.getElementById("board");cv.addEventListener("pointerdown",e=>{if(state!=="play")return;const rect=cv.getBoundingClientRect();const x=e.clientX-rect.left,y=e.clientY-rect.top;for(let i=0;i<9;i++){const p=holePos(i);const dx=x-p.x,dy=y-p.y,rad=p.cell*.4;if(dx*dx+dy*dy<rad*rad){whack(i);break;}}});document.getElementById("startBtn").addEventListener("click",()=>{Sfx.init();if(Sfx.audio&&Sfx.audio.resume)Sfx.audio.resume();newGame();});document.getElementById("againBtn").addEventListener("click",()=>{Sfx.init();newGame();});document.getElementById("menuBtn").addEventListener("click",()=>setState("menu"));document.getElementById("muteBtn").addEventListener("click",()=>{Sfx.muted=!Sfx.muted;document.getElementById("iconOn").style.display=Sfx.muted?"none":"block";document.getElementById("iconOff").style.display=Sfx.muted?"block":"none";});}
+function init(){resize();addEventListener("resize",resize);bind();best=parseInt(localStorage.getItem("ngWhack_best")||"0",10)||0;document.getElementById("bestV")&&0;setState("menu");lastT=performance.now();requestAnimationFrame(loop);}
+window.addEventListener("DOMContentLoaded",init);
+</script>
+
+<!-- infucoco-watermark -->
+<img src="../../assets/images/infucoco-mascot-mark.png" alt="infucoco" style="position:fixed;right:8px;bottom:8px;width:40px;opacity:.9;pointer-events:none;z-index:99999;border-radius:12px;box-shadow:0 4px 14px #0009;image-rendering:auto">
+</body>
+</html>

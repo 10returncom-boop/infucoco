@@ -6,9 +6,9 @@
 
 /* ---------- 設計 Token ---------- */
 :root{
-  --paper:      #FAF6EE;   /* 頁面底 */
+  --paper:      #F4F9FF;   /* 頁面底（淡藍白） */
   --surface:    #FFFFFF;   /* 卡片/面板 */
-  --ink:        #2B2A26;   /* 主文字 */
+  --ink:        #111111;   /* 主文字（黑） */
   --ink-soft:   #5B564A;   /* 次要文字 */
   --ink-faint:  #8B8575;   /* 弱文字 */
   --line:       #EAE2D0;   /* 分隔線 */
@@ -43,7 +43,7 @@ body{
   font-size:16px;
   line-height:1.7;
   color:var(--ink);
-  background:var(--paper);
+  background:linear-gradient(180deg,#DDEBFF 0%, #F4F9FF 55%, #FFFFFF 100%);
   -webkit-font-smoothing:antialiased;
 }
 img{ max-width:100%; display:block; }
@@ -192,7 +192,7 @@ button{ font-family:inherit; cursor:pointer; }
 .hero{
   position:relative;
   background:
-    linear-gradient(to right, rgba(250,246,238,1) 0%, rgba(250,246,238,.97) 26%, rgba(250,246,238,.72) 44%, rgba(250,246,238,.28) 62%, rgba(250,246,238,.05) 76%, rgba(250,246,238,0) 88%),
+    linear-gradient(to right, rgba(244,249,255,1) 0%, rgba(244,249,255,.97) 26%, rgba(244,249,255,.72) 44%, rgba(244,249,255,.28) 62%, rgba(244,249,255,.05) 76%, rgba(244,249,255,0) 88%),
     url("../img/infucoco-base.webp") 72% 40%/cover no-repeat,
     var(--paper);
   border-bottom:1px solid var(--line);
@@ -494,3 +494,26 @@ button{ font-family:inherit; cursor:pointer; }
 
 /* ===== 卡片 hover：橘色陰影 + 橘色邊框 ===== */
 .cat-card:hover,.hot-card:hover,.sym-item:hover,.stat-card:hover,.font-row:hover,.nick-cand:hover,.subchip:hover,.word-item:hover,.rand-item:hover,.paste-item:hover{ border-color:#f59f1c; box-shadow:0 16px 34px -14px rgba(245,159,28,.45); }
+
+/* ============================================================
+   滿版佈局（全站統一：滿版寬、同一頁共用一條捲軸）
+   ============================================================ */
+body{ display:flex; flex-direction:column; }
+
+#site-header{ flex:0 0 auto; }
+main.wrap{ flex:1 1 auto; min-height:0; width:100%; max-width:none; display:flex; flex-direction:column; }
+#site-footer{ flex:0 0 auto; margin-top:0; padding:14px 0 10px; }
+#site-footer .foot-bottom{ margin-top:10px; padding-top:8px; }
+
+/* 頁首區壓縮，騰出空間給內容 */
+.page-head{ padding:10px 0 2px; }
+.page-head h1{ font-size:1.4rem; }
+#breadcrumb{ margin-top:2px; }
+
+/* 符號/表情/顏文字網格：滿版寬、格子緊湊 */
+#collection{ flex:1 1 auto; display:flex; flex-direction:column; }
+.sym-grid{ flex:1 1 auto; display:grid; grid-auto-flow:row; grid-template-columns:repeat(auto-fill,minmax(50px,1fr)); grid-auto-rows:auto; gap:4px; margin-top:6px; }
+.sym-item{ min-height:0; padding:4px 2px; gap:1px; }
+.sym-char{ font-size:1rem; min-height:1.3em; }
+.sym-name{ font-size:.44rem; }
+.sym-item .fav-heart{ font-size:.7rem; }

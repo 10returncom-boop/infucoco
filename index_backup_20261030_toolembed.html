@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/favicon.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="description" content="infucoco 文創數字的異想世界：故事、金句、療癒遊戲與 AI 視覺創作平台。">
+<meta name="author" content="infucoco">
+<meta name="theme-color" content="#5F3FA8">
+<title>infucoco 文創數字的異想世界｜藝術、視覺與數位創作平台</title>
+<link rel="canonical" href="https://infucoco.com/">
+<link rel="alternate" hreflang="zh-TW" href="https://infucoco.com/">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:title" content="infucoco 文創數字的異想世界｜藝術、視覺與數位創作平台">
+<meta property="og:site_name" content="infucoco 文創數字的異想世界">
+<meta property="og:description" content="infucoco 文創數字的異想世界：故事、金句、療癒遊戲與 AI 視覺創作平台。">
+<meta property="og:url" content="https://infucoco.com/">
+<meta property="og:image" content="https://infucoco.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="infucoco 文創數字的異想世界｜藝術、視覺與數位創作平台">
+<meta name="twitter:description" content="infucoco 文創數字的異想世界：故事、金句、療癒遊戲與 AI 視覺創作平台。">
+<meta name="twitter:image" content="https://infucoco.com/assets/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"infucoco 文創數字的異想世界","url":"https://infucoco.com/","description":"infucoco 文創數字的異想世界：故事、金句、療癒遊戲與 AI 視覺創作平台。"}</script>
+<!-- css 未内联: rel="stylesheet" href="css/main.css" (missing) -->
+<style>
+/* dynamic link css/main.css */
+/* ============================================================
+ infucoco 文創數字的異想世界 — 沉浸式場景 · 翻轉雜誌
+ 全屏照片沉浸 + 不對稱雜誌網格 + 3D 翻轉 + 視差 + 斜切
+ ============================================================ */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+ --paper:#FBF6EC; /* 奶油紙感底 */
+ --paper2:#F3EBD8;
+ --card:#FFFDF7;
+ --txt:#1C1A15; /* 墨黑字 */
+ --soft:#6E6757;
+ --accent:#E36B00; /* 暖橘 */
+ --accent2:#7A5CC8; /* 紫 */
+ --mint:#3E9B6F;
+ --ink:#181510;
+ --line:rgba(28,26,21,.12);
+ --shadow:0 18px 50px rgba(24,21,16,.16);
+ --radius:22px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--txt);font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;line-height:1.7;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none}
+img{max-width:100%;display:block}
+.container{max-width:1240px;margin:0 auto;padding:0 24px;position:relative;z-index:2}
+
+/* ===== 導覽樣式統一由 css/main.css 控制 ===== */
+
+/* Popover Dropdown（紙感） */
+.popover-wrap{position:relative}
+.popover-dropdown{position:absolute;right:0;top:calc(100% + 10px);width:min(92vw,420px);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 22px 60px rgba(24,21,16,.25);z-index:70;display:none}
+.popover-dropdown.open{display:block;animation:pop .18s ease}
+@keyframes pop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.popover-dropdown__head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.popover-dropdown__title{font-weight:900;color:var(--accent)}
+.popover-dropdown__grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.popover-dropdown__link{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border-radius:14px;background:var(--paper2);font-size:.78rem;color:var(--txt);font-weight:700;text-align:center;transition:.2s}
+.popover-dropdown__link:hover{background:var(--ink);color:#fff;transform:scale(1.05) rotate(-2deg)}
+.popover-dropdown__icon{font-size:1.4rem}
+.popover-dropdown__foot{display:flex;gap:8px;margin-top:12px}
+.popover-dropdown__chip{flex:1;padding:8px;border-radius:12px;border:1px solid var(--line);background:var(--paper2);color:var(--soft);font-size:.78rem;cursor:pointer;transition:.2s}
+.popover-dropdown__chip:hover{color:var(--accent);border-color:var(--accent)}
+
+/* ===== 全屏沉浸式 Hero 場景 ===== */
+.hero{position:relative;min-height:92vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:5vh;overflow:hidden;background:var(--ink)}
+.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.05);animation:heroZoom 22s ease-in-out infinite;z-index:0}
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;background:#181510}
+@keyframes heroZoom{0%,100%{transform:scale(1.02)}50%{transform:scale(1.1)}}
+.hero::before{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,rgba(24,21,16,.38) 0%,rgba(24,21,16,.28) 40%,rgba(24,21,16,.62) 100%)}
+.hero-content{position:relative;z-index:3;text-align:center;color:#fff;padding:0 24px;max-width:760px}
+.hero-stamp{display:inline-block;background:#fff;color:var(--ink);font-weight:900;padding:5px 16px;border-radius:4px;transform:rotate(-3deg);font-size:.76rem;margin-bottom:14px;box-shadow:6px 6px 0 rgba(0,0,0,.3)}
+.hero-title{font-family:'Fredoka','Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;font-size:clamp(8rem,25vw,3.2rem);font-weight:900;letter-spacing:.02em;color:#fff;text-shadow:0 6px 30px rgba(0,0,0,.8);line-height:1;margin:26px 0 0;text-transform:lowercase}
+.hero-title .hl{color:#FFE27A;text-shadow:0 4px 30px rgba(227,107,0,.6),0 2px 4px rgba(0,0,0,.9)}
+.hero-title .rl{display:inline-block;transform:rotate(-3deg);color:#fff;margin:0 .1em}
+.rip{display:inline-block;animation:ripWave 2s ease-in-out infinite}
+.rip:nth-child(1){animation-delay:0s}
+.rip:nth-child(2){animation-delay:.1s}
+.rip:nth-child(3){animation-delay:.2s}
+.rip:nth-child(4){animation-delay:.3s}
+.rip:nth-child(5){animation-delay:.4s}
+.rip:nth-child(6){animation-delay:.5s}
+.rip:nth-child(7){animation-delay:.6s}
+.rip:nth-child(8){animation-delay:.7s}
+@keyframes ripWave{0%,100%{transform:translateY(0) scale(1)}30%{transform:translateY(-6px) scale(1.06)}60%{transform:translateY(2px) scale(.98)}}
+.hero-sub{max-width:560px;margin:14px auto 20px;color:#fff;font-size:1rem;text-shadow:0 3px 14px rgba(0,0,0,.9);font-weight:600}
+.hero-ctas{display:flex;gap:8px;justify-content:center;flex-wrap:nowrap;max-width:min(92vw,420px);margin:0 auto}
+.hero-ctas .btn{flex:1 1 0;font-family:'Fredoka','Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;background:linear-gradient(135deg,#2D1B69 0%,#4A2D8F 50%,#6B3FA8 100%);color:#fff;font-weight:900;font-size:.85rem;padding:10px 8px;border-radius:12px;border:1px solid rgba(255,255,255,.15);box-shadow:0 6px 16px rgba(30,27,75,.45),0 2px 4px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.18),inset 0 -2px 4px rgba(0,0,0,.2);text-shadow:0 1px 3px rgba(0,0,0,.4);text-align:center;white-space:nowrap}
+.hero-ctas .btn:hover{transform:translateY(-2px);filter:brightness(1.15);box-shadow:0 10px 24px rgba(30,27,75,.55),0 4px 8px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.25)}
+.hero-ctas .btn:active{transform:translateY(2px);box-shadow:0 2px 6px rgba(30,27,75,.4),inset 0 -1px 2px rgba(0,0,0,.2)}
+.scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.7);font-size:.8rem;z-index:3;letter-spacing:.2em;animation:blink 1.6s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:.4}50%{opacity:1}}
+
+/* ===== 紙感按鈕 ===== */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:15px 28px;border-radius:40px;font-weight:900;font-size:1rem;background:linear-gradient(100deg,#FFD6AE 0%,#FFB7C8 42%,#D6C6F5 100%);color:#4A2433;border:1px solid rgba(74,36,51,.12);cursor:pointer;transition:.22s;box-shadow:0 10px 30px rgba(186,140,215,.22)}
+.btn:hover{transform:translateY(-3px) rotate(-1deg)}
+.btn.o,.btn.w,.btn.dark{background:linear-gradient(100deg,#FFD6AE 0%,#FFB7C8 42%,#D6C6F5 100%);color:#4A2433}
+.btn.ghost{background:transparent;color:#4A2433;border:2px solid rgba(74,36,51,.22)}
+.btn.ghost:hover{background:linear-gradient(100deg,#FFD6AE 0%,#FFB7C8 42%,#D6C6F5 100%);color:#4A2433}
+
+/* ===== 斜切分區 ===== */
+.skew-sec{position:relative;padding:90px 0;background:var(--paper)}
+.skew-sec:nth-of-type(even){background:var(--paper2)}
+.skew-sec::before{content:"";position:absolute;left:0;right:0;top:-44px;height:90px;background:var(--paper);clip-path:polygon(0 100%,100% 0,100% 100%);}
+.skew-sec:nth-of-type(even)::before{background:var(--paper2)}
+
+/* ===== 巨型章節標題 ===== */
+.section-title{margin-bottom:34px;position:relative}
+.sec-no{display:inline-block;font-size:.8rem;font-weight:900;color:var(--accent);letter-spacing:.25em;text-transform:uppercase;margin-bottom:10px}
+.section-title h2{font-size:clamp(2rem,5.5vw,4rem);font-weight:900;line-height:1;letter-spacing:-.02em}
+.section-title h2 .sl{color:var(--accent)}
+.section-title h2 .rl{display:inline-block;transform:rotate(-4deg)}
+.section-title .lead{color:var(--soft);max-width:560px;margin-top:12px}
+
+/* ===== Bento 不對稱網格（更特殊版型）===== */
+.bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:240px;gap:18px}
+.bento .card-b{position:relative;overflow:hidden;border-radius:var(--radius);background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);transition:.3s;cursor:pointer}
+.bento .card-b:hover{transform:translateY(-6px) rotate(-.6deg);box-shadow:0 26px 70px rgba(24,21,16,.22)}
+.bento .card-b img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:.5s}
+.bento .card-b:hover img{transform:scale(1.08)}
+.bento .card-b .ovl{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(24,21,16,.72));display:flex;flex-direction:column;justify-content:flex-end;padding:20px;color:#fff}
+.bento .card-b .ovl .tag{font-size:.72rem;font-weight:800;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.bento .card-b .ovl h3{font-size:1.3rem;font-weight:900}
+.bento .card-b .ovl p{font-size:.84rem;color:rgba(255,255,255,.85)}
+.bento .big{grid-column:span 2;grid-row:span 2}
+.bento .w2{grid-column:span 2}
+.bento .h2{grid-row:span 2}
+@media(max-width:900px){.bento{grid-template-columns:repeat(2,1fr)}.bento .big{grid-column:span 2}}
+@media(max-width:560px){.bento{grid-template-columns:1fr}.bento .big,.bento .w2{grid-column:span 1}}
+
+/* ===== 3D 翻轉卡 ===== */
+.flip-wrap{perspective:1200px}
+.flip{position:relative;width:100%;height:320px;transition:transform .7s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d;cursor:pointer}
+.flip-wrap:hover .flip,.flip.turn{transform:rotateY(180deg)}
+.flip .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.flip .front{background:var(--card);display:grid;place-items:center;border:1px solid var(--line)}
+.flip .front img{width:100%;height:100%;object-fit:cover}
+.flip .front .fcap{position:absolute;bottom:0;left:0;right:0;background:rgba(24,21,16,.6);color:#fff;padding:12px 16px;font-weight:800;font-size:.95rem}
+.flip .back{background:var(--ink);color:#fff;transform:rotateY(180deg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:26px;text-align:center}
+.flip .back h3{color:var(--accent);margin-bottom:10px;font-size:1.3rem}
+.flip .back p{color:rgba(255,255,255,.85);font-size:.9rem}
+
+/* ===== 遊戲卡（紙感）===== */
+.game-card{display:block;position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:var(--card);transition:.3s;box-shadow:var(--shadow)}
+.game-card:hover{transform:translateY(-6px) rotate(-1deg);box-shadow:0 26px 60px rgba(24,21,16,.2)}
+.game-thumb{height:160px;background-size:cover;background-position:center;display:flex;align-items:flex-start;justify-content:space-between;padding:12px}
+.gcat{background:rgba(24,21,16,.7);color:#fff;padding:4px 10px;border-radius:20px;font-size:.74rem;font-weight:900}
+.gdiff{background:rgba(255,255,255,.85);color:var(--ink);padding:4px 10px;border-radius:20px;font-size:.74rem;font-weight:900}
+.gnum{display:none}
+.game-info{padding:14px 16px}
+.game-info h4{font-size:1.02rem}
+.game-info p{color:var(--soft);font-size:.84rem;margin-top:4px}
+
+/* ===== 播放器 ===== */
+.game-stage{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+.game-start{text-align:center;padding:40px 20px}
+.game-start h3{font-size:1.8rem;color:var(--accent);margin:10px 0}
+.game-start p{color:var(--soft);margin-bottom:20px}
+.g-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-weight:900}
+.g-info{color:var(--accent)}
+.score{color:var(--mint)}
+.g-opt{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.g-opt button{padding:14px;border-radius:14px;border:2px solid var(--line);background:var(--paper2);color:var(--txt);font-size:1.05rem;cursor:pointer;font-weight:700;transition:.2s}
+.g-opt button:hover{border-color:var(--accent);transform:scale(1.02)}
+.g-opt button.correct{background:var(--mint);color:#fff;border-color:var(--mint)}
+.g-opt button.wrong{background:#E8605A;border-color:#E8605A;color:#fff}
+.g-emojis{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.g-item{padding:18px;border:2px solid var(--line);border-radius:14px;font-size:2rem;cursor:pointer;transition:.2s;background:var(--card)}
+.g-item:hover{border-color:var(--accent);transform:scale(1.06)}
+
+/* ===== 金句 / 故事 ===== */
+.quote-main{font-size:clamp(1.4rem,3.4vw,2rem);font-weight:800;line-height:1.45;text-align:center;padding:40px 26px;background:var(--card);border-radius:var(--radius);border:1px solid var(--line);box-shadow:var(--shadow)}
+.quote-main .mark{color:var(--accent)}
+.q-card{border-left:5px solid var(--accent)}
+.n-num{font-size:1.1rem;font-weight:900;color:var(--accent)}
+.card-tag{display:inline-block;padding:3px 10px;border-radius:20px;background:rgba(227,107,0,.12);color:var(--accent);font-size:.72rem;font-weight:900;margin-bottom:8px}
+.opt-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+.opt-row button{padding:12px 18px;border-radius:16px;border:2px solid var(--line);background:var(--card);color:var(--txt);font-weight:800;cursor:pointer;transition:.2s}
+.opt-row button:hover{border-color:var(--accent);transform:scale(1.05)}
+.opt-row button.sel{background:linear-gradient(100deg,#FFD6AE 0%,#FFB7C8 42%,#D6C6F5 100%);color:#4A2433;border-color:#fff}
+.btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+.center{text-align:center}
+.mt{margin-top:30px}
+
+/* ===== Footer ===== */
+.site-footer{background:var(--ink);color:#fff;margin-top:44px;padding:26px 0 12px;position:relative}
+.site-footer::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--mint))}
+.footer-inner{max-width:1240px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:16px 22px}
+@media(max-width:900px){.footer-inner{grid-template-columns:1fr 1fr;gap:14px 18px}}
+.footer-col h4{color:var(--accent);margin-bottom:6px;font-weight:900;font-size:1rem !important}
+.footer-col p{font-size:.82rem !important;line-height:1.6;margin-top:6px !important}
+.footer-col ul{list-style:none}
+.footer-col li{display:inline-block;margin:0 8px 4px}
+.footer-col a{color:rgba(255,255,255,.72);transition:.2s}
+.footer-col a:hover{color:#fff}
+.footer-credit{max-width:1240px;margin:12px auto 0;padding:10px 24px 0;border-top:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.88);font-size:.82rem;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.footer-credit a{color:var(--accent);font-weight:800}
+.footer-bottom{max-width:1240px;margin:8px auto 0;padding:0 24px;color:rgba(255,255,255,.5);font-size:.75rem}
+
+/* ===== 工具百寶箱（iconlib 獨立區塊）===== */
+.iconlib-feature{display:flex;align-items:center;gap:22px;flex-wrap:wrap;background:linear-gradient(100deg,#E36B00 0%,#B85B3A 38%,#8A52C0 72%,#5F3FA8 100%);color:#fff;border-radius:var(--radius);padding:30px;box-shadow:var(--shadow)}
+.iconlib-feature__thumb{flex:0 0 auto;width:112px;height:112px;border-radius:18px;overflow:hidden;background:#fff;border:4px solid rgba(255,255,255,.2);display:block}
+.iconlib-feature__thumb img{width:100%;height:100%;object-fit:cover}
+.iconlib-feature__body{flex:1 1 300px;min-width:220px}
+.iconlib-feature__eyebrow{font-size:.78rem;font-weight:900;letter-spacing:.18em;color:#FFE27A;margin-bottom:4px;text-transform:uppercase}
+.iconlib-feature__title{font-weight:900;font-size:clamp(1.3rem,3vw,1.7rem);margin-bottom:8px}
+.iconlib-feature__desc{color:rgba(255,255,255,.9);font-size:.95rem;line-height:1.65}
+.iconlib-feature__cta{flex:0 0 auto;background:#fff;color:#B85B3A;border:none}
+.iconlib-feature__cta:hover{background:#FFE27A;color:#B85B3A;transform:translateY(-3px) rotate(-1deg)}
+@media(max-width:560px){.iconlib-feature__thumb{width:88px;height:88px}}
+
+/* ===== 其他 ===== */
+.breadcrumb{position:relative;z-index:2;color:var(--soft);font-size:.85rem;margin:10px 0 6px;padding:0 24px;max-width:1240px;margin-left:auto;margin-right:auto}
+.breadcrumb a{color:var(--accent)}
+.breadcrumb span.sep{margin:0 6px;color:var(--soft)}
+.grid{display:grid;gap:22px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.toolbar-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:24px}
+.filter-chip{padding:8px 18px;border-radius:30px;border:1px solid var(--line);background:var(--card);color:var(--soft);cursor:pointer;font-weight:800;font-size:.86rem;transition:.2s}
+.filter-chip:hover{color:var(--accent);border-color:var(--accent)}
+.filter-chip.on{background:linear-gradient(100deg,#FFD6AE 0%,#FFB7C8 42%,#D6C6F5 100%);color:#4A2433;border-color:rgba(255,255,255,.55)}
+.reveal{opacity:0;transform:translateY(26px);transition:.6s}
+.reveal.in{opacity:1;transform:none}
+.d2{transition-delay:.08s}.d3{transition-delay:.16s}.d4{transition-delay:.24s}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 24px;border-radius:30px;font-weight:800;z-index:99;display:none;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+#particles{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.5}
+
+</style>
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+<header class="site-header"><div class="header-inner">
+<div class="logo"><span class="rip">i</span><span class="rip">n</span><span class="rip">f</span><span class="rip">u</span><span class="rip">c</span><span class="rip">o</span><span class="rip">c</span><span class="rip">o</span><small>文創數字的異想世界</small></div>
+<nav class="nav-links"> <a href="index.html" class="active">首頁</a><button type="button" class="nav-tool-btn" id="nav-tool-btn" aria-haspopup="true" aria-expanded="false">工具</button><a href="games.html">遊戲</a><span class="nav-dd"><button type="button" class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">infu百寶箱<span class="nav-dd-arrow">▾</span></button><div class="nav-dd-panel"><a href="quotes.html"><span class="mm-icon">✨</span>金句</a><a href="quiz.html"><span class="mm-icon">🧘</span>心靈療癒</a><a href="stories.html"><span class="mm-icon">📖</span>故事</a></div></span><span class="nav-dd"><button type="button" class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">數位週邊<span class="nav-dd-arrow">▾</span></button><div class="nav-dd-panel"><a href="stickers.html"><span class="mm-icon">🖼️</span>數位商品</a><a href="shop.html"><span class="mm-icon">🛍️</span>實體周邊</a></div></span><a href="member.html">會員</a><a href="about.html">關於</a> </nav>
+</div>
+<div class="nav-tool-frame" id="nav-tool-frame" role="menu">
+<div class="mm-group">
+<div class="mm-group__head">🔧 工具百寶箱</div>
+<div class="mm-tree">
+<a href="infucoco-iconlib/index.html"><span class="mm-icon">✳️</span>特殊符號</a>
+<a href="infucoco-iconlib/emoji/index.html"><span class="mm-icon">😀</span>Emoji 表情</a>
+<a href="infucoco-iconlib/kaomoji/index.html"><span class="mm-icon">🎭</span>顏文字</a>
+<a href="infucoco-iconlib/blank/index.html"><span class="mm-icon">⬜</span>空白與分隔</a>
+<a href="infucoco-iconlib/font/index.html"><span class="mm-icon">🔤</span>花式字體</a>
+<a href="infucoco-iconlib/text-tools/index.html"><span class="mm-icon">🛠️</span>文字工具</a>
+</div>
+</div>
+</div></header>
+
+<section class="hero">
+<video class="hero-video" src="assets/video/hero.mp4" autoplay muted loop playsinline preload="auto" poster="assets/webp/infucoco_night_redapple_house_stand.webp"></video>
+<div class="hero-transition" style="background-image:url('assets/webp/infucoco_night_redapple_house_stand.webp')" aria-hidden="true"></div>
+
+<div class="hero-content">
+<div class="hero-ctas">
+<a href="stories.html" class="btn o">故事</a>
+<a href="games.html" class="btn o">遊戲</a>
+<a href="shop.html" class="btn o">數位周邊</a>
+</div>
+<h1 class="hero-title"><span class="rip">i</span><span class="rip">n</span><span class="rip">f</span><span class="rip">u</span><span class="rip">c</span><span class="rip">o</span><span class="rip">c</span><span class="rip">o</span></h1>
+</div>
+<div class="scroll-hint">▼ SCROLL</div>
+</section>
+
+  <section class="skew-sec" id="tool-embed"><div class="container"><div class="section-title"><span class="sec-no">01 / 工具</span><h2>Infucoco<span class="rl">工具百寶箱</span></h2><p class="lead">特殊符號、Emoji、顏文字、空白與花式字體，直接在此使用，點一下即複製。</p></div><div class="tool-embed-frame"><iframe id="tool-embed-iframe" src="infucoco-iconlib/index.html" title="Infucoco 特殊符號複製大全" loading="lazy"></iframe></div></div></section><section class="skew-sec">
+<div class="container">
+<div class="section-title"><h2>走進<span class="rt"><span>i</span><span>n</span><span>f</span><span>u</span><span>c</span><span>o</span><span>c</span><span>o</span></span><span class="rl">異想世界</span></h2><p class="lead">每一張，都是一個可以躲進去的角落。</p></div>
+<div class="bento">
+<a class="card-b big" href="star-blanket.html"><img src="assets/webp/infucoco_rooftop_city_cloud_moon.webp" alt="夜晚裹毯坐地，貓狗兔相伴"><div class="ovl"><span class="tag">夜晚 · 裹毯</span><h3>我們都在異想世界</h3><p>橘貓、小狗與兔子都窩在身邊</p></div></a>
+<a class="card-b" href="puppy-cuddle.html"><img src="assets/media/infucoco_window_dog_cuddle_moon.webp" alt="夜窗月與小狗依偎"><div class="ovl"><span class="tag">夜窗</span><h3>小狗依偎</h3></div></a>
+<a class="card-b" href="hide-and-seek.html"><img src="assets/webp/infucoco_park_bench_mailbox_toy.webp" alt="捉迷藏，貓從抱枕探頭"><div class="ovl"><span class="tag">遊戲</span><h3>捉迷藏</h3></div></a>
+<a class="card-b w2" href="welcome-home.html"><img src="assets/media/infucoco_entrance_squat_pet_mat.webp" alt="玄關蹲地墊，白兔橘貓小狗"><div class="ovl"><span class="tag">玄關</span><h3>回家的第一句話</h3><p>蹲下來，把一天的疲憊交出去</p></div></a>
+</div>
+</div>
+</section>
+
+<section class="skew-sec">
+<div class="container">
+<div class="iconlib-feature">
+<a class="iconlib-feature__thumb" href="infucoco-iconlib/index.html"><img src="infucoco-iconlib/assets/img/icons/symbols.webp" alt="Infucoco 特殊符號複製大全"></a>
+<div class="iconlib-feature__body">
+<p class="iconlib-feature__eyebrow">工具百寶箱</p>
+<p class="iconlib-feature__title">Infucoco 特殊符號複製大全</p>
+<p class="iconlib-feature__desc">特殊符號、Emoji、顏文字、空白與花式字體，收錄在你眼前。點一下複製，輸入的內容不會上傳。</p>
+</div>
+<a href="#tool-embed" class="btn o iconlib-feature__cta">進入符號百寶箱</a>
+</div>
+</div>
+</section>
+
+<section class="skew-sec">
+<div class="container">
+<div class="section-title"><span class="sec-no">02 / 故事</span><h2>翻轉卡<span class="rl">睡前故事</span></h2><p class="lead">滑過去，卡片會翻面。</p></div>
+<div class="grid g3">
+<div class="flip-wrap"><div class="flip"><div class="face front"><img src="assets/webp/infucoco_hourglass_sprout_crowd_sit.webp" alt="種下星星的種子"><div class="fcap">種下星星的種子</div></div><div class="face back"><h3>種下星星的種子</h3><p>最珍貴的成長，都發生在耐心的等待裡。</p><a class="btn o" style="margin-top:16px;padding:10px 18px;font-size:.85rem" href="fable-star-seed.html">讀全文</a></div></div></div>
+<div class="flip-wrap"><div class="flip"><div class="face front"><img src="assets/webp/infucoco_stage_spotlight_crowd_dusk.webp" alt="替別人的煙火鼓掌"><div class="fcap">替別人的煙火鼓掌</div></div><div class="face back"><h3>替別人的煙火鼓掌</h3><p>真心為別人喝采，就是為自己點燈。</p><a class="btn o" style="margin-top:16px;padding:10px 18px;font-size:.85rem" href="fable-fireworks.html">讀全文</a></div></div></div>
+<div class="flip-wrap"><div class="flip"><div class="face front"><img src="assets/webp/infucoco_afterwork_coffee_sidewalk.webp" alt="星塵咖啡館"><div class="fcap">星塵咖啡館</div></div><div class="face back"><h3>星塵咖啡館</h3><p>允許自己休息，是給未來充電。</p><a class="btn o" style="margin-top:16px;padding:10px 18px;font-size:.85rem" href="fable-cosmic-cafe.html">讀全文</a></div></div></div>
+</div>
+</div>
+</section>
+
+<section class="skew-sec">
+<div class="container">
+<div class="section-title"><span class="sec-no">03 / 遊戲</span><h2>先看<span class="rl">這幾款</span></h2></div>
+<div class="grid g3"><a class="game-card" href="play.html@g=g01.html"><div class="game-thumb" style="background-image:url('assets/webp/game_g01.webp')"><span class="gcat">反應</span></div><div class="game-info"><h4>接住彩虹氣球</h4><p><span>彩虹慢慢升起</span><br><span>伸手，接住一整團春天。</span></p></div></a><a class="game-card" href="play.html@g=g04.html"><div class="game-thumb" style="background-image:url('assets/webp/game_g04.webp')"><span class="gcat">反應</span></div><div class="game-info"><h4>捕捉發光的螢火蟲</h4><p><span>夜色輕輕關燈</span><br><span>我把螢火蟲，捧在手心。</span></p></div></a><a class="game-card" href="play.html@g=g07.html"><div class="game-thumb" style="background-image:url('assets/webp/game_g07.webp')"><span class="gcat">反應</span></div><div class="game-info"><h4>點泡泡大賽</h4><p><span>泡泡一顆一顆</span><br><span>碰一下，就笑出聲音。</span></p></div></a></div>
+<div class="center mt"><a href="games.html" class="btn dark">看 7 款療癒遊戲</a></div>
+</div>
+</section>
+
+<section class="skew-sec" style="padding-top:110px">
+<div class="container explore">
+<div class="section-title"><span class="sec-no">繼續探索</span><h2><span class="rt"><span>i</span><span>n</span><span>f</span><span>u</span><span>c</span><span>o</span><span>c</span><span>o</span></span><span class="rl">精彩角落</span></h2><p class="lead">翻轉卡片，走進每一個 infucoco 場景。</p></div>
+<div class="grid g4">
+<a class="card-b" href="quotes.html"><img src="assets/webp/infucoco_night_redapple_house_stand.webp" alt="每日金句"><div class="ovl"><span class="tag">每日一句</span><h3>心靈金句</h3></div></a>
+<a class="card-b" href="stories.html"><img src="assets/webp/infucoco_stage_spotlight_crowd_dusk.webp" alt="睡前故事"><div class="ovl"><span class="tag">睡前故事</span><h3>療癒故事</h3></div></a>
+<a class="card-b" href="games.html"><img src="assets/webp/game_g01.webp" alt="療癒遊戲"><div class="ovl"><span class="tag">🎮 遊戲</span><h3>療癒遊戲</h3></div></a>
+<a class="card-b" href="quiz.html"><img src="assets/webp/infucoco_rooftop_city_cloud_moon.webp" alt="心靈療癒"><div class="ovl"><span class="tag">心靈療癒</span><h3>心靈療癒</h3></div></a>
+</div>
+</div>
+</section>
+
+<footer class="site-footer"><div class="footer-inner">
+<div class="footer-col"><h4 style="font-size:1.2rem"><span class="rt"><span>i</span><span>n</span><span>f</span><span>u</span><span>c</span><span>o</span><span>c</span><span>o</span></span> 文創數字的異想世界</h4></div>
+<div class="footer-col"><details class="footer-drop"><summary>療癒</summary><ul><li><a href="quotes.html">心靈金句</a></li><li><a href="stories.html">療癒故事</a></li><li><a href="quiz.html">心靈療癒</a></li></ul></details></div>
+<div class="footer-col"><details class="footer-drop"><summary>玩樂</summary><ul><li><a href="games.html">療癒遊戲</a></li><li><a href="gallery.html">infu百寶箱</a></li><li><a href="stickers.html">數位商品</a></li><li><a href="infucoco-iconlib/index.html">特殊符號字庫</a></li></ul></details></div>
+<div class="footer-col"><details class="footer-drop"><summary>網站地圖</summary><ul><li><a href="shop.html">周邊</a></li><li><a href="member.html">會員</a></li><li><a href="about.html">關於</a></li><li><a href="sitemap.html">完整地圖</a></li></ul></details></div>
+</div><div class="footer-credit">規劃×設計×開發×網路行銷：舒安境 Studi-O　<a href="tel:0968222201">0968-222201</a>　<a href="https://line.me/ti/p/~331.today" target="_blank" rel="noopener">LINE</a></div><div class="footer-bottom" style="padding-top:10px"><p style="margin:0 0 6px">給疲憊的你，一座 infu 世界：故事 × 金句 × 遊戲 × 心靈療癒 × 數位商品 × 周邊。</p><p style="margin:0">✉️ infucoco@gmail.com</p><p style="margin-top:6px">© 2026 infucoco 文創數字的異想世界</p></div><div class="footer-notice">著作權聲明：本網站圖文、角色 infucoco 與設計內容，未經授權不得轉載、重製或作為商業使用。<br>免責聲明：本站金句、故事與心靈測驗僅供休閒參考，不構成醫療或心理諮商建議；如有身心不適，請尋求專業協助。</div></footer>
+<div class="float-actions" id="float-nav"><a class="line" href="https://line.me/ti/p/~331.today" target="_blank" rel="noopener" title="LINE 聯絡">LINE</a><button class="nav-toggle" onclick="document.getElementById('float-nav').classList.toggle('open')"></button><div class="nav-list"><a href="index.html">首頁</a><a href="infucoco-iconlib/index.html">工具</a><a href="games.html">遊戲</a><a href="quotes.html">金句</a><a href="quiz.html">心靈療癒</a><a href="stories.html">故事</a><a href="gallery.html">infu百寶箱</a><a href="stickers.html">數位商品</a><a href="shop.html">實體周邊</a><a href="member.html">會員</a><a href="about.html">關於</a></div></div>
+
+<script>
+(function(){
+ var heroVideo=document.querySelector('.hero-video');
+ var heroTransition=document.querySelector('.hero-transition');
+ if(!heroVideo||!heroTransition)return;
+ function fadeTransition(){heroTransition.classList.add('fade');}
+ heroVideo.addEventListener('playing',fadeTransition,{once:true});
+ heroVideo.addEventListener('canplay',function(){setTimeout(fadeTransition,600)},{once:true});
+ setTimeout(fadeTransition,3500);
+})();
+</script>
+<script src="js/infucoco-games.js" defer></script>
+<script src="js/infucoco-app.js" defer></script>
+</body>
+</html>

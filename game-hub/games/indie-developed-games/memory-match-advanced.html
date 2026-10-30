@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>記憶配對翻牌</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%;
+    font-family: -apple-system, "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    overflow: auto;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+  }
+  #wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 16px;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  h1 {
+    color: #fff;
+    font-size: 1.8em;
+    margin: 8px 0 12px;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
+  }
+  #toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+  .diff-btn {
+    padding: 8px 18px;
+    font-size: 0.95em;
+    font-family: inherit;
+    font-weight: bold;
+    color: #fff;
+    background: rgba(255,255,255,0.12);
+    border: 2px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .diff-btn:hover { background: rgba(255,255,255,0.22); }
+  .diff-btn.active {
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    border-color: #a29bfe;
+    box-shadow: 0 2px 10px rgba(108,92,231,0.5);
+  }
+  #stats {
+    display: flex;
+    gap: 20px;
+    color: #ffd700;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 14px;
+    background: rgba(0,0,0,0.3);
+    padding: 8px 20px;
+    border-radius: 12px;
+  }
+  #board {
+    display: grid;
+    gap: 10px;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 16px;
+  }
+  .card {
+    aspect-ratio: 3 / 4;
+    perspective: 600px;
+    cursor: pointer;
+    position: relative;
+  }
+  .card-inner {
+    position: relative;
+    width: 100%; height: 100%;
+    transition: transform 0.4s;
+    transform-style: preserve-3d;
+  }
+  .card.flipped .card-inner { transform: rotateY(180deg); }
+  .card.matched { cursor: default; }
+  .card.matched .card-inner { transform: rotateY(180deg); }
+  .card-face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    font-size: 2em;
+  }
+  .card-front {
+    background: linear-gradient(135deg, #6c5ce7, #0984e3);
+    color: rgba(255,255,255,0.3);
+    font-size: 1.6em;
+    font-weight: bold;
+  }
+  .card-back {
+    background: #fff;
+    transform: rotateY(180deg);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .card.matched .card-back {
+    background: #d4edda;
+    box-shadow: 0 0 12px rgba(46,204,113,0.6);
+  }
+  #overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    color: #fff;
+    text-align: center;
+    flex-direction: column;
+    padding: 20px;
+  }
+  #overlay.hidden { display: none; }
+  #overlay h2 {
+    font-size: 2em;
+    margin-bottom: 12px;
+    color: #ffd700;
+  }
+  #overlay p { font-size: 1.2em; margin: 6px 0; }
+  #overlay .btn {
+    margin-top: 20px;
+    padding: 12px 36px;
+    font-size: 1.1em;
+    font-family: inherit;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(135deg, #00b894, #00cec9);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,184,148,0.5);
+  }
+  #overlay .btn:active { transform: scale(0.97); }
+</style>
+</head>
+<body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<div id="wrap">
+  <h1>🧠 記憶配對翻牌</h1>
+  <div id="toolbar">
+    <button class="diff-btn" data-cols="4" data-rows="3">簡單 4×3</button>
+    <button class="diff-btn active" data-cols="4" data-rows="4">普通 4×4</button>
+    <button class="diff-btn" data-cols="6" data-rows="4">困難 6×4</button>
+  </div>
+  <div id="stats">
+    <span>步數：<span id="moves">0</span></span>
+    <span>時間：<span id="timer">0</span> 秒</span>
+    <span>配對：<span id="matched">0</span>/<span id="total">8</span></span>
+  </div>
+  <div id="board"></div>
+</div>
+
+<div id="overlay" class="hidden">
+  <h2>🎉 過關！</h2>
+  <p>步數：<span id="win-moves">0</span></p>
+  <p>用時：<span id="win-time">0</span> 秒</p>
+  <button class="btn" id="btn-again">再玩一次</button>
+</div>
+
+<script>
+(function() {
+  const EMOJIS = ['🍎','🍌','🍇','🍉','🍓','🍑','🍒','🥝','🍍','🥥','🍋','🥕','🌽','🍄','🌼','🌵'];
+  const boardEl = document.getElementById('board');
+  const movesEl = document.getElementById('moves');
+  const timerEl = document.getElementById('timer');
+  const matchedEl = document.getElementById('matched');
+  const totalEl = document.getElementById('total');
+  const overlay = document.getElementById('overlay');
+  const winMovesEl = document.getElementById('win-moves');
+  const winTimeEl = document.getElementById('win-time');
+
+  let cols = 4, rows = 4;
+  let cards = [];
+  let firstCard = null;
+  let secondCard = null;
+  let lockBoard = false;
+  let moves = 0;
+  let matchedPairs = 0;
+  let totalPairs = 8;
+  let seconds = 0;
+  let timerInterval = null;
+  let gameStarted = false;
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function startTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+    seconds = 0;
+    timerEl.textContent = '0';
+    timerInterval = setInterval(function() {
+      seconds++;
+      timerEl.textContent = seconds;
+    }, 1000);
+  }
+
+  function stopTimer() {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+  }
+
+  function initGame() {
+    stopTimer();
+    gameStarted = false;
+    moves = 0;
+    matchedPairs = 0;
+    firstCard = null;
+    secondCard = null;
+    lockBoard = false;
+    movesEl.textContent = '0';
+    timerEl.textContent = '0';
+
+    totalPairs = (cols * rows) / 2;
+    totalEl.textContent = totalPairs;
+    matchedEl.textContent = '0';
+
+    // Pick emojis
+    const pool = shuffle(EMOJIS.slice()).slice(0, totalPairs);
+    const deck = shuffle(pool.concat(pool));
+
+    // Build board
+    boardEl.style.gridTemplateColumns = 'repeat(' + cols + ', 1fr)';
+    boardEl.innerHTML = '';
+    cards = [];
+
+    deck.forEach(function(emoji) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.dataset.emoji = emoji;
+      card.innerHTML =
+        '<div class="card-inner">' +
+          '<div class="card-face card-front">❓</div>' +
+          '<div class="card-face card-back">' + emoji + '</div>' +
+        '</div>';
+      card.addEventListener('click', function() { flipCard(card); });
+      boardEl.appendChild(card);
+      cards.push(card);
+    });
+
+    overlay.classList.add('hidden');
+  }
+
+  function flipCard(card) {
+    if (lockBoard) return;
+    if (card === firstCard) return;
+    if (card.classList.contains('matched')) return;
+
+    if (!gameStarted) {
+      gameStarted = true;
+      startTimer();
+    }
+
+    card.classList.add('flipped');
+
+    if (!firstCard) {
+      firstCard = card;
+      return;
+    }
+
+    secondCard = card;
+    moves++;
+    movesEl.textContent = moves;
+    checkMatch();
+  }
+
+  function checkMatch() {
+    const isMatch = firstCard.dataset.emoji === secondCard.dataset.emoji;
+    if (isMatch) {
+      firstCard.classList.add('matched');
+      secondCard.classList.add('matched');
+      matchedPairs++;
+      matchedEl.textContent = matchedPairs;
+      resetTurn();
+      if (matchedPairs === totalPairs) {
+        stopTimer();
+        setTimeout(function() {
+          winMovesEl.textContent = moves;
+          winTimeEl.textContent = seconds;
+          overlay.classList.remove('hidden');
+        }, 400);
+      }
+    } else {
+      lockBoard = true;
+      setTimeout(function() {
+        firstCard.classList.remove('flipped');
+        secondCard.classList.remove('flipped');
+        resetTurn();
+      }, 700);
+    }
+  }
+
+  function resetTurn() {
+    firstCard = null;
+    secondCard = null;
+    lockBoard = false;
+  }
+
+  // Difficulty buttons
+  document.querySelectorAll('.diff-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.diff-btn').forEach(function(b) {
+        b.classList.remove('active');
+      });
+      btn.classList.add('active');
+      cols = parseInt(btn.dataset.cols, 10);
+      rows = parseInt(btn.dataset.rows, 10);
+      initGame();
+    });
+  });
+
+  document.getElementById('btn-again').addEventListener('click', function() {
+    initGame();
+  });
+
+  // Handle resize - nothing special needed since CSS grid handles it,
+  // but ensure board max-width adjusts on small screens
+  function onResize() {
+    if (window.innerWidth < 500) {
+      boardEl.style.maxWidth = '100%';
+    } else {
+      boardEl.style.maxWidth = '600px';
+    }
+  }
+  window.addEventListener('resize', onResize);
+  onResize();
+
+  initGame();
+})();
+</script>
+
+<!-- infucoco-watermark -->
+<img src="../../assets/images/infucoco-mascot-mark.png" alt="infucoco" style="position:fixed;right:8px;bottom:8px;width:40px;opacity:.9;pointer-events:none;z-index:99999;border-radius:12px;box-shadow:0 4px 14px #0009;image-rendering:auto">
+</body>
+</html>

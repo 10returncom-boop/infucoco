@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>325 遊樂場 · Treemap Menu</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0b14'/%3E%3Cpath d='M8 16h16M16 8v16' stroke='%23e6354a' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/css/style.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0b0b10;color:#f2f2f5;font-family:"PingFang TC","Microsoft JhengHei",sans-serif;min-height:100vh}
+header{position:sticky;top:0;z-index:20;background:rgba(11,11,16,.95);backdrop-filter:blur(10px);border-bottom:1px solid #26263a;padding:12px 16px}
+header h1{font-size:18px;letter-spacing:3px;display:inline-block}
+header h1 span{color:#e6354a}
+header .sub{font-size:12px;color:#8a8a96;display:inline-block;margin-left:10px}
+#menu{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+#menu a{color:#c9c9d6;text-decoration:none;font-size:12px;padding:5px 11px;border-radius:99px;background:#16161f;border:1px solid #26263a;cursor:pointer}
+#menu a:hover{color:#fff;border-color:#e6354a}
+#wrap{padding:16px;max-width:1200px;margin:0 auto}
+#treemap{width:100%;height:520px;position:relative;border-radius:12px;overflow:hidden;border:1px solid #26263a}
+.tile{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:transform .12s,opacity .12s;overflow:hidden;text-align:center;padding:8px;background-size:cover;background-position:center}
+.tile::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,16,.42),rgba(10,10,16,.72));z-index:0}
+.tile:hover{transform:scale(.97);opacity:.92}
+.tile .t,.tile .n{position:relative;z-index:1;text-shadow:0 2px 8px #000}
+#games{margin-top:18px}
+#games h2{font-size:16px;margin-bottom:10px;padding-left:10px;border-left:3px solid #e6354a}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+a.card{background:#16161f;border:1px solid #26263a;border-radius:10px;padding:12px 6px;text-align:center;text-decoration:none;color:#f2f2f5}
+a.card:hover{border-color:#e6354a}
+a.card .em{font-size:24px;display:block;margin-bottom:4px}
+a.card .nm{font-size:12px;font-weight:700}
+/* 分類背景圖：webp 主題圖（路徑寫在 CSS url()，發布可用） */
+.tb0{background-image:url("../assets/images/arcade-action-arena.webp")}
+.tb1{background-image:url("../assets/images/puzzle-block-stack.webp")}
+.tb2{background-image:url("../assets/images/chess-strategy-board.webp")}
+.tb3{background-image:url("../assets/images/reaction-speed-limit.webp")}
+.tb4{background-image:url("../assets/images/memory-match-cards.webp")}
+.tb5{background-image:url("../assets/images/eliminate-link-chain.webp")}
+.tb6{background-image:url("../assets/images/table-luck-roll.webp")}
+.tb7{background-image:url("../assets/images/classic-arcade-cabinet.webp")}
+.tb8{background-image:url("../assets/images/puzzle-adventure-quest.webp")}
+.tb9{background-image:url("../assets/images/typing-math-speed.webp")}
+</style></head><body>
+<div class="site-nav-fixed right"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<header>
+  <h1>325 <span>遊樂場</span></h1><span class="sub">Treemap 分類選單</span>
+  <div id="menu"></div>
+</header>
+<div id="wrap">
+  <div id="treemap"></div>
+  <div id="games"></div>
+</div>
+<script>
+var CATS = [
+  {t:"街機動作", c:"#e6354a", g:[
+    ["retail-boxed-games/snake-classic-arcade.html","🐍","貪吃蛇"],["retail-boxed-games/snake-advanced-arena.html","🐍","貪吃蛇(進)"],
+    ["retail-boxed-games/space-war-arcade.html","🚀","太空大戰"],["retail-boxed-games/space-shooter-classic.html","🚀","太空射擊"],["retail-boxed-games/space-shooter-advanced.html","🚀","太空射擊(進)"],
+    ["retail-boxed-games/interstellar-shooter-arcade.html","👾","星際射手"],["retail-boxed-games/dodge-meteor-arcade.html","☄️","躲隕石"],
+    ["retail-boxed-games/extreme-jump-arcade.html","🦘","極限跳躍"],["retail-boxed-games/endless-runner-classic.html","🏃","無盡跑酷"],["retail-boxed-games/parkour-jump-runner.html","🏃","跑酷跳躍"],["retail-boxed-games/endless-runner-advanced.html","🏃","跑酷跳躍(進)"],
+    ["retail-boxed-games/rocket-racer-speed.html","🏎️","火箭賽車"],["retail-boxed-games/pinball-table-classic.html","🔮","彈珠台"],
+    ["retail-boxed-games/flappy-flight-classic.html","🐤","Flappy飛行"],["retail-boxed-games/flappy-bird-advanced.html","🐤","笨鳥先飛"],
+    ["retail-boxed-games/stealth-master-arcade.html","🥷","潛行大師"],["retail-boxed-games/bounce-ball-arcade.html","🟡","跳跳彈"],
+    ["retail-boxed-games/catch-coin-arcade.html","🪙","接金幣"],["retail-boxed-games/catch-water-drops.html","💧","接水滴"],["retail-boxed-games/catch-fruit-arcade.html","🍎","接水果"],["retail-boxed-games/catch-ball-juggle.html","🤹","接球雜耍"]
+  ]},
+  {t:"益智方塊", c:"#f1c40f", g:[
+    ["free-to-play/2048-classic-puzzle.html","🔢","2048"],["free-to-play/2048-legacy-blocks.html","🔢","2048(舊)"],["free-to-play/2048-advanced-mode.html","🔢","2048(進)"],
+    ["free-to-play/number-slide-puzzle.html","🧩","數字拼圖"],["free-to-play/sliding-puzzle-classic.html","🧩","滑動拼圖"],["free-to-play/sliding-tile-puzzle.html","🧩","拼圖滑塊"],
+    ["free-to-play/block-stack-classic.html","🧱","方塊疊疊樂"],["free-to-play/tetris-classic-blocks.html","🧱","俄羅斯方塊"],["free-to-play/tetris-advanced-blocks.html","🧱","俄羅斯方塊(進)"],["free-to-play/block-stack-retro.html","🧱","疊疊樂"],
+    ["free-to-play/sudoku-classic-puzzle.html","🔢","數獨"],["free-to-play/sudoku-advanced-puzzle.html","🔢","數獨(進)"],
+    ["free-to-play/sokoban-box-puzzle.html","📦","倉庫番"],["free-to-play/klotski-slide-puzzle.html","🚗","華容道"]
+  ]},
+  {t:"棋藝策略", c:"#3ddc84", g:[
+    ["subscription-game-service/tic-tac-toe-ai.html","⭕","井字棋AI"],["subscription-game-service/tic-tac-toe-classic.html","⭕","井字棋"],
+    ["subscription-game-service/gomoku-five-row.html","⚪","五子棋"],["subscription-game-service/gomoku-vs-ai.html","🤖","五子棋AI"],["subscription-game-service/connect-four-game.html","⚪","四子棋"],
+    ["subscription-game-service/othello-reversi-board.html","⚫","黑白棋"],["subscription-game-service/tower-defense-line.html","🏰","塔防戰線"]
+  ]},
+  {t:"反應極限", c:"#ff8a5a", g:[
+    ["online-operated-games/reaction-test-classic.html","⚡","反應測試"],["online-operated-games/reaction-speed-challenge.html","⚡","極速反應"],["online-operated-games/traffic-light-game.html","🚦","紅綠燈"],
+    ["online-operated-games/whack-mole-classic.html","🐹","打地鼠"],["online-operated-games/whack-mole-retro.html","🐹","打地鼠(舊)"],
+    ["online-operated-games/swat-mosquito-game.html","🦟","拍蚊子"],["online-operated-games/target-practice-range.html","🎯","射靶練習"],["online-operated-games/archery-target-challenge.html","🏹","射箭"]
+  ]},
+  {t:"記憶配對", c:"#7c9bff", g:[
+    ["indie-developed-games/memory-match-classic.html","🃏","記憶翻牌"],["indie-developed-games/memory-match-advanced.html","🃏","記憶配對(進)"],
+    ["indie-developed-games/memory-sequence-challenge.html","🧠","記憶序列"],
+    ["indie-developed-games/simon-says-classic.html","🎹","西蒙記憶"],["indie-developed-games/simon-rhythm-arcade.html","🎹","Simon節奏"]
+  ]},
+  {t:"消除連連", c:"#b07cff", g:[
+    ["ip-licensed-games/match-three-classic.html","🍬","消消樂"],["ip-licensed-games/jewel-match-quest.html","🍬","三消消消樂"],["ip-licensed-games/bubble-shooter-arcade.html","🫧","泡泡射手"],
+    ["ip-licensed-games/pair-link-arcade.html","🔗","連連看"],["ip-licensed-games/mahjong-link-match.html","🀄","麻將連連看"]
+  ]},
+  {t:"桌機運氣", c:"#ffd76a", g:[
+    ["ad-monetized-games/dice-high-low.html","🎲","骰子比大小"],["ad-monetized-games/dice-combo-roll.html","🎲","骰子組合"],
+    ["ad-monetized-games/blackjack-card-game.html","🃏","21點"],["ad-monetized-games/blackjack-alternate-play.html","🃏","廿一點"],
+    ["ad-monetized-games/lucky-wheel-spin.html","🎡","幸運輪盤"],["ad-monetized-games/rock-paper-scissors.html","✊","猜拳對戰"]
+  ]},
+  {t:"經典街機", c:"#4fc3f7", g:[
+    ["esports-oriented-games/brick-breaker-classic.html","🧱","打磚塊"],["esports-oriented-games/brick-breaker-advanced.html","🧱","打磚塊(進)"],
+    ["esports-oriented-games/minesweeper-classic-arcade.html","💣","踩地雷"],["esports-oriented-games/minesweeper-advanced-arcade.html","💣","踩地雷(進)"],["esports-oriented-games/minesweeper-retro-classic.html","💣","掃雷"],
+    ["esports-oriented-games/fishing-catch-game.html","🎣","釣魚"],["esports-oriented-games/miner-dig-dash.html","⛏️","鑽礦工"]
+  ]},
+  {t:"解謎冒險", c:"#3ddc84", g:[
+    ["physical-merch-games/maze-home-return.html","🏠","迷宮回家路"],["physical-merch-games/maze-escape-adventure.html","🏃","迷宮逃脫"],
+    ["physical-merch-games/infucoco-open-wild.html","🏞️","Infucoco荒野3D"]
+  ]},
+  {t:"打字心算", c:"#ff6b9a", g:[
+    ["corporate-education-games/math-speed-dash.html","➕","計算衝刺"],["corporate-education-games/mental-math-master.html","🧮","心算大師"],["corporate-education-games/mental-arithmetic-challenge.html","🧮","心算挑戰"],
+    ["corporate-education-games/typing-speed-race.html","⌨️","打字衝刺"],["corporate-education-games/typing-practice-train.html","⌨️","打字訓練"]
+  ]}
+];
+
+var tm = document.getElementById('treemap');
+var menu = document.getElementById('menu');
+
+menu.innerHTML = CATS.map(function(c,i){
+  return '<a onclick="show('+i+')">'+c.t+' ('+c.g.length+')</a>';
+}).join('');
+
+function squarify(items,x,y,w,h,out){
+  if(!items.length) return;
+  if(items.length===1){ out.push({it:items[0],x:x,y:y,w:w,h:h}); return; }
+  var total=0; for(var k=0;k<items.length;k++) total+=items[k].v;
+  var acc=0, idx=1;
+  for(var i=0;i<items.length;i++){ acc+=items[i].v; if(acc/total>0.45){ idx=i+1; break; } }
+  if(idx>=items.length) idx=items.length-1;
+  var left=items.slice(0,idx), right=items.slice(idx);
+  var lv=0; for(var j=0;j<left.length;j++) lv+=left[j].v;
+  if(w>=h){
+    var cw=w*lv/total;
+    squarify(left,x,y,cw,h,out);
+    squarify(right,x+cw,y,w-cw,h,out);
+  } else {
+    var ch=h*lv/total;
+    squarify(left,x,y,w,ch,out);
+    squarify(right,x,y+ch,w,h-ch,out);
+  }
+}
+
+function render(){
+  tm.innerHTML='';
+  var W=tm.clientWidth||1000, H=tm.clientHeight||520;
+  var items=CATS.map(function(c,i){ return {i:i, v:c.g.length}; });
+  var out=[];
+  squarify(items,0,0,W,H,out);
+  out.forEach(function(r){
+    var c=CATS[r.it.i];
+    var d=document.createElement('div');
+    d.className='tile tb'+r.it.i;
+    d.style.left=r.x+'px'; d.style.top=r.y+'px';
+    d.style.width=r.w+'px'; d.style.height=r.h+'px';
+    d.style.border='2px solid '+c.c;
+    d.innerHTML='<div class="t">'+c.t+'</div><div class="n">'+c.g.length+' 款</div>';
+    d.onclick=function(){ show(r.it.i); };
+    tm.appendChild(d);
+  });
+}
+
+function show(i){
+  var c=CATS[i];
+  var html='<h2>'+c.t+' <small style="color:#888">'+c.g.length+' 款</small></h2><div class="grid">';
+  c.g.forEach(function(g){
+    html+='<a class="card" href="'+g[0]+'"><span class="em">'+g[1]+'</span><span class="nm">'+g[2]+'</span></a>';
+  });
+  html+='</div>';
+  document.getElementById('games').innerHTML=html;
+  document.getElementById('games').scrollIntoView({behavior:'smooth'});
+}
+
+window.addEventListener('load', render);
+window.addEventListener('resize', render);
+render();
+</script></body></html>

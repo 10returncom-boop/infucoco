@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>潛行大師 Stealth Master — 忍者暗殺潛行遊戲</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%230a0e17'/%3E%3Cpath d='M20 40 L44 40 L38 22 L26 22 Z' fill='%232dd4bf'/%3E%3Ccircle cx='26' cy='28' r='2' fill='%230a0e17'/%3E%3Ccircle cx='38' cy='28' r='2' fill='%230a0e17'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+  :root{
+    --bg:#070a12;
+    --panel:#0e1524;
+    --panel2:#121a2c;
+    --line:#22304a;
+    --ink:#e8ecf5;
+    --ink-dim:#8fa0bd;
+    --teal:#2dd4bf;
+    --gold:#f0a83a;
+    --red:#ff4040;
+    --pink:#ff6b9d;
+    --green:#46d67a;
+    --cyan:#53c7ff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Segoe UI",system-ui,sans-serif;
+    overflow:hidden;
+    -webkit-user-select:none;user-select:none;
+    touch-action:none;
+  }
+  #stage{position:fixed;inset:0;}
+  #game{position:absolute;inset:0;display:block;background:#0a0f1a;}
+  /* 暗角氛圍層 */
+  #vignette{
+    position:fixed;inset:0;pointer-events:none;z-index:5;
+    background:radial-gradient(ellipse at center, transparent 52%, rgba(2,4,9,.72) 100%);
+  }
+  #grain{
+    position:fixed;inset:0;pointer-events:none;z-index:6;opacity:.05;mix-blend-mode:overlay;
+    background-image:repeating-radial-gradient(circle at 17% 32%, #fff 0 1px, transparent 1px 4px);
+    background-size:7px 7px;
+  }
+
+  /* ===== HUD ===== */
+  #hud{position:fixed;inset:0;z-index:10;pointer-events:none;display:none;}
+  #hud .top{
+    position:absolute;top:14px;left:14px;right:14px;
+    display:flex;align-items:center;gap:14px;
+  }
+  .chip{
+    background:rgba(10,15,26,.72);border:1px solid var(--line);
+    border-radius:12px;padding:8px 14px;backdrop-filter:blur(4px);
+    display:flex;align-items:center;gap:9px;font-size:14px;letter-spacing:.03em;
+  }
+  .chip .lbl{color:var(--ink-dim);font-size:12px;}
+  .chip b{color:var(--ink);font-weight:700;}
+  #levelTag b{color:var(--teal);}
+  #killTag b{color:var(--pink);}
+  #timeTag b{color:var(--cyan);font-variant-numeric:tabular-nums;}
+  .spacer{flex:1;}
+  /* 警覺度 */
+  #alertMeter{width:170px;}
+  #alertBar{height:8px;border-radius:5px;background:#22304a;overflow:hidden;margin-top:5px;}
+  #alertFill{height:100%;width:0%;border-radius:5px;background:linear-gradient(90deg,#f0a83a,#ff4040);transition:width .12s linear;}
+  /* 按鈕 */
+  #btns{display:flex;gap:8px;pointer-events:auto;}
+  .hbtn{
+    background:rgba(10,15,26,.72);border:1px solid var(--line);color:var(--ink-dim);
+    border-radius:10px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-size:18px;transition:.15s;backdrop-filter:blur(4px);
+  }
+  .hbtn:hover{color:var(--ink);border-color:var(--teal);}
+  #muteBtn.on{color:var(--teal);}
+
+  /* 螢幕提示（中心） */
+  #centerMsg{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    text-align:center;display:none;width:min(520px,88vw);
+  }
+  #centerMsg .big{font-size:clamp(26px,5vw,44px);font-weight:800;letter-spacing:.06em;color:var(--ink);}
+  #centerMsg .sub{font-size:16px;color:var(--ink-dim);margin-top:10px;line-height:1.6;}
+  .flashRed{animation:flashRed .5s ease 3;}
+  @keyframes flashRed{0%,100%{box-shadow:0 0 0 rgba(255,64,64,0)}50%{box-shadow:0 0 40px rgba(255,64,64,.9)}}
+
+  /* 擊殺提示 */
+  #killPrompt{
+    position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:11;
+    background:rgba(14,21,36,.9);border:1px solid var(--pink);border-radius:12px;
+    padding:10px 18px;font-size:15px;color:var(--pink);letter-spacing:.05em;
+    display:none;pointer-events:none;box-shadow:0 0 24px rgba(255,107,157,.25);
+  }
+  #killPrompt kbd{
+    background:#1a2440;border:1px solid var(--line);border-radius:6px;padding:2px 8px;
+    color:var(--ink);font-family:inherit;font-size:13px;
+  }
+
+  /* 提示列 */
+  #tipBar{
+    position:absolute;left:50%;bottom:16px;transform:translateX(-50%);
+    font-size:13px;color:var(--ink-dim);letter-spacing:.04em;text-align:center;
+    background:rgba(10,15,26,.6);border:1px solid var(--line);border-radius:10px;
+    padding:6px 14px;white-space:nowrap;
+  }
+
+  /* ===== 觸控 ===== */
+  #touchUi{position:fixed;inset:0;z-index:12;pointer-events:none;display:none;}
+  #joystick{position:absolute;left:26px;bottom:26px;width:118px;height:118px;pointer-events:auto;}
+  #joyBase{position:absolute;inset:0;border-radius:50%;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.15);}
+  #joyKnob{position:absolute;left:50%;top:50%;width:54px;height:54px;border-radius:50%;background:rgba(45,212,191,.5);border:2px solid var(--teal);transform:translate(-50%,-50%);}
+  #atkBtn{
+    position:absolute;right:30px;bottom:44px;width:88px;height:88px;border-radius:50%;
+    background:rgba(255,107,157,.16);border:3px solid var(--pink);color:var(--pink);
+    display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;
+    pointer-events:auto;letter-spacing:.06em;
+  }
+
+  /* ===== 選單 / 覆蓋層 ===== */
+  .overlay{
+    position:fixed;inset:0;z-index:20;display:none;
+    align-items:center;justify-content:center;
+    background:radial-gradient(ellipse at 50% 40%, #0d1526, #05070d 75%);
+    flex-direction:column;padding:24px;
+  }
+  .overlay.show{display:flex;}
+  .titleWrap{text-align:center;}
+  .logo{font-size:clamp(40px,8vw,72px);font-weight:900;letter-spacing:.12em;color:var(--ink);}
+  .logo .ninja{color:var(--teal);}
+  .tagline{margin-top:14px;font-size:16px;color:var(--ink-dim);letter-spacing:.3em;}
+  .divider{width:220px;height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:26px auto;}
+  .cards{display:grid;grid-template-columns:repeat(2,minmax(220px,300px));gap:14px;margin:8px 0;}
+  .card{
+    background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+    text-align:left;cursor:pointer;transition:.18s;position:relative;overflow:hidden;
+  }
+  .card:hover{transform:translateY(-3px);border-color:var(--teal);}
+  .card .t{font-weight:800;font-size:17px;color:var(--ink);display:flex;align-items:center;gap:9px;}
+  .card .t .n{color:var(--teal);font-weight:900;}
+  .card .d{font-size:13px;color:var(--ink-dim);margin-top:8px;line-height:1.6;}
+  .card .meta{margin-top:12px;font-size:12px;color:var(--gold);display:flex;gap:12px;}
+  .card .lock{position:absolute;top:12px;right:14px;color:var(--ink-dim);font-size:15px;}
+  .card.locked{opacity:.55;cursor:not-allowed;}
+  .card.locked:hover{border-color:var(--line);transform:none;}
+
+  .bigBtn{
+    margin-top:22px;background:linear-gradient(180deg,#2dd4bf,#1aa18f);color:#04211c;
+    border:none;border-radius:14px;padding:16px 46px;font-size:19px;font-weight:800;letter-spacing:.15em;
+    cursor:pointer;transition:.18s;box-shadow:0 10px 30px rgba(45,212,191,.28);
+  }
+  .bigBtn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(45,212,191,.4);}
+
+  .help{display:grid;grid-template-columns:repeat(2,1fr);gap:8px 24px;margin-top:26px;max-width:520px;width:100%;}
+  .help .row{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-dim);}
+  .help kbd{background:#1a2440;border:1px solid var(--line);border-radius:6px;padding:3px 9px;color:var(--ink);font-family:inherit;font-size:13px;min-width:46px;text-align:center;}
+  .foot{margin-top:26px;font-size:12px;color:var(--ink-dim);letter-spacing:.08em;opacity:.7;}
+
+  /* 結果覆蓋 */
+  .result .big{font-size:clamp(34px,7vw,60px);font-weight:900;letter-spacing:.1em;}
+  .result .big.win{color:var(--teal);}
+  .result .big.lose{color:var(--red);}
+  .result .stat{display:flex;gap:30px;margin:26px 0 6px;}
+  .result .stat .s{text-align:center;}
+  .result .stat .v{font-size:30px;font-weight:900;color:var(--gold);}
+  .result .stat .k{font-size:12px;color:var(--ink-dim);margin-top:4px;letter-spacing:.1em;}
+  .rowbtns{display:flex;gap:14px;margin-top:20px;}
+  .ghostBtn{background:transparent;border:1px solid var(--line);color:var(--ink-dim);border-radius:12px;padding:14px 26px;font-size:15px;letter-spacing:.08em;cursor:pointer;transition:.15s;}
+  .ghostBtn:hover{color:var(--ink);border-color:var(--teal);}
+
+  @media (max-width:640px){
+    .cards{grid-template-columns:1fr;}
+    #alertMeter{width:110px;}
+    #tipBar{white-space:normal;width:86vw;line-height:1.5;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none!important;transition:none!important;}
+  }
+</style>
+</head>
+<body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<div id="stage">
+  <canvas id="game"></canvas>
+</div>
+<div id="vignette"></div>
+<div id="grain"></div>
+
+<!-- ===== HUD ===== -->
+<div id="hud">
+  <div class="top">
+    <div class="chip" id="levelTag"><span class="lbl">關卡</span><b>1 / 3</b></div>
+    <div class="chip" id="killTag"><span class="lbl">擊殺</span><b>0</b></div>
+    <div class="chip" id="timeTag"><span class="lbl">時間</span><b>00:00</b></div>
+    <div class="chip" id="alertMeter"><span class="lbl">警覺度</span><div id="alertBar"><div id="alertFill"></div></div></div>
+    <div class="spacer"></div>
+    <div id="btns">
+      <button class="hbtn" id="muteBtn" aria-label="聲音開關">
+        <svg id="iconSoundOn" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+        <svg id="iconSoundOff" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+      </button>
+      <button class="hbtn" id="restartBtn" aria-label="重新開始"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg></button>
+      <button class="hbtn" id="menuBtn" aria-label="回到選單"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    </div>
+  </div>
+  <div id="centerMsg">
+    <div class="big"></div>
+    <div class="sub"></div>
+  </div>
+  <div id="tipBar">WASD / 方向鍵 移動</div>
+</div>
+
+<div id="killPrompt">按 <kbd>E</kbd> 或點擊 暗殺</div>
+
+<!-- ===== 觸控 ===== -->
+<div id="touchUi">
+  <div id="joystick"><div id="joyBase"></div><div id="joyKnob"></div></div>
+  <div id="atkBtn">擊殺</div>
+</div>
+
+<!-- ===== 主選單 ===== -->
+<div class="overlay show" id="menuOverlay">
+  <div class="titleWrap">
+    <div class="logo">潛行<span class="ninja">大師</span></div>
+    <div class="tagline">STEALTH MASTER · 忍者暗殺行動</div>
+  </div>
+  <div class="divider"></div>
+  <div class="cards" id="levelCards"></div>
+  <button class="bigBtn" id="startBtn">開始任務</button>
+  <div class="help">
+    <div class="row"><kbd>WASD</kbd><span>移動</span></div>
+    <div class="row"><kbd>SHIFT</kbd><span>潛行（慢速）</span></div>
+    <div class="row"><kbd>E</kbd><span>暗殺 / 互動</span></div>
+    <div class="row"><kbd>R</kbd><span>重新開始關卡</span></div>
+  </div>
+  <div class="foot">繞到守衛背後、避開視線，潛入並暗殺目標後逃離出口</div>
+</div>
+
+<!-- ===== 結果 ===== -->
+<div class="overlay" id="resultOverlay">
+  <div class="result" style="text-align:center">
+    <div class="big" id="resTitle"></div>
+    <div class="sub" id="resMsg" style="color:var(--ink-dim);font-size:15px;margin-top:10px"></div>
+    <div class="stat" style="justify-content:center">
+      <div class="s"><div class="v" id="resKills">0</div><div class="k">暗殺數</div></div>
+      <div class="s"><div class="v" id="resTime">0:00</div><div class="k">用時</div></div>
+      <div class="s"><div class="v" id="resScore">0</div><div class="k">潛行分</div></div>
+    </div>
+    <div class="rowbtns">
+      <button class="ghostBtn" id="againBtn">再試一次</button>
+      <button class="ghostBtn" id="nextBtn">下一關</button>
+      <button class="ghostBtn" id="resMenuBtn">主選單</button>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* =====================================================================
+   潛行大師 Stealth Master — 忍者暗殺潛行遊戲
+   單檔 HTML5 Canvas 遊戲：視錐警戒、巡邏 AI、背刺暗殺、逃離出口
+   ===================================================================== */
+/* ============ 常數 ============ */
+const TILE = 40;
+const DEBUG = false;
+const Cfg = {
+  moveSpeed: 210,          // 玩家移動速度 px/s
+  sneakSpeed: 120,         // 潛行速度
+  sneakKillRange: 46,      // 背刺距離
+  targetKillRange: 40,     // 目標刺殺距離
+  guardDetectRange: 250,   // 守衛視距
+  guardFov: 100,           // 視角（度）
+  guardSpeed: 90,          // 巡邏速度
+  guardChaseSpeed: 150,    // 追擊速度
+  catchRadius: 30,         // 被抓半徑
+  detectRate: 0.55,        // 每秒警覺上升
+  decayRate: 0.32,         // 每秒警覺下降
+  recoverTime: 2.4,        // 追丟後冷靜時間
+};
+
+/* ============ 關卡資料 ============
+   tile: '#'=牆  ' '=地板  'P'=出生  'X'=出口  'T'=目標
+   guards: [{x,y, dir, path:[{x,y}...], fov?, range?}]
+   target: {x,y}
+   exit: {x,y}
+   座標皆為 tile 格子座標
+================================== */
+const LEVELS = [
+  {
+    name:"訓練場",
+    tile:[
+      "########################",
+      "#P                     #",
+      "#  ####      ##      ###",
+      "#  #   #    #  #      G#",
+      "#  #   #    #  #    ### #",
+      "#  ## ##    #  #   #    #",
+      "#    # #    #  #   # T  #",
+      "#    # #    #  #   #### #",
+      "#  G# # #   #  #        #",
+      "#   # # #   #  ##   X   #",
+      "########################",
+    ],
+    guards:[
+      {x:3,y:8, dir:0, path:[{x:3,y:8},{x:8,y:8},{x:8,y:3},{x:3,y:3}]},
+      {x:23,y:5, dir:180, path:[{x:23,y:5},{x:23,y:9},{x:18,y:9},{x:18,y:5}]},
+    ],
+    target:{x:20,y:6},
+    exit:{x:23,y:9},
+  },
+  {
+    name:"倉庫之夜",
+    tile:[
+      "##############################",
+      "#P   ##      ###         ####",
+      "#    #   ##  # #   ##    #  #",
+      "# ## #   #   # #   #   ##   #",
+      "# #  #   #   # #   #   #  G #",
+      "# #  ##  #   # #  ##   #  # #",
+      "# G  ##  #   # ## #  #  #  # ",
+      "#    #  ##   #    #  #  #  # ",
+      "#    #    #  #  T #  #  #   #",
+      "#  ####    #     #  #  #    #",
+      "#      ####      #     ##  ##",
+      "#         ##          #    #",
+      "#     ######          X    #",
+      "##############################",
+    ],
+    guards:[
+      {x:3,y:6, dir:90, path:[{x:3,y:6},{x:7,y:6},{x:7,y:2},{x:2,y:2}]},
+      {x:15,y:4, dir:0, path:[{x:15,y:4},{x:18,y:4},{x:18,y:2},{x:13,y:2}]},
+      {x:21,y:8, dir:180, path:[{x:21,y:8},{x:21,y:11},{x:25,y:11},{x:25,y:8}]},
+      {x:12,y:8, dir:90, path:[{x:12,y:8},{x:12,y:11},{x:9,y:11}]},
+    ],
+    target:{x:19,y:8},
+    exit:{x:27,y:12},
+  },
+  {
+    name:"戒備總部",
+    tile:[
+      "#################################",
+      "#P      ##        ##       #####",
+      "#  ##   #    ##   #   ###  #   #",
+      "#  #    #    ##   #   # #  # G #",
+      "#  #    ##   ##  ##   # #  #   #",
+      "#  #     #       #    # #  #  ###",
+      "#  #   ## #   T  #    # #  #    #",
+      "# G#   #  #       #    # #  #    #",
+      "#   #  #  ##########   # #  #   #",
+      "#   ## #             # #  #  #  #",
+      "#    # ###### ###### # #   #  # #",
+      "#    #      #  #    # #   ##  # #",
+      "#    ##   # #  #   # #    #   # #",
+      "#        # #   #   # #    #  X  #",
+      "#################################",
+    ],
+    guards:[
+      {x:3,y:7, dir:90, path:[{x:3,y:7},{x:6,y:7},{x:6,y:11},{x:2,y:11}]},
+      {x:20,y:3, dir:0, path:[{x:20,y:3},{x:24,y:3},{x:24,y:1},{x:19,y:1}]},
+      {x:27,y:8, dir:180, path:[{x:27,y:8},{x:27,y:13},{x:22,y:13}]},
+      {x:12,y:9, dir:90, path:[{x:12,y:9},{x:12,y:13},{x:8,y:13},{x:8,y:10}]},
+      {x:25,y:12, dir:90, path:[{x:25,y:12},{x:29,y:12},{x:29,y:6},{x:25,y:6}]},
+    ],
+    target:{x:14,y:6},
+    exit:{x:28,y:13},
+  },
+];
+
+/* ============ 工具函式 ============ */
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+const angNorm=(a)=>{while(a>Math.PI)a-=2*Math.PI;while(a<-Math.PI)a+=2*Math.PI;return a;};
+const angDiff=(a,b)=>Math.abs(angNorm(a-b));
+
+/* ============ 全域狀態 ============ */
+let canvas,ctx,W,H,DPR;
+let levelIndex=0, unlocked=1;
+let world=null;         // {tile,w,h,floorW,floorH,guards,target,exit,player,bodies}
+let state="menu";       // menu | play | over | win
+let kills=0, levelTime=0, detectedEver=false;
+let raf=null,lastT=0;
+
+const Sfx={audio:null,muted:false,enabled:false};
+/* ============ 世界建構 ============ */
+function buildWorld(idx){
+  const lv=LEVELS[idx];
+  const tile=lv.tile.map(r=>r.split(""));
+  const w=tile[0].length, h=tile.length;
+  const tileAt=(tx,ty)=>{
+    if(tx<0||ty<0||tx>=w||ty>=h)return "#";
+    return tile[ty][tx];
+  };
+  const cell=(gx,gy)=>Math.floor(gy/TILE)*w+Math.floor(gx/TILE);
+  const tileCenter=(tx,ty)=>({x:tx*TILE+TILE/2, y:ty*TILE+TILE/2});
+
+  let px,py;
+  const guards=[],bodies=[];
+  let target=null,exitP=null;
+
+  // 掃描格網建立實體
+  for(let ty=0;ty<h;ty++)for(let tx=0;tx<w;tx++){
+    const c=tile[ty][tx];
+    const p=tileCenter(tx,ty);
+    if(c==="P"){px=p.x;py=p.y;}
+    else if(c==="X"){exitP={x:p.x,y:p.y,r:26};}
+    else if(c==="T"){target={x:p.x,y:p.y,facing:Math.PI,detection:0,alert:false,dead:false,deadT:0};}
+  }
+  // 依資料建立守衛
+  for(const gd of lv.guards){
+    const p=tileCenter(gd.x,gd.y);
+    guards.push({
+      x:p.x,y:p.y,facing:gd.dir*Math.PI/180,
+      fov:(gd.fov||Cfg.guardFov)*Math.PI/180,
+      range:gd.range||Cfg.guardDetectRange,
+      path:gd.path.map(pp=>tileCenter(pp.x,pp.y)),
+      pathIdx:0, targetPt:null, waiting:0, waitAt:0,
+      state:"patrol", detection:0, detectTarget:null,
+      dead:false, deadT:0, speed:Cfg.guardSpeed, catchRadius:Cfg.catchRadius,
+    });
+  }
+
+  const player={
+    x:px,y:py, facing:0, sneak:false, move:false,
+    r:12, killCd:0,
+  };
+
+  return {
+    tile, w,h, tileAt, cell, tileCenter,
+    guards, bodies, target, exitP, player,
+    floorW:w*TILE, floorH:h*TILE,
+    camX:0,camY:0,
+    killFx:[], msgFx:[], flash:0,
+  };
+}
+
+/* ============ 碰撞 ============ */
+function collides(px,py,r,world){
+  const {tileAt}=world;
+  const x0=Math.floor((px-r)/TILE), x1=Math.floor((px+r)/TILE);
+  const y0=Math.floor((py-r)/TILE), y1=Math.floor((py+r)/TILE);
+  for(let ty=y0;ty<=y1;ty++)for(let tx=x0;tx<=x1;tx++){
+    if(tileAt(tx,ty)==="#")continue;
+    // 牆格 AABB 中心
+    const cx=tx*TILE+TILE/2, cy=ty*TILE+TILE/2;
+    const nx=clamp(px,cx-TILE/2,cx+TILE/2);
+    const ny=clamp(py,cy-TILE/2,cy+TILE/2);
+    if(Math.hypot(px-nx,py-ny)<r) return true;
+  }
+  return false;
+}
+// 軸向碰撞（各軸獨立解析）
+function moveEntity(e,r,dx,dy,world){
+  e.x+=dx;
+  if(collides(e.x,e.y,r,world)) e.x-=dx;
+  e.y+=dy;
+  if(collides(e.x,e.y,r,world)) e.y-=dy;
+}
+
+/* ============ 視線（DDA 方塊光線） ============ */
+function lineOfSight(world,x1,y1,x2,y2){
+  const {tileAt}=world;
+  const dx=x2-x1, dy=y2-y1;
+  const len=Math.hypot(dx,dy)||0.001;
+  const steps=Math.ceil(len/(TILE*0.5));
+  for(let i=1;i<=steps;i++){
+    const t=i/steps;
+    const gx=Math.floor((x1+dx*t)/TILE);
+    const gy=Math.floor((y1+dy*t)/TILE);
+    if(tileAt(gx,gy)==="#") return false;
+  }
+  return true;
+}
+
+/* ============ 輸入 ============ */
+const keys={};
+const joy={active:false,dx:0,dy:0};
+let touchDevice=false;
+
+function setupInput(){
+  addEventListener("keydown",e=>{
+    const k=e.key.toLowerCase();
+    keys[k]=true;
+    if(["arrowup","arrowdown","arrowleft","arrowright"," ","shift"].includes(e.key.toLowerCase())) e.preventDefault();
+    if(state==="play"){
+      if(k==="e"||k===" "||k==="enter"){ e.preventDefault(); tryAttack(); }
+      if(k==="r") loadLevel(levelIndex);
+      if(k==="m") toggleMute();
+    }
+  });
+  addEventListener("keyup",e=>{ keys[e.key.toLowerCase()]=false; });
+  window.addEventListener("blur",()=>{ for(const k in keys)keys[k]=false; });
+
+  // 觸控偵測
+  if("ontouchstart" in window || navigator.maxTouchPoints>0){
+    touchDevice=true;
+    document.getElementById("touchUi").style.display="block";
+    setupJoystick();
+    document.getElementById("atkBtn").addEventListener("touchstart",e=>{e.preventDefault();tryAttack();});
+    document.getElementById("atkBtn").addEventListener("mousedown",e=>{tryAttack();});
+  }
+}
+function setupJoystick(){
+  const joyEl=document.getElementById("joystick");
+  const knob=document.getElementById("joyKnob");
+  const baseRect=()=>joyEl.getBoundingClientRect();
+  const cx=()=>baseRect().left+baseRect().width/2;
+  const cy=()=>baseRect().top+baseRect().height/2;
+  const rad=38;
+  const move=(e)=>{
+    const cxp=cx(),cyp=cy();
+    let dx=(e.touches?e.touches[0].clientX:e.clientX)-cxp;
+    let dy=(e.touches?e.touches[0].clientY:e.clientY)-cyp;
+    const d=Math.hypot(dx,dy);
+    if(d>rad){dx=dx/d*rad;dy=dy/d*rad;}
+    joy.active=true; joy.dx=dx/rad; joy.dy=dy/rad;
+    knob.style.transform=`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px))`;
+  };
+  const end=()=>{joy.active=false;joy.dx=0;joy.dy=0;knob.style.transform="translate(-50%,-50%)";};
+  joyEl.addEventListener("touchstart",move,{passive:false});
+  joyEl.addEventListener("touchmove",move,{passive:false});
+  joyEl.addEventListener("touchend",end);
+  joyEl.addEventListener("mousedown",move);
+  window.addEventListener("mousemove",e=>{if(joy.active&&(e.buttons&1))move(e);});
+  window.addEventListener("mouseup",end);
+}
+function inputVector(){
+  let dx=0,dy=0;
+  if(keys["w"]||keys["arrowup"])dy-=1;
+  if(keys["s"]||keys["arrowdown"])dy+=1;
+  if(keys["a"]||keys["arrowleft"])dx-=1;
+  if(keys["d"]||keys["arrowright"])dx+=1;
+  if(joy.active){dx=joy.dx;dy=joy.dy;}
+  const d=Math.hypot(dx,dy);
+  if(d>1){dx/=d;dy/=d;}
+  return {dx,dy,mag:d};
+}
+
+/* ============ 更新 ============ */
+function update(dt){
+  const wd=world; if(!wd)return;
+  levelTime+=dt;
+
+  // 玩家移動
+  const p=wd.player;
+  const iv=inputVector();
+  p.sneak=keys["shift"];
+  const speed=p.sneak?Cfg.sneakSpeed:Cfg.moveSpeed;
+  p.move=iv.mag>0.01;
+  if(p.move){
+    p.facing=Math.atan2(iv.dy,iv.dx);
+    moveEntity(p,p.r,iv.dx*speed*dt,iv.dy*speed*dt,wd);
+  }
+  p.killCd=Math.max(0,p.killCd-dt);
+
+  // 守衛更新
+  for(const g of wd.guards){
+    if(g.dead)continue;
+    updateGuard(g,wd,dt);
+  }
+
+  // 目標（站著不動的 VIP）
+  if(wd.target && !wd.target.dead){
+    const t=wd.target;
+    // 若玩家靠得太近且未被抓，允許刺殺
+    if(dist(p,t)<Cfg.targetKillRange && p.killCd<=0){
+      t.dead=true; t.deadT=0.5;
+      kills++; p.killCd=0.3;
+      wd.msgFx.push({x:t.x,y:t.y,t:"目標已清除",c:"#ff6b9d",life:1.2});
+      Sfx.play("kill");
+      // 目標死亡 -> 標記可逃離
+      showCenter("目標已清除","現在前往綠色出口逃離",1800);
+    }
+    if(t.dead)t.deadT-=dt;
+  }
+
+  // 出口判定
+  if(wd.exitP && (!wd.target||wd.target.dead)){
+    if(dist(p,wd.exitP)<34){
+      onLevelComplete();
+      return;
+    }
+  }
+
+  // 特效計時
+  for(let i=wd.killFx.length-1;i>=0;i--){wd.killFx[i].life-=dt;if(wd.killFx[i].life<=0)wd.killFx.splice(i,1);}
+  for(let i=wd.msgFx.length-1;i>=0;i--){wd.msgFx[i].life-=dt;if(wd.msgFx[i].life<=0)wd.msgFx.splice(i,1);}
+  wd.flash=Math.max(0,wd.flash-dt);
+
+  // HUD
+  let alert=0;
+  for(const g of wd.guards) if(g.state==="alert") alert=Math.max(alert,1);
+  updateHud(alert);
+}
+
+function updateGuard(g,wd,dt){
+  const p=wd.player;
+  const toPlayer=Math.atan2(p.y-g.y,p.x-g.x);
+  const dToP=dist(g,p);
+
+  // 視線偵測
+  const angOk=angDiff(toPlayer,g.facing)<=g.fov/2;
+  const losOk=dToP<=g.range && lineOfSight(wd,g.x,g.y,p.x,p.y);
+  const seesPlayer=angOk&&losOk;
+
+  if(g.state==="patrol"){
+    // 追蹤警覺度
+    if(seesPlayer){
+      g.detection+=Cfg.detectRate*dt;
+      if(!g.detectTarget){ g.detectTarget=dToP; }
+    } else {
+      g.detection=Math.max(0,g.detection-Cfg.decayRate*dt);
+    }
+    if(g.detection>=1){
+      g.state="alert"; g.detectTarget=null;
+      wd.flash=0.35;
+      Sfx.play("alarm");
+      showCenter("被發現了！","逃離視線範圍可解除警戒",1500);
+    }
+    // 巡邏移動
+    if(g.state==="patrol"){
+      if(g.waiting>0){
+        g.waiting-=dt;
+      } else {
+        const tgt=g.path[g.pathIdx];
+        const d=dist(g,tgt);
+        if(d<4){
+          g.pathIdx=(g.pathIdx+1)%g.path.length;
+          g.waiting=g.waitAt||0.4;
+        } else {
+          const a=Math.atan2(tgt.y-g.y,tgt.x-g.x);
+          g.facing=a;
+          moveEntity(g,12,Math.cos(a)*g.speed*dt,Math.sin(a)*g.speed*dt,wd);
+        }
+      }
+    }
+  } else { // alert
+    // 追擊玩家
+    g.facing=toPlayer;
+    moveEntity(g,12,Math.cos(toPlayer)*g.guardChaseSpeed*dt,Math.sin(toPlayer)*g.guardChaseSpeed*dt,wd);
+    if(dToP<g.catchRadius+ p.r){
+      onCaught();
+      return;
+    }
+    // 追丟 -> 冷靜
+    if(!seesPlayer){
+      g.detectTarget=(g.detectTarget||0)+dt;
+      if(g.detectTarget>Cfg.recoverTime){
+        g.state="patrol"; g.detectTarget=null; g.detection=0;
+      }
+    } else {
+      g.detectTarget=0;
+    }
+  }
+}
+
+/* ============ 攻擊 ============ */
+function tryAttack(){
+  if(state!=="play")return;
+  const wd=world,p=wd.player;
+  if(p.killCd>0)return;
+
+  // 找最近的守衛
+  let best=null,bd=1e9;
+  for(const g of wd.guards){
+    if(g.dead||g.state==="alert")continue;
+    const d=dist(p,g);
+    if(d<bd){bd=d;best=g;}
+  }
+  if(best && bd<=Cfg.sneakKillRange){
+    // 判斷是否在背後：守衛面朝方向與指向玩家方向夾角大於 105°
+    const toP=Math.atan2(p.y-best.y,p.x-best.x);
+    const behind=angDiff(best.facing,toP)>= (105*Math.PI/180);
+    if(behind){
+      doKill(best);
+      return;
+    } else {
+      Sfx.play("nope");
+    }
+  }
+  // 目標近身刺殺
+  const t=wd.target;
+  if(t&&!t.dead&&dist(p,t)<=Cfg.targetKillRange){
+    t.dead=true;t.deadT=0.5;kills++;p.killCd=0.3;
+    wd.msgFx.push({x:t.x,y:t.y,t:"目標已清除",c:"#ff6b9d",life:1.2});
+    Sfx.play("kill");
+    showCenter("目標已清除","現在前往綠色出口逃離",1800);
+  }
+}
+function doKill(g){
+  const wd=world;
+  g.dead=true; g.deadT=2.5;
+  wd.bodies.push({x:g.x,y:g.y,facing:g.facing,deadT:2.5});
+  kills++; wd.player.killCd=0.35;
+  wd.killFx.push({x:g.x,y:g.y,life:0.35,c:"#2dd4bf"});
+  wd.msgFx.push({x:g.x,y:g.y-20,t:"暗殺",c:"#2dd4bf",life:1});
+  Sfx.play("kill");
+}
+/* ============ 渲染 ============ */
+function resize(){
+  canvas=document.getElementById("game");
+  DPR=Math.min(window.devicePixelRatio||1,2);
+  W=window.innerWidth; H=window.innerHeight;
+  canvas.width=W*DPR; canvas.height=H*DPR;
+  canvas.style.width=W+"px"; canvas.style.height=H+"px";
+  ctx=canvas.getContext("2d");
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+function updateCam(wd){
+  const p=wd.player;
+  let tx=clamp(p.x-W/2,0,wd.floorW-W);
+  let ty=clamp(p.y-H/2,0,wd.floorH-H);
+  if(wd.floorW<W){tx=(wd.floorW-W)/2;}
+  if(wd.floorH<H){ty=(wd.floorH-H)/2;}
+  wd.camX+=(tx-wd.camX)*0.12;
+  wd.camY+=(ty-wd.camY)*0.12;
+}
+function draw(){
+  const wd=world; if(!wd)return;
+  updateCam(wd);
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle="#0a0f1a"; ctx.fillRect(0,0,W,H);
+  ctx.save();
+  ctx.translate(-wd.camX,-wd.camY);
+
+  drawFloor(wd);
+  drawExit(wd);
+  drawBodies(wd);
+  drawGuards(wd);
+  drawTarget(wd);
+  drawPlayer(wd);
+  drawFx(wd);
+
+  ctx.restore();
+
+  // 警報紅光
+  if(wd.flash>0){
+    ctx.fillStyle=`rgba(255,64,64,${wd.flash*0.5})`;
+    ctx.fillRect(0,0,W,H);
+  }
+}
+function drawFloor(wd){
+  const x0=Math.max(0,Math.floor(wd.camX/TILE)-1), x1=Math.min(wd.w-1,Math.ceil((wd.camX+W)/TILE)+1);
+  const y0=Math.max(0,Math.floor(wd.camY/TILE)-1), y1=Math.min(wd.h-1,Math.ceil((wd.camY+H)/TILE)+1);
+  for(let ty=y0;ty<=y1;ty++)for(let tx=x0;tx<=x1;tx++){
+    const c=wd.tile[ty][tx];
+    const px=tx*TILE,py=ty*TILE;
+    if(c==="#"){
+      ctx.fillStyle="#313d55"; ctx.fillRect(px,py,TILE,TILE);
+      ctx.fillStyle="#46546f"; ctx.fillRect(px,py,TILE,4); ctx.fillRect(px,py,4,TILE);
+      ctx.fillStyle="#232c40"; ctx.fillRect(px,py+TILE-4,TILE,4); ctx.fillRect(px+TILE-4,py,4,TILE);
+    } else {
+      const shade=((tx*7+ty*13)%9)/9;
+      ctx.fillStyle=`rgb(${Math.round(20+shade*6)},${Math.round(28+shade*8)},${Math.round(44+shade*12)})`;
+      ctx.fillRect(px,py,TILE,TILE);
+      // 網格微線
+      ctx.strokeStyle="rgba(255,255,255,0.02)"; ctx.lineWidth=1;
+      ctx.strokeRect(px+.5,py+.5,TILE,TILE);
+    }
+  }
+}
+function drawExit(wd){
+  if(!wd.exitP)return;
+  const e=wd.exitP;
+  const t=performance.now()/1000;
+  const pulse=1+Math.sin(t*4)*0.12;
+  ctx.save();
+  ctx.translate(e.x,e.y);
+  ctx.rotate(t*0.6);
+  ctx.strokeStyle="rgba(70,214,122,0.85)"; ctx.lineWidth=3;
+  for(let i=0;i<4;i++){
+    ctx.rotate(Math.PI/2);
+    ctx.beginPath(); ctx.moveTo(0,-16*pulse); ctx.lineTo(0,0);
+    ctx.stroke();
+  }
+  ctx.restore();
+  ctx.fillStyle="rgba(70,214,122,0.16)"; ctx.beginPath(); ctx.arc(e.x,e.y,26,0,7); ctx.fill();
+  ctx.fillStyle="#46d67a"; ctx.beginPath(); ctx.arc(e.x,e.y,7,0,7); ctx.fill();
+  // 標籤
+  ctx.font="600 13px 'Noto Sans TC',sans-serif";
+  ctx.textAlign="center"; ctx.fillStyle="#46d67a";
+  ctx.fillText("出口 EXIT",e.x,e.y-34);
+}
+function drawBodies(wd){
+  for(const b of wd.bodies){
+    ctx.save(); ctx.translate(b.x,b.y);
+    ctx.rotate(b.facing);
+    ctx.fillStyle="rgba(60,52,70,0.9)";
+    ctx.beginPath(); ctx.ellipse(0,0,12,7,0,0,7); ctx.fill();
+    ctx.restore();
+  }
+}
+function drawGuardVision(g){
+  const ang=g.fov;
+  ctx.save(); ctx.translate(g.x,g.y); ctx.rotate(g.facing);
+  const grad=ctx.createRadialGradient(0,0,10,0,0,g.range);
+  grad.addColorStop(0,g.state==="alert"?"rgba(255,64,64,0.28)":"rgba(240,168,58,0.26)");
+  grad.addColorStop(1,g.state==="alert"?"rgba(255,64,64,0)":"rgba(240,168,58,0)");
+  ctx.fillStyle=grad;
+  ctx.beginPath(); ctx.moveTo(0,0);
+  ctx.arc(0,0,g.range,-ang/2,ang/2);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle=g.state==="alert"?"rgba(255,64,64,0.4)":"rgba(240,168,58,0.28)";
+  ctx.lineWidth=1.5; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(Math.cos(-ang/2)*g.range,Math.sin(-ang/2)*g.range);
+  ctx.moveTo(0,0); ctx.lineTo(Math.cos(ang/2)*g.range,Math.sin(ang/2)*g.range); ctx.stroke();
+  ctx.restore();
+}
+function drawGuards(wd){
+  for(const g of wd.guards){
+    if(g.dead){
+      // 屍體
+      ctx.save(); ctx.translate(g.x,g.y); ctx.rotate(g.facing);
+      ctx.fillStyle="rgba(90,70,70,0.85)";
+      ctx.beginPath(); ctx.ellipse(0,0,13,8,0,0,7); ctx.fill();
+      ctx.fillStyle="rgba(255,64,64,0.7)";
+      ctx.beginPath(); ctx.arc(0,4,4,0,7); ctx.fill();
+      ctx.restore(); continue;
+    }
+    drawGuardVision(g);
+    const col=g.state==="alert"?"#ff4040":"#e6a23c";
+    ctx.save(); ctx.translate(g.x,g.y); ctx.rotate(g.facing);
+    // 身體
+    ctx.fillStyle=col;
+    ctx.beginPath(); ctx.arc(0,0,13,0,7); ctx.fill();
+    ctx.fillStyle="rgba(255,255,255,0.9)";
+    ctx.beginPath(); ctx.arc(0,0,13,0,7); ctx.fill();
+    ctx.fillStyle=col; ctx.beginPath(); ctx.arc(0,0,11,0,7); ctx.fill();
+    // 眼睛
+    ctx.fillStyle="#141a26";
+    ctx.beginPath(); ctx.arc(7,-4,2.6,0,7); ctx.fill();
+    ctx.beginPath(); ctx.arc(7,4,2.6,0,7); ctx.fill();
+    // 警覺度外圈
+    if(g.detection>0.02){
+      ctx.fillStyle=`rgba(255,180,60,${g.detection*0.6})`;
+      ctx.beginPath(); ctx.arc(0,0,15+g.detection*8,0,7); ctx.fill();
+    }
+    ctx.restore();
+  }
+}
+function drawTarget(wd){
+  if(!wd.target||wd.target.dead)return;
+  const t=wd.target;
+  const bob=Math.sin(performance.now()/300)*2;
+  ctx.save(); ctx.translate(t.x,t.y+bob);
+  // 高亮圈
+  ctx.strokeStyle="rgba(255,107,157,0.5)"; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.arc(0,0,22,0,7); ctx.stroke();
+  // 目標人
+  ctx.fillStyle="#ff6b9d"; ctx.beginPath(); ctx.arc(0,0,14,0,7); ctx.fill();
+  ctx.fillStyle="rgba(255,255,255,0.9)"; ctx.beginPath(); ctx.arc(0,0,12,0,7); ctx.fill();
+  ctx.fillStyle="#ff6b9d"; ctx.beginPath(); ctx.arc(0,0,10,0,7); ctx.fill();
+  // 皇冠
+  ctx.fillStyle="#f0c040";
+  ctx.beginPath(); ctx.moveTo(-8,-14); ctx.lineTo(-5,-8); ctx.lineTo(0,-12); ctx.lineTo(5,-8); ctx.lineTo(8,-14); ctx.lineTo(6,-2); ctx.lineTo(-6,-2); ctx.closePath(); ctx.fill();
+  ctx.restore();
+  ctx.font="700 13px 'Noto Sans TC',sans-serif"; ctx.textAlign="center";
+  ctx.fillStyle="#ff6b9d"; ctx.fillText("目標 TARGET",t.x,t.y-34);
+}
+function drawPlayer(wd){
+  const p=wd.player;
+  const bob=p.move?Math.sin(performance.now()/120)*2:0;
+  ctx.save(); ctx.translate(p.x,p.y+bob);
+  // 潛行光圈
+  if(p.sneak){
+    ctx.strokeStyle="rgba(45,212,191,0.35)"; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.arc(0,0,20,0,7); ctx.stroke();
+  }
+  ctx.rotate(p.facing);
+  // 忍者身體
+  ctx.fillStyle="#2dd4bf";
+  ctx.beginPath(); ctx.arc(0,0,12,0,7); ctx.fill();
+  ctx.fillStyle="rgba(255,255,255,0.92)"; ctx.beginPath(); ctx.arc(0,0,10,0,7); ctx.fill();
+  ctx.fillStyle="#2dd4bf"; ctx.beginPath(); ctx.arc(0,0,8,0,7); ctx.fill();
+  // 頭帶
+  ctx.fillStyle="#0a0f1a"; ctx.beginPath(); ctx.arc(0,0,8,0,7); ctx.fill();
+  // 眼睛（面向前方）
+  ctx.fillStyle="#2dd4bf";
+  ctx.beginPath(); ctx.arc(4,-3,2.2,0,7); ctx.fill();
+  ctx.beginPath(); ctx.arc(4,3,2.2,0,7); ctx.fill();
+  // 刀
+  ctx.strokeStyle="#dfe6f5"; ctx.lineWidth=2.5; ctx.lineCap="round";
+  ctx.beginPath(); ctx.moveTo(8,0); ctx.lineTo(20,0); ctx.stroke();
+  ctx.restore();
+}
+function drawFx(wd){
+  for(const f of wd.killFx){
+    ctx.strokeStyle=`rgba(45,212,191,${f.life/0.35})`; ctx.lineWidth=3;
+    ctx.beginPath(); ctx.arc(f.x,f.y,6+(0.35-f.life)*40,0,7); ctx.stroke();
+  }
+  for(const f of wd.msgFx){
+    const a=clamp(f.life/0.6,0,1);
+    ctx.globalAlpha=a;
+    ctx.font="800 15px 'Noto Sans TC',sans-serif"; ctx.textAlign="center";
+    ctx.fillStyle=f.c; ctx.fillText(f.t,f.x,f.y);
+    ctx.globalAlpha=1;
+  }
+}
+/* ============ 音效（Web Audio，使用者手勢後啟動） ============ */
+Sfx.init=function(){
+  if(Sfx.audio)return;
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC)return;
+  Sfx.audio=new AC();
+};
+Sfx.blip=function(freq,dur,type,vol,slide){
+  if(Sfx.muted||!Sfx.audio)return;
+  try{
+    const t=Sfx.audio.currentTime;
+    const o=Sfx.audio.createOscillator(),g=Sfx.audio.createGain();
+    o.type=type||"sine";
+    o.frequency.setValueAtTime(freq,t);
+    if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+dur);
+    g.gain.setValueAtTime(vol||0.18,t);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g).connect(Sfx.audio.destination);
+    o.start(t); o.stop(t+dur+0.02);
+  }catch(e){}
+};
+Sfx.play=function(name){
+  if(Sfx.muted)return;
+  switch(name){
+    case "kill": Sfx.blip(320,0.16,"sawtooth",0.22,60); Sfx.blip(90,0.22,"sine",0.2,40); break;
+    case "alarm": Sfx.blip(700,0.18,"square",0.14,520); setTimeout(()=>Sfx.blip(700,0.18,"square",0.14,520),200); break;
+    case "nope": Sfx.blip(140,0.12,"square",0.1,110); break;
+    case "clear": Sfx.blip(520,0.2,"sine",0.18,780); setTimeout(()=>Sfx.blip(660,0.25,"sine",0.18,880),120); break;
+    case "fail": Sfx.blip(220,0.4,"sawtooth",0.16,90); break;
+  }
+};
+function toggleMute(){
+  Sfx.muted=!Sfx.muted;
+  document.getElementById("iconSoundOn").style.display=Sfx.muted?"none":"block";
+  document.getElementById("iconSoundOff").style.display=Sfx.muted?"block":"none";
+  document.getElementById("muteBtn").classList.toggle("on",!Sfx.muted);
+}
+// iOS 靜音鍵提示
+setTimeout(()=>{
+  if(/iPhone|iPad|iPod/.test(navigator.userAgent) && Sfx.audio){
+    try{
+      const a=Sfx.audio.createAnalyser(); a.fftSize=32;
+      const src=Sfx.audio.createOscillator(); src.connect(a);
+      a.getByteFrequencyData(new Uint8Array(16));
+    }catch(e){}
+  }
+},600);
+
+/* ============ HUD / 訊息 ============ */
+let msgTimer=null;
+function showCenter(big,sub,dur){
+  const el=document.getElementById("centerMsg");
+  el.querySelector(".big").textContent=big;
+  el.querySelector(".sub").textContent=sub||"";
+  el.style.display="block";
+  clearTimeout(msgTimer);
+  if(dur) msgTimer=setTimeout(()=>el.style.display="none",dur);
+}
+function hideCenter(){clearTimeout(msgTimer);document.getElementById("centerMsg").style.display="none";}
+function updateHud(alert){
+  document.getElementById("levelTag").querySelector("b").textContent=`${levelIndex+1} / ${LEVELS.length}`;
+  document.getElementById("killTag").querySelector("b").textContent=kills;
+  const mm=Math.floor(levelTime/60), ss=Math.floor(levelTime%60);
+  document.getElementById("timeTag").querySelector("b").textContent=`${String(mm).padStart(2,"0")}:${String(ss).padStart(2,"0")}`;
+  const pct=alert>0?100:0;
+  document.getElementById("alertFill").style.width=pct+"%";
+  document.getElementById("alertMeter").style.display=(alert>0||detectedEver)?"flex":"none";
+}
+function updateKillPrompt(){
+  if(state!=="play"){document.getElementById("killPrompt").style.display="none";return;}
+  const wd=world,p=wd.player;
+  let show=false;
+  for(const g of wd.guards){
+    if(g.dead||g.state==="alert")continue;
+    if(dist(p,g)<=Cfg.sneakKillRange){
+      const toP=Math.atan2(p.y-g.y,p.x-g.x);
+      if(angDiff(g.facing,toP)>=105*Math.PI/180){show=true;break;}
+    }
+  }
+  const t=wd.target;
+  if(!show&&t&&!t.dead&&dist(p,t)<=Cfg.targetKillRange)show=true;
+  document.getElementById("killPrompt").style.display=show?"block":"none";
+}
+
+/* ============ 遊戲流程 ============ */
+function setState(s){
+  state=s;
+  document.getElementById("hud").style.display=(s==="play")?"block":"none";
+  document.getElementById("menuOverlay").classList.toggle("show",s==="menu");
+  document.getElementById("resultOverlay").classList.toggle("show",s==="over"||s==="win");
+  if(s==="play")hideCenter();
+  if(s!=="play")document.getElementById("killPrompt").style.display="none";
+}
+function loadLevel(idx){
+  levelIndex=idx;
+  world=buildWorld(idx);
+  kills=0; levelTime=0; detectedEver=false;
+  const wd=world;
+  wd.camX=wd.player.x-W/2; wd.camY=wd.player.y-H/2;
+  updateHud(0);
+  setState("play");
+  showCenter("潛入開始",LEVELS[idx].name,1500);
+}
+function onCaught(){
+  state="over"; detectedEver=true;
+  Sfx.play("fail");
+  document.getElementById("game").classList.add("flashRed");
+  setTimeout(()=>document.getElementById("game").classList.remove("flashRed"),1600);
+  showResult(false);
+}
+function onLevelComplete(){
+  state="win";
+  Sfx.play("clear");
+  if(levelIndex+1<LEVELS.length) unlocked=Math.max(unlocked,levelIndex+2);
+  localStorage.setItem("sm_unlocked",String(unlocked));
+  showResult(true);
+}
+function showResult(win){
+  setState(win?"win":"over");
+  document.getElementById("resTitle").textContent=win?"任務完成":"任務失敗";
+  document.getElementById("resTitle").className="big "+(win?"win":"lose");
+  document.getElementById("resMsg").textContent=win?"目標已清除，成功逃離出口":(detectedEver?"你被守衛發現並抓獲":"目標逃脫了");
+  document.getElementById("resKills").textContent=kills;
+  const mm=Math.floor(levelTime/60), ss=Math.floor(levelTime%60);
+  document.getElementById("resTime").textContent=`${mm}:${String(ss).padStart(2,"0")}`;
+  let score=kills*100;
+  if(!detectedEver)score+=500;
+  if(!detectedEver&&kills>=LEVELS[levelIndex].guards.length)score+=300;
+  document.getElementById("resScore").textContent=score;
+  const hasNext=levelIndex+1<LEVELS.length;
+  document.getElementById("nextBtn").style.display=(win&&hasNext)?"inline-block":"none";
+  document.getElementById("nextBtn").textContent="下一關";
+}
+function goMenu(){
+  setState("menu"); renderLevelCards();
+}
+
+/* ============ 主迴圈 ============ */
+function loop(t){
+  const dt=Math.min((t-lastT)/1000,0.05); lastT=t;
+  if(state==="play"&&world){
+    update(dt);
+    updateKillPrompt();
+  }
+  if(world)draw();
+  raf=requestAnimationFrame(loop);
+}
+
+/* ============ 選單 / 事件 ============ */
+function renderLevelCards(){
+  const box=document.getElementById("levelCards");
+  box.innerHTML="";
+  LEVELS.forEach((lv,i)=>{
+    const card=document.createElement("div");
+    card.className="card"+(i+1>unlocked?" locked":"");
+    const lk=i+1>unlocked?'<span class="lock"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>':"";
+    card.innerHTML=`
+      <div class="t"><span class="n">${String(i+1).padStart(2,"0")}</span>${lv.name}${lk}</div>
+      <div class="d">${lv.guards.length} 名守衛 · ${lv.target?"暗殺目標":"逃離"}</div>
+      <div class="meta">目標清除 → 逃離出口</div>`;
+    if(i+1<=unlocked){
+      card.addEventListener("click",()=>loadLevel(i));
+    }
+    box.appendChild(card);
+  });
+}
+function bindUI(){
+  document.getElementById("startBtn").addEventListener("click",()=>{
+    Sfx.init(); Sfx.enabled=true;
+    Sfx.audio&&Sfx.audio.resume&&Sfx.audio.resume();
+    if(state!=="play")loadLevel(Math.min(unlocked-1,LEVELS.length-1));
+  });
+  document.getElementById("menuBtn").addEventListener("click",goMenu);
+  document.getElementById("restartBtn").addEventListener("click",()=>{if(state==="play")loadLevel(levelIndex);});
+  document.getElementById("muteBtn").addEventListener("click",toggleMute);
+  document.getElementById("againBtn").addEventListener("click",()=>loadLevel(levelIndex));
+  document.getElementById("nextBtn").addEventListener("click",()=>loadLevel(levelIndex+1));
+  document.getElementById("resMenuBtn").addEventListener("click",goMenu);
+  // 點擊畫布 = 嘗試攻擊
+  document.getElementById("game").addEventListener("mousedown",e=>{ if(state==="play")tryAttack(); });
+}
+
+/* ============ 啟動 ============ */
+function init(){
+  resize();
+  addEventListener("resize",resize);
+  setupInput();
+  bindUI();
+  unlocked=Math.max(1,parseInt(localStorage.getItem("sm_unlocked")||"1",10)||1);
+  renderLevelCards();
+  // 預載第一關（用於選單背景不需顯示，僅確保建構正常）
+  try{ const w=buildWorld(0); world=w; }catch(e){ console.error("Level build error",e); }
+  lastT=performance.now();
+  raf=requestAnimationFrame(loop);
+}
+window.addEventListener("DOMContentLoaded",init);
+</script>
+
+<!-- infucoco-watermark -->
+<img src="../../assets/images/infucoco-mascot-mark.png" alt="infucoco" style="position:fixed;right:8px;bottom:8px;width:40px;opacity:.9;pointer-events:none;z-index:99999;border-radius:12px;box-shadow:0 4px 14px #0009;image-rendering:auto">
+</body>
+</html>

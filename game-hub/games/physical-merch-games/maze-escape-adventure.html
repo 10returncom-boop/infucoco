@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>霓虹迷宮逃脫 — 找路出迷宮</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0e17'/%3E%3Cpath d='M14 14 H50 V26 H26 V38 H50 V50 H14' stroke='%232dd4bf' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='50' cy='50' r='5' fill='%23f0c040'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+:root{--bg:#070a12;--ink:#e8ecf5;--dim:#8fa0bd;--teal:#2dd4bf;--pink:#ff6b9d;--gold:#f0c040;--cyan:#53c7ff;--line:#22304a;--panel:#0e1524}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Segoe UI",system-ui,sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:none}
+#vignette{position:fixed;inset:0;pointer-events:none;z-index:5;background:radial-gradient(ellipse at center,transparent 55%,rgba(2,4,9,.7) 100%)}
+#wrap{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:6;padding:10px}
+#top{display:flex;align-items:center;gap:8px;width:min(460px,94vw);flex-wrap:wrap}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:7px 12px;font-size:14px}
+.chip b{color:var(--gold);font-variant-numeric:tabular-nums}
+.chip .k{font-size:11px;color:var(--dim)}
+.spacer{flex:1}
+#muteBtn{width:44px;height:44px;border-radius:10px;background:var(--panel);border:1px solid var(--line);color:var(--dim);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s}
+#muteBtn:hover{color:var(--ink);border-color:var(--teal)}
+#board{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:0 0 50px rgba(45,212,191,.08)}
+#tipBar{font-size:12px;color:var(--dim);letter-spacing:.1em}
+#dpad{display:grid;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(3,52px);gap:6px}
+.dbtn{background:var(--panel);border:1px solid var(--line);border-radius:12px;color:var(--teal);display:flex;align-items:center;justify-content:center;cursor:pointer;min-width:44px;min-height:44px}
+.dbtn:active{background:#16233a;border-color:var(--teal)}
+.dbtn.up{grid-column:2;grid-row:1}.dbtn.left{grid-column:1;grid-row:2}.dbtn.right{grid-column:3;grid-row:2}.dbtn.down{grid-column:2;grid-row:3}
+.overlay{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;flex-direction:center;background:radial-gradient(ellipse at 50% 40%,#0d1526,#05070d 80%);padding:24px;text-align:center;flex-direction:column}
+.overlay.show{display:flex}
+.logo{font-size:clamp(40px,9vw,62px);font-weight:900;letter-spacing:.06em}.logo .n{color:var(--teal)}.logo .t{color:var(--gold)}
+.tag{color:var(--dim);letter-spacing:.3em;margin-top:12px;font-size:15px}
+.bigBtn{margin-top:26px;background:linear-gradient(180deg,#2dd4bf,#1a9c8c);color:#04121c;border:none;border-radius:14px;padding:16px 40px;font-size:18px;font-weight:800;letter-spacing:.12em;cursor:pointer;transition:.18s;box-shadow:0 10px 30px rgba(45,212,191,.26)}
+.bigBtn:hover{transform:translateY(-2px)}
+.diffRow{display:flex;gap:12px;margin-top:26px;flex-wrap:wrap;justify-content:center}
+.diffBtn{background:var(--panel);border:1px solid var(--line);color:var(--ink);border-radius:14px;padding:16px 22px;cursor:pointer;transition:.15s;min-width:96px}
+.diffBtn:hover{border-color:var(--teal)}
+.diffBtn .sz{font-size:22px;font-weight:900;color:var(--cyan)}
+.diffBtn .lb{font-size:12px;color:var(--dim);margin-top:4px}
+.help{display:grid;grid-template-columns:1fr;gap:8px;margin-top:24px;font-size:14px;color:var(--dim);max-width:360px;text-align:left}
+.help .row{display:flex;justify-content:space-between;gap:12px}
+.result .big{font-size:clamp(32px,7vw,50px);font-weight:900;color:var(--teal)}
+.stat{display:flex;gap:26px;justify-content:center;margin:24px 0 8px}
+.stat .v{font-size:28px;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums}
+.stat .k{font-size:12px;color:var(--dim);margin-top:4px;letter-spacing:.1em}
+.rowbtns{display:flex;gap:14px;margin-top:20px;flex-wrap:wrap;justify-content:center}
+.ghostBtn{background:transparent;border:1px solid var(--line);color:var(--dim);border-radius:12px;padding:14px 28px;font-size:15px;letter-spacing:.08em;cursor:pointer;transition:.15s;min-width:120px}
+.ghostBtn:hover{color:var(--ink);border-color:var(--teal)}
+@media (min-width:768px){#dpad{grid-template-columns:repeat(3,48px);grid-template-rows:repeat(3,48px)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<div id="wrap">
+  <div id="top">
+    <div class="chip"><span class="k">難度</span> <b id="hudD">--</b></div>
+    <div class="chip"><span class="k">時間</span> <b id="hudT">0.0</b>s</div>
+    <div class="chip"><span class="k">最佳</span> <b id="hudB">--</b></div>
+    <div class="spacer"></div>
+    <button id="muteBtn" aria-label="聲音開關">
+      <svg id="iconOn" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+      <svg id="iconOff" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+    </button>
+  </div>
+  <canvas id="board"></canvas>
+  <div id="dpad">
+    <div class="dbtn up" data-d="0,-1"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg></div>
+    <div class="dbtn left" data-d="-1,0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="dbtn right" data-d="1,0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+    <div class="dbtn down" data-d="0,1"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+  </div>
+</div>
+<div id="vignette"></div>
+<div class="overlay show" id="menu">
+  <div class="logo"><span class="n">霓虹</span><span class="t">迷宮逃脫</span></div>
+  <div class="tag">MAZE · 找路出口</div>
+  <div class="diffRow">
+    <button class="diffBtn" data-n="11"><div class="sz">11</div><div class="lb">簡單</div></button>
+    <button class="diffBtn" data-n="15"><div class="sz">15</div><div class="lb">普通</div></button>
+    <button class="diffBtn" data-n="21"><div class="sz">21</div><div class="lb">困難</div></button>
+  </div>
+  <div class="help">
+    <div class="row"><span>從左上角出發</span><span>走到右下角出口</span></div>
+    <div class="row"><span>方向鍵 / WASD / 滑動</span><span>或下方方向鈕</span></div>
+    <div class="row"><span>即時計時</span><span>越快越好</span></div>
+  </div>
+</div>
+<div class="overlay" id="result">
+  <div class="result">
+    <div class="big" id="resTitle">成功逃出！</div>
+    <div class="stat">
+      <div class="s"><div class="v" id="rT">0.0</div><div class="k">用時(秒)</div></div>
+      <div class="s"><div class="v" id="rB">--</div><div class="k">最佳(秒)</div></div>
+      <div class="s"><div class="v" id="rD">11</div><div class="k">難度</div></div>
+    </div>
+    <div class="rowbtns">
+      <button class="ghostBtn" id="againBtn">再玩一次</button>
+      <button class="ghostBtn" id="menuBtn">主選單</button>
+    </div>
+  </div>
+</div>
+<script>
+"use strict";
+const Sfx={audio:null,muted:false};
+Sfx.init=()=>{if(!Sfx.audio){const AC=window.AudioContext||window.webkitAudioContext;if(AC)Sfx.audio=new AC();}};
+Sfx.beep=(f,d,type,v,slide)=>{if(Sfx.muted||!Sfx.audio)return;try{const t=Sfx.audio.currentTime,o=Sfx.audio.createOscillator(),g=Sfx.audio.createGain();o.type=type||"square";o.frequency.setValueAtTime(f,t);if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+d);g.gain.setValueAtTime(v||.1,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(Sfx.audio.destination);o.start(t);o.stop(t+d+.02);}catch(e){}};
+Sfx.play=n=>{if(Sfx.muted)return;if(n==="move")Sfx.beep(300,.04,"square",.05);else if(n==="win"){Sfx.beep(520,.12,"sine",.15);Sfx.beep(780,.18,"sine",.15,1040);}else if(n==="start")Sfx.beep(440,.08,"sine",.1);};
+
+let size,dpr,ctx,state="menu";
+let n=11,grid=[],player={cx:0,cy:0,rx:0,ry:0};
+let startT=0,elapsed=0,lastN=11;
+let lastT=0,cell=0;
+function resize(){const cv=document.getElementById("board");size=Math.min(window.innerWidth*.92,460);dpr=Math.min(devicePixelRatio||1,2);cv.width=size*dpr;cv.height=size*dpr;cv.style.width=size+"px";cv.style.height=size+"px";ctx=cv.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);if(n)cell=size/n;}
+function genMaze(){grid=Array.from({length:n},()=>Array.from({length:n},()=>({top:1,right:1,bottom:1,left:1,vis:false})));const stack=[[0,0]];grid[0][0].vis=true;while(stack.length){const [r,c]=stack[stack.length-1];const opts=[];if(r>0&&!grid[r-1][c].vis)opts.push([r-1,c,"up"]);if(r<n-1&&!grid[r+1][c].vis)opts.push([r+1,c,"down"]);if(c>0&&!grid[r][c-1].vis)opts.push([r,c-1,"left"]);if(c<n-1&&!grid[r][c+1].vis)opts.push([r,c+1,"right"]);if(!opts.length){stack.pop();continue;}const[nr,nc,dir]=opts[Math.floor(Math.random()*opts.length)];if(dir==="up"){grid[r][c].top=0;grid[nr][nc].bottom=0;}else if(dir==="down"){grid[r][c].bottom=0;grid[nr][nc].top=0;}else if(dir==="left"){grid[r][c].left=0;grid[nr][nc].right=0;}else{grid[r][c].right=0;grid[nr][nc].left=0;}grid[nr][nc].vis=true;stack.push([nr,nc]);}}
+function bestKey(){return "nMaze_best_"+n;}
+function getBest(){try{return parseFloat(localStorage.getItem(bestKey()))||null;}catch(e){return null;}}
+function setState(s){state=s;document.getElementById("menu").classList.toggle("show",s==="menu");document.getElementById("result").classList.toggle("show",s==="over");}
+function startGame(level){n=level;lastN=level;genMaze();player={cx:0,cy:0,rx:0,ry:0};elapsed=0;cell=size/n;startT=performance.now();const b=getBest();document.getElementById("hudD").textContent=n+"×"+n;document.getElementById("hudB").textContent=b==null?"--":b.toFixed(1);setState("play");Sfx.play("start");}
+function settled(){return Math.abs(player.rx-player.cx)<.08&&Math.abs(player.ry-player.cy)<.08;}
+function tryMove(dc,dr){if(state!=="play"||!settled())return;const nx=player.cx+dc,ny=player.cy+dr;if(nx<0||nx>=n||ny<0||ny>=n)return;const cl=grid[player.cy][player.cx];if(dr===-1&&cl.top)return;if(dr===1&&cl.bottom)return;if(dc===-1&&cl.left)return;if(dc===1&&cl.right)return;player.cx=nx;player.cy=ny;Sfx.play("move");if(nx===n-1&&ny===n-1)win();}
+function win(){elapsed=(performance.now()-startT)/1000;const b=getBest();let nb=b;if(b==null||elapsed<b)nb=elapsed;try{localStorage.setItem(bestKey(),String(nb));}catch(e){}document.getElementById("rT").textContent=elapsed.toFixed(1);document.getElementById("rB").textContent=nb.toFixed(1);document.getElementById("rD").textContent=n+"×"+n;setState("over");Sfx.play("win");}
+function update(dt){if(state!=="play")return;elapsed=(performance.now()-startT)/1000;document.getElementById("hudT").textContent=elapsed.toFixed(1);const k=Math.min(1,dt*14);player.rx+=(player.cx-player.rx)*k;player.ry+=(player.cy-player.ry)*k;}
+function draw(){const c=ctx;c.clearRect(0,0,size,size);c.fillStyle="#0a0e17";c.fillRect(0,0,size,size);if(!grid.length)return;const cs=cell;c.strokeStyle="#2dd4bf";c.lineWidth=Math.max(1.5,cs*0.09);c.lineCap="round";c.beginPath();for(let r=0;r<n;r++)for(let cc=0;cc<n;cc++){const x=cc*cs,y=r*cs;if(grid[r][cc].top){c.moveTo(x,y);c.lineTo(x+cs,y);}if(grid[r][cc].left){c.moveTo(x,y);c.lineTo(x,y+cs);}}c.stroke();c.strokeStyle="#2dd4bf";c.beginPath();for(let cc=0;cc<n;cc++){c.moveTo(cc*cs,n*cs);c.lineTo((cc+1)*cs,n*cs);}for(let r=0;r<n;r++){c.moveTo(n*cs,r*cs);c.lineTo(n*cs,(r+1)*cs);}c.stroke();// 終點
+c.fillStyle="#f0c040";c.shadowColor="#f0c040";c.shadowBlur=12;c.beginPath();c.arc((n-1)*cs+cs/2,(n-1)*cs+cs/2,cs*0.28,0,Math.PI*2);c.fill();c.shadowBlur=0;// 起點標記
+c.fillStyle="rgba(45,212,191,.3)";c.beginPath();c.arc(cs/2,cs/2,cs*0.28,0,Math.PI*2);c.fill();// 玩家
+const px=(player.rx+0.5)*cs,py=(player.ry+0.5)*cs;c.shadowColor="#53c7ff";c.shadowBlur=14;c.fillStyle="#53c7ff";c.beginPath();c.arc(px,py,cs*0.3,0,Math.PI*2);c.fill();c.shadowBlur=0;c.fillStyle="rgba(255,255,255,.75)";c.beginPath();c.arc(px-cs*0.08,py-cs*0.08,cs*0.07,0,Math.PI*2);c.fill();}
+function loop(t){const dt=Math.min((t-lastT)/1000,.05);lastT=t;update(dt);draw();requestAnimationFrame(loop);}
+let ts=null;
+function bind(){addEventListener("keydown",e=>{const k=e.key.toLowerCase();if(["arrowup","arrowdown","arrowleft","arrowright"].includes(k))e.preventDefault();if(k==="arrowup"||k==="w")tryMove(0,-1);else if(k==="arrowdown"||k==="s")tryMove(0,1);else if(k==="arrowleft"||k==="a")tryMove(-1,0);else if(k==="arrowright"||k==="d")tryMove(1,0);});const cv=document.getElementById("board");cv.addEventListener("touchstart",e=>{const t=e.touches[0];ts={x:t.clientX,y:t.clientY};},{passive:true});cv.addEventListener("touchmove",e=>e.preventDefault(),{passive:false});cv.addEventListener("touchend",e=>{if(!ts)return;const t=e.changedTouches[0];const dx=t.clientX-ts.x,dy=t.clientY-ts.y;if(Math.max(Math.abs(dx),Math.abs(dy))<24)return;if(Math.abs(dx)>Math.abs(dy))tryMove(dx>0?1:-1,0);else tryMove(0,dy>0?1:-1);ts=null;});document.querySelectorAll(".dbtn").forEach(b=>{b.addEventListener("click",()=>{const[dc,dr]=b.dataset.d.split(",").map(Number);tryMove(dc,dr);});});document.querySelectorAll(".diffBtn").forEach(b=>{b.addEventListener("click",()=>{Sfx.init();if(Sfx.audio&&Sfx.audio.resume)Sfx.audio.resume();startGame(parseInt(b.dataset.n,10));});});document.getElementById("againBtn").addEventListener("click",()=>{Sfx.init();startGame(lastN);});document.getElementById("menuBtn").addEventListener("click",()=>setState("menu"));document.getElementById("muteBtn").addEventListener("click",()=>{Sfx.muted=!Sfx.muted;document.getElementById("iconOn").style.display=Sfx.muted?"none":"block";document.getElementById("iconOff").style.display=Sfx.muted?"block":"none";});}
+function init(){resize();addEventListener("resize",resize);bind();setState("menu");lastT=performance.now();requestAnimationFrame(loop);}
+window.addEventListener("DOMContentLoaded",init);
+</script>
+
+<!-- infucoco-watermark -->
+<img src="../../assets/images/infucoco-mascot-mark.png" alt="infucoco" style="position:fixed;right:8px;bottom:8px;width:40px;opacity:.9;pointer-events:none;z-index:99999;border-radius:12px;box-shadow:0 4px 14px #0009;image-rendering:auto">
+</body>
+</html>

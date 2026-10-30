@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>貪吃蛇</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    width: 100%; height: 100%;
+    font-family: "Microsoft JhengHei", "PingFang TC", "Heiti TC", sans-serif;
+    background: radial-gradient(ellipse at top, #1b2a4a 0%, #0c1426 70%, #070d1a 100%);
+    color: #e8eefc;
+    overflow: hidden;
+  }
+  #wrap {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 10px; padding: 10px;
+  }
+  h1 {
+    font-size: clamp(22px, 4vw, 34px);
+    letter-spacing: 6px;
+    color: #7fe0a8;
+    text-shadow: 0 0 12px rgba(127,224,168,.55);
+  }
+  #hud {
+    display: flex; gap: 18px; flex-wrap: wrap; justify-content: center;
+    font-size: clamp(13px, 2.4vw, 17px);
+  }
+  #hud .box {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 10px;
+    padding: 6px 14px;
+  }
+  #hud b { color: #ffd479; font-size: 1.1em; }
+  #stage { position: relative; }
+  canvas {
+    display: block;
+    background: #0e1a30;
+    border-radius: 12px;
+    box-shadow: 0 0 0 2px #2b3f66, 0 12px 40px rgba(0,0,0,.55);
+  }
+  .overlay {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; text-align: center;
+    background: rgba(8,14,28,.82);
+    border-radius: 12px;
+    backdrop-filter: blur(2px);
+    padding: 20px;
+  }
+  .overlay h2 { font-size: clamp(20px, 4vw, 30px); color: #7fe0a8; letter-spacing: 3px; }
+  .overlay p { font-size: clamp(12px, 2.4vw, 15px); line-height: 1.8; color: #c4d2ee; }
+  .btn {
+    cursor: pointer;
+    border: none;
+    border-radius: 24px;
+    padding: 12px 34px;
+    font-size: clamp(15px, 3vw, 18px);
+    font-family: inherit;
+    letter-spacing: 2px;
+    color: #08131f;
+    background: linear-gradient(180deg, #8ff0b3, #4cc47e);
+    box-shadow: 0 4px 0 #2f8a57, 0 6px 16px rgba(0,0,0,.4);
+    transition: transform .08s;
+  }
+  .btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #2f8a57; }
+  .hidden { display: none !important; }
+  #touch {
+    display: none;
+    grid-template-columns: repeat(3, 60px);
+    grid-template-rows: repeat(3, 60px);
+    gap: 8px;
+    margin-top: 4px;
+  }
+  #touch button {
+    font-size: 24px; color: #dce7ff;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 12px;
+  }
+  #touch .up { grid-area: 1/2; }
+  #touch .left { grid-area: 2/1; }
+  #touch .down { grid-area: 3/2; }
+  #touch .right { grid-area: 2/3; }
+  @media (pointer: coarse) { #touch { display: grid; } }
+</style>
+</head>
+<body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<div id="wrap">
+  <h1>貪 吃 蛇</h1>
+  <div id="hud">
+    <div class="box">得分 <b id="score">0</b></div>
+    <div class="box">最高分 <b id="best">0</b></div>
+    <div class="box">速度 <b id="level">1</b></div>
+  </div>
+  <div id="stage">
+    <canvas id="game"></canvas>
+    <div class="overlay" id="startOv">
+      <h2>貪吃蛇</h2>
+      <p>方向鍵 或 WASD 控制移動<br>吃食物變長、速度愈來愈快<br>撞牆或撞到自己就結束<br>（手機可滑動或使用下方按鈕）</p>
+      <button class="btn" id="startBtn">開始遊戲</button>
+    </div>
+    <div class="overlay hidden" id="overOv">
+      <h2>遊戲結束</h2>
+      <p id="finalScore"></p>
+      <button class="btn" id="restartBtn">重新開始</button>
+    </div>
+  </div>
+  <div id="touch">
+    <button class="up" data-dir="up">▲</button>
+    <button class="left" data-dir="left">◀</button>
+    <button class="down" data-dir="down">▼</button>
+    <button class="right" data-dir="right">▶</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  const GRID = 20;               // 格數
+  let cell = 24;                 // 每格像素（resize 時調整）
+  let W = GRID, H = GRID;
+
+  const scoreEl = document.getElementById('score');
+  const bestEl = document.getElementById('best');
+  const levelEl = document.getElementById('level');
+  const startOv = document.getElementById('startOv');
+  const overOv = document.getElementById('overOv');
+  const finalScore = document.getElementById('finalScore');
+
+  let snake, dir, nextDir, food, score, best, speed, timer, running;
+  best = parseInt(localStorage.getItem('snake_best') || '0', 10);
+  bestEl.textContent = best;
+
+  function resize() {
+    // 依視窗大小決定畫布邊長（正方形），最大 520px
+    const maxH = Math.min(window.innerHeight * 0.62, 560);
+    const maxW = window.innerWidth * 0.92;
+    let size = Math.floor(Math.min(maxH, maxW, 520));
+    size -= size % GRID;
+    size = Math.max(240, size);
+    cell = size / GRID;
+    canvas.width = size;
+    canvas.height = size;
+    W = size; H = size;
+    draw();
+  }
+
+  function init() {
+    snake = [{x:10,y:10},{x:9,y:10},{x:8,y:10}];
+    dir = {x:1,y:0};
+    nextDir = {x:1,y:0};
+    score = 0;
+    speed = 150;
+    running = true;
+    placeFood();
+    updateHud();
+    clearInterval(timer);
+    timer = setInterval(step, speed);
+    draw();
+  }
+
+  function placeFood() {
+    while (true) {
+      const fx = Math.floor(Math.random()*GRID);
+      const fy = Math.floor(Math.random()*GRID);
+      if (!snake.some(s => s.x===fx && s.y===fy)) { food = {x:fx,y:fy}; return; }
+    }
+  }
+
+  function updateHud() {
+    scoreEl.textContent = score;
+    bestEl.textContent = best;
+    levelEl.textContent = Math.floor((150 - speed)/12) + 1;
+  }
+
+  function step() {
+    dir = nextDir;
+    const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+    // 撞牆
+    if (head.x < 0 || head.y < 0 || head.x >= GRID || head.y >= GRID) return gameOver();
+    // 撞到自己
+    if (snake.some(s => s.x===head.x && s.y===head.y)) return gameOver();
+    snake.unshift(head);
+    if (head.x === food.x && head.y === food.y) {
+      score += 10;
+      if (score > best) { best = score; localStorage.setItem('snake_best', best); }
+      // 加速
+      speed = Math.max(60, speed - 6);
+      clearInterval(timer);
+      timer = setInterval(step, speed);
+      placeFood();
+      updateHud();
+    } else {
+      snake.pop();
+    }
+    draw();
+  }
+
+  function draw() {
+    // 背景
+    ctx.fillStyle = '#0e1a30';
+    ctx.fillRect(0,0,W,H);
+    // 網格
+    ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+    ctx.lineWidth = 1;
+    for (let i=1;i<GRID;i++){
+      ctx.beginPath(); ctx.moveTo(i*cell,0); ctx.lineTo(i*cell,H); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0,i*cell); ctx.lineTo(W,i*cell); ctx.stroke();
+    }
+    if (!food || !snake) return;
+    // 食物
+    const fx = food.x*cell + cell/2, fy = food.y*cell + cell/2;
+    ctx.fillStyle = '#ff6b81';
+    ctx.shadowColor = '#ff6b81'; ctx.shadowBlur = 12;
+    ctx.beginPath(); ctx.arc(fx, fy, cell*0.35, 0, Math.PI*2); ctx.fill();
+    ctx.shadowBlur = 0;
+    // 蛇身
+    snake.forEach((s,i) => {
+      const t = i/Math.max(1,snake.length-1);
+      ctx.fillStyle = i===0 ? '#b8ffcf' : `rgb(${76 - t*30}, ${196 - t*90}, ${126 - t*40})`;
+      roundRect(s.x*cell+1, s.y*cell+1, cell-2, cell-2, 5);
+    });
+    // 蛇眼
+    const h = snake[0];
+    ctx.fillStyle = '#0c1426';
+    ctx.beginPath();
+    ctx.arc(h.x*cell+cell*0.35, h.y*cell+cell*0.35, cell*0.08, 0, Math.PI*2);
+    ctx.arc(h.x*cell+cell*0.65, h.y*cell+cell*0.35, cell*0.08, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  function roundRect(x,y,w,h,r){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);
+    ctx.arcTo(x+w,y,x+w,y+h,r);
+    ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r);
+    ctx.arcTo(x,y,x+w,y,r);
+    ctx.closePath(); ctx.fill();
+  }
+
+  function gameOver() {
+    running = false;
+    clearInterval(timer);
+    finalScore.textContent = '本局得分：' + score + '　最高分：' + best;
+    overOv.classList.remove('hidden');
+  }
+
+  function setDir(d) {
+    const map = { up:{x:0,y:-1}, down:{x:0,y:1}, left:{x:-1,y:0}, right:{x:1,y:0} };
+    const nd = map[d];
+    if (!nd) return;
+    // 不可直接反向
+    if (nd.x === -dir.x && nd.y === -dir.y) return;
+    nextDir = nd;
+  }
+
+  document.addEventListener('keydown', e => {
+    const k = e.key.toLowerCase();
+    if (['arrowup','w'].includes(k)) { setDir('up'); e.preventDefault(); }
+    else if (['arrowdown','s'].includes(k)) { setDir('down'); e.preventDefault(); }
+    else if (['arrowleft','a'].includes(k)) { setDir('left'); e.preventDefault(); }
+    else if (['arrowright','d'].includes(k)) { setDir('right'); e.preventDefault(); }
+    else if (k === ' ' && !running) { startGame(); }
+  });
+
+  // 觸控按鈕
+  document.querySelectorAll('#touch button').forEach(b => {
+    b.addEventListener('click', () => setDir(b.dataset.dir));
+  });
+
+  // 滑動手勢
+  let tsx=0, tsy=0;
+  canvas.addEventListener('touchstart', e => {
+    tsx = e.touches[0].clientX; tsy = e.touches[0].clientY;
+  }, {passive:true});
+  canvas.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tsx;
+    const dy = e.changedTouches[0].clientY - tsy;
+    if (Math.abs(dx) < 20 && Math.abs(dy) < 20) return;
+    if (Math.abs(dx) > Math.abs(dy)) setDir(dx>0 ? 'right':'left');
+    else setDir(dy>0 ? 'down':'up');
+  }, {passive:true});
+
+  function startGame() {
+    startOv.classList.add('hidden');
+    overOv.classList.add('hidden');
+    init();
+  }
+  document.getElementById('startBtn').addEventListener('click', startGame);
+  document.getElementById('restartBtn').addEventListener('click', startGame);
+
+  window.addEventListener('resize', resize);
+  resize();
+})();
+</script>
+</body>
+</html>

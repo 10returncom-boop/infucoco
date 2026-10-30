@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>21 點</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230e2a1f'/%3E%3Crect x='14' y='10' width='36' height='44' rx='5' fill='%23fdfbf7'/%3E%3Ctext x='32' y='40' font-size='22' font-weight='900' text-anchor='middle' fill='%23e02f2f' font-family='sans-serif'%3E21%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+  :root{--bg:#0e2a1f;--panel:#12402f;--felt:#1f6b47;--ink:#f1fbf4;--muted:#9ccbb2;--accent:#ffd54a;--red:#ef5a6b;}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,"Segoe UI",sans-serif;
+    min-height:100vh;color:var(--ink);display:flex;justify-content:center;padding:14px;
+    background:radial-gradient(circle at 80% 10%, rgba(31,107,71,.2), transparent 50%), var(--bg);
+    user-select:none;}
+  .app{width:100%;max-width:520px;}
+  .head{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+  .head h1{margin:0;font-size:24px;letter-spacing:3px;}
+  .head .en{font-size:11px;color:var(--muted);letter-spacing:3px;}
+  .spacer{flex:1;}
+  .chip{background:var(--panel);border-radius:12px;padding:6px 13px;text-align:center;}
+  .chip .lbl{font-size:9px;color:var(--muted);letter-spacing:1px;}
+  .chip .val{font-size:18px;font-weight:900;line-height:1.1;}
+  .btn{appearance:none;border:none;cursor:pointer;color:var(--ink);background:var(--panel);border-radius:12px;
+    padding:9px 15px;font-size:14px;font-weight:700;font-family:inherit;min-height:46px;}
+  .btn:hover{background:#1a5240;}
+  .btn.primary{background:linear-gradient(180deg,#3fa86f,#2b7f59);}
+  .btn.danger{background:linear-gradient(180deg,#e8573c,#c23a30);}
+  .btn.primary:hover,.btn.danger:hover{filter:brightness(1.1);}
+  .btn:disabled{filter:grayscale(.5) brightness(.7);cursor:not-allowed;}
+  .ic{display:none;}
+  .btn:not(.muted) .ic-on{display:block;}
+  .btn.muted .ic-off{display:block;}
+
+  .felt{background:radial-gradient(circle at 50% 30%, #2c8a5e, var(--felt));border-radius:18px;padding:16px;
+    box-shadow:0 18px 40px rgba(0,0,0,.45), inset 0 0 0 1px rgba(255,255,255,.06);min-height:340px;}
+  .zone{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-start;margin-bottom:8px;min-height:92px;}
+  .zone .label{width:100%;font-size:12px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;}
+  .zone .pts{font-size:14px;font-weight:900;color:var(--accent);margin-left:6px;}
+  .card{width:64px;height:88px;background:#fdfbf7;border-radius:8px;position:relative;
+    box-shadow:0 3px 8px rgba(0,0,0,.35);display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .card .rank{font-size:20px;font-weight:900;color:#222;}
+  .card.red .rank{color:var(--red);}
+  .card .suit{width:20px;height:20px;margin-top:2px;}
+  .card.hole{background:repeating-linear-gradient(45deg,#3a5a88,#3a5a88 6px,#2f4c74 6px,#2f4c74 12px);}
+  .card.hole::after{content:"";position:absolute;inset:4px;border:2px dashed rgba(255,255,255,.3);border-radius:5px;}
+  .result{text-align:center;font-size:18px;font-weight:900;min-height:26px;color:var(--accent);margin:6px 0;}
+  .controls{display:flex;gap:10px;justify-content:center;margin-top:6px;}
+  .bet{display:flex;gap:8px;align-items:center;justify-content:center;margin:8px 0 4px;}
+  .bet .btn{min-width:52px;padding:7px 10px;font-size:13px;}
+  .bet .amt{font-weight:900;color:var(--accent);font-size:16px;}
+  .hint{margin-top:10px;text-align:center;font-size:11.5px;color:var(--muted);}
+  .overlay{position:fixed;inset:0;background:rgba(6,20,14,.84);display:none;align-items:center;justify-content:center;z-index:50;padding:20px;backdrop-filter:blur(3px);}
+  .overlay.open{display:flex;}
+  .modal{max-width:330px;width:100%;text-align:center;background:var(--panel);border-radius:20px;padding:26px;border:1px solid rgba(255,255,255,.08);}
+  .modal h2{margin:0 0 8px;font-size:26px;color:var(--accent);}
+  .modal p{margin:4px 0 18px;color:var(--muted);font-size:14px;}
+  .modal .btn{padding:12px 26px;font-size:15px;}
+</style>
+</head>
+<body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<div class="app">
+  <div class="head">
+    <h1>21 點</h1><span class="en">BLACKJACK</span>
+    <div class="spacer"></div>
+    <div class="chip"><div class="lbl">籌碼</div><div class="val" id="bank">100</div></div>
+    <div class="chip"><div class="lbl">最高</div><div class="val" id="best">100</div></div>
+    <div class="chip"><div class="lbl">勝場</div><div class="val" id="wins">0</div></div>
+    <button class="btn" id="muteBtn" title="音效"><svg class="ic ic-on" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 010 7M18 6a8.5 8.5 0 010 12" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg><svg class="ic ic-off" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor"/><path d="M16 9l6 6M22 9l-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg></button>
+  </div>
+
+  <div class="felt">
+    <div class="zone"><div class="label">莊家</div><div id="dealerCards"></div><span class="pts" id="dealerPts"></span></div>
+    <div class="zone"><div class="label">玩家</div><div id="playerCards"></div><span class="pts" id="playerPts"></span></div>
+    <div class="result" id="result"></div>
+    <div class="controls">
+      <button class="btn primary" id="hitBtn">要牌</button>
+      <button class="btn danger" id="standBtn">停牌</button>
+      <button class="btn" id="dealBtn">發牌</button>
+    </div>
+  </div>
+
+  <div class="bet">
+    <span style="color:var(--muted)">下注</span>
+    <button class="btn" data-bet="10">10</button>
+    <button class="btn" data-bet="25">25</button>
+    <button class="btn" data-bet="50">50</button>
+    <span class="amt" id="betAmt">10</span>
+  </div>
+  <div class="hint">目標讓點數接近 21 且比莊家大 · A 記 1 或 11 · 莊家點數達 17 停牌</div>
+</div>
+<div class="overlay" id="endOverlay">
+  <div class="modal">
+    <h2>籌碼耗盡</h2>
+    <p id="endMsg">本局結果</p>
+    <button class="btn primary" id="againBtn">重新開始</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var SUITS=[
+    {c:'#e02f2f',p:'<path d="M10 3c-4 3-7 7-7 10 0 3 3 5 7 4 4 1 7-1 7-4 0-3-3-7-7-10z" fill="currentColor"/><path d="M10 11c4 3 7 7 7 10 0 3-3 5-7 4-4 1-7-1-7-4 0-3 3-7 7-10z" fill="currentColor"/>'},
+    {c:'#222',p:'<path d="M10 3c4 3 7 7 7 10 0 3-3 5-7 4-4 1-7-1-7-4 0-3 3-7 7-10z" fill="currentColor"/><path d="M10 11c-4 3-7 7-7 10 0 3 3 5 7 4 4 1 7-1 7-4 0-3-3-7-7-10z" fill="currentColor"/>'},
+    {c:'#e02f2f',p:'<path d="M10 3l7 6a5 5 0 01-7 5 5 5 0 01-7-5zM10 21l7-6a5 5 0 00-7-5 5 5 0 00-7 5z" fill="currentColor"/>'},
+    {c:'#222',p:'<path d="M10 3l7 6a5 5 0 01-7 5 5 5 0 01-7-5zM10 21l7-6a5 5 0 00-7-5 5 5 0 00-7 5z" fill="currentColor"/>'}
+  ];
+  var deck=[],player=[],dealer=[],phase='bet';
+  var bank=Number(localStorage.getItem('gBJBank')||100);
+  var best=Number(localStorage.getItem('gBJBest')||100);
+  var wins=Number(localStorage.getItem('gBJWins')||0);
+  var bet=10;
+  var muted=localStorage.getItem('gBJMuted')==='1';
+
+  var actx=null, audioReady=false;
+  function ensureAudio(){
+    if(!actx){ try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} }
+    if(actx&&actx.state==='suspended') actx.resume();
+  }
+  ['pointerdown','keydown','touchstart','click'].forEach(function(ev){ window.addEventListener(ev,function(){ audioReady=true; ensureAudio(); },true); });
+  function audio(){ if(audioReady) ensureAudio(); }
+  function tone(f,d,t,v,del){ if(muted||!actx)return; var tt=actx.currentTime+(del||0);
+    var o=actx.createOscillator(),g=actx.createGain(); o.type=t||'triangle'; o.frequency.value=f;
+    g.gain.setValueAtTime(.0001,tt); g.gain.exponentialRampToValueAtTime(v||.12,tt+.01); g.gain.exponentialRampToValueAtTime(.0001,tt+d);
+    o.connect(g);g.connect(actx.destination);o.start(tt);o.stop(tt+d+.02); }
+  var sCard=function(){tone(420,.05,'square',.07);};
+  var sWin=function(){[523,659,784,1047].forEach(function(f,i){tone(f,.14,'triangle',.13,i*.09);});};
+  var sLose=function(){tone(220,.16,'sawtooth',.12);tone(150,.28,'sawtooth',.12,.12);};
+
+  function shuffleDeck(){
+    deck=[];var ranks=['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+    for(var s=0;s<4;s++)for(var r=0;r<13;r++) deck.push({rank:ranks[r],suit:s,val:ranks[r]==='A'?11:(ranks[r]==='J'||ranks[r]==='Q'||ranks[r]==='K'?10:+ranks[r])});
+    for(var i=deck.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=deck[i];deck[i]=deck[j];deck[j]=t;}
+  }
+  function drawCard(){ return deck.pop(); }
+  function handValue(h){
+    var total=0,aces=0;
+    h.forEach(function(c){total+=c.val;if(c.rank==='A')aces++;});
+    while(total>21&&aces--){total-=10;}
+    return total;
+  }
+  function cardHTML(c,hole){
+    if(hole){ return '<div class="card hole"></div>'; }
+    var s=SUITS[c.suit];
+    return '<div class="card '+(c.suit%2===0?'red':'')+'"><div class="rank">'+c.rank+'</div><svg class="suit" viewBox="0 0 20 24">'+s.p+'</svg></div>';
+  }
+  function render(){
+    var dc=dealer.map(function(c,i){return cardHTML(c,phase==='play'&&i===0);}).join('');
+    var pc=player.map(function(c){return cardHTML(c);}).join('');
+    document.getElementById('dealerCards').innerHTML=dc;
+    document.getElementById('playerCards').innerHTML=pc;
+    document.getElementById('dealerPts').textContent = phase==='play'? ('('+handValue([dealer[0]])+'+?)') : '('+handValue(dealer)+')';
+    document.getElementById('playerPts').textContent='('+handValue(player)+')';
+    var canHit=phase==='play'&&handValue(player)<=21;
+    document.getElementById('hitBtn').disabled=!canHit;
+    document.getElementById('standBtn').disabled=!canHit;
+    document.getElementById('dealBtn').disabled=phase!=='play'?false:false;
+  }
+  function deal(){
+    if(phase==='play') return;
+    audio();
+    if(bank<bet){ bank+=100; localStorage.setItem('gBJBank',bank); }
+    bank-=bet;
+    player=[];dealer=[];
+    player.push(drawCard());dealer.push(drawCard());player.push(drawCard());dealer.push(drawCard());
+    phase='play';
+    document.getElementById('result').textContent='';
+    sCard();
+    render();
+    if(handValue(player)===21){ stand(); }
+    updateBank();
+  }
+  function hit(){
+    if(phase!=='play')return;
+    audio();sCard();
+    player.push(drawCard());
+    render();
+    if(handValue(player)>21){ endRound('你爆牌了，莊家獲勝',-1); }
+  }
+  function stand(){
+    if(phase!=='play')return;
+    audio();
+    while(handValue(dealer)<17){ dealer.push(drawCard()); }
+    phase='done';
+    var pv=handValue(player),dv=handValue(dealer);
+    render();
+    if(dv>21||pv>dv){ endRound('你贏了！',1); }
+    else if(pv===dv){ endRound('平手，退回下注',0); }
+    else { endRound('莊家獲勝',-1); }
+  }
+  function endRound(msg,res){
+    document.getElementById('result').textContent=msg;
+    if(res===1){ bank+=bet*2; wins++; localStorage.setItem('gBJWins',String(wins)); sWin(); }
+    else if(res===0){ bank+=bet; }
+    else { sLose(); }
+    if(bank>best){best=bank;localStorage.setItem('gBJBest',String(best));}
+    localStorage.setItem('gBJBank',String(bank));
+    updateBank();
+    document.getElementById('dealBtn').disabled=false;
+    if(bank<bet){ document.getElementById('endMsg').textContent='籌碼不足，已補發 100 繼續'; document.getElementById('endOverlay').classList.add('open'); }
+  }
+  function updateBank(){
+    document.getElementById('bank').textContent=bank;
+    document.getElementById('best').textContent=best;
+    document.getElementById('wins').textContent=wins;
+    document.getElementById('betAmt').textContent=bet;
+  }
+
+  document.getElementById('hitBtn').addEventListener('click',hit);
+  document.getElementById('standBtn').addEventListener('click',stand);
+  document.getElementById('dealBtn').addEventListener('click',deal);
+  document.querySelectorAll('.bet .btn').forEach(function(b){
+    b.addEventListener('click',function(){bet=Number(b.dataset.bet);updateBank();});
+  });
+  document.getElementById('againBtn').addEventListener('click',function(){document.getElementById('endOverlay').classList.remove('open');});
+  document.getElementById('muteBtn').addEventListener('click',function(){muted=!muted;localStorage.setItem('gBJMuted',muted?'1':'0');document.getElementById('muteBtn').classList.toggle('muted',muted);});
+
+  shuffleDeck();
+  updateBank();
+  deal();
+})();
+</script>
+
+<!-- infucoco-watermark -->
+<img src="../../assets/images/infucoco-mascot-mark.png" alt="infucoco" style="position:fixed;right:8px;bottom:8px;width:40px;opacity:.9;pointer-events:none;z-index:99999;border-radius:12px;box-shadow:0 4px 14px #0009;image-rendering:auto">
+</body>
+</html>

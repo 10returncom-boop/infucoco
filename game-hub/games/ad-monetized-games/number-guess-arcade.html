@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>霓虹猜數字 — 1A2B 邏輯解謎</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0e17'/%3E%3Ccircle cx='20' cy='32' r='8' fill='%23f0c040'/%3E%3Ccircle cx='44' cy='32' r='8' fill='%232dd4bf'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+:root{--bg:#070a12;--ink:#e8ecf5;--dim:#8fa0bd;--teal:#2dd4bf;--pink:#ff6b9d;--gold:#f0c040;--cyan:#53c7ff;--line:#22304a;--panel:#0e1524}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Segoe UI",system-ui,sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+#vignette{position:fixed;inset:0;pointer-events:none;z-index:5;background:radial-gradient(ellipse at center,transparent 55%,rgba(2,4,9,.7) 100%)}
+#wrap{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;gap:10px;z-index:6;padding:12px}
+#top{display:flex;align-items:center;gap:8px;width:min(420px,94vw)}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:7px 12px;font-size:14px}
+.chip b{color:var(--gold);font-variant-numeric:tabular-nums}
+.chip .k{font-size:11px;color:var(--dim)}
+.spacer{flex:1}
+#muteBtn{width:40px;height:40px;border-radius:10px;background:var(--panel);border:1px solid var(--line);color:var(--dim);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;flex:none}
+#muteBtn:hover{color:var(--ink);border-color:var(--teal)}
+#stage{width:min(420px,94vw);flex:1;display:flex;flex-direction:column;gap:10px;min-height:0}
+#slots{display:flex;gap:10px;justify-content:center}
+.slot{width:58px;height:68px;background:var(--panel);border:1px solid var(--line);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:900;color:var(--cyan);box-shadow:0 0 18px rgba(83,199,255,.08)}
+.slot.filled{border-color:var(--teal);color:var(--ink)}
+#logBox{flex:1;min-height:0;overflow-y:auto;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+#logBox .row{display:flex;align-items:center;gap:10px;font-size:15px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,.03)}
+#logBox .row .n{font-variant-numeric:tabular-nums;letter-spacing:.15em;color:var(--ink);font-weight:700}
+#logBox .row .fb{margin-left:auto;font-weight:900;font-variant-numeric:tabular-nums}
+.fb.a{color:var(--teal)}
+.fb.b{color:var(--gold)}
+.fb.x{color:var(--dim)}
+#pad{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.key{height:52px;background:var(--panel);border:1px solid var(--line);border-radius:12px;color:var(--ink);font-size:20px;font-weight:800;cursor:pointer;transition:.12s}
+.key:hover{border-color:var(--cyan)}
+.key:active{transform:scale(.95)}
+.key.act{border-color:var(--pink);color:var(--pink)}
+#pad .wide{grid-column:span 2}
+#feedback{height:22px;text-align:center;font-size:14px;color:var(--gold);letter-spacing:.1em}
+.overlay{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;flex-direction:column;background:radial-gradient(ellipse at 50% 40%,#0d1526,#05070d 80%);padding:24px;text-align:center;overflow-y:auto}
+.overlay.show{display:flex}
+.logo{font-size:clamp(40px,9vw,64px);font-weight:900;letter-spacing:.06em}
+.logo .n{color:var(--cyan)}.logo .t{color:var(--gold)}
+.tag{color:var(--dim);letter-spacing:.3em;margin-top:12px;font-size:14px}
+.bigBtn{margin-top:28px;background:linear-gradient(180deg,#53c7ff,#2a8fd6);color:#04121c;border:none;border-radius:14px;padding:15px 48px;font-size:18px;font-weight:800;letter-spacing:.15em;cursor:pointer;transition:.18s;box-shadow:0 10px 30px rgba(83,199,255,.26)}
+.bigBtn:hover{transform:translateY(-2px)}
+.help{display:grid;grid-template-columns:1fr;gap:8px;margin-top:26px;font-size:14px;color:var(--dim);max-width:360px;text-align:left}
+.help .row{display:flex;justify-content:space-between;gap:12px}
+.result .big{font-size:clamp(34px,7vw,50px);font-weight:900}
+.result .big.win{color:var(--teal)}
+.stat{display:flex;gap:30px;justify-content:center;margin:24px 0 8px}
+.stat .v{font-size:30px;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums}
+.stat .k{font-size:12px;color:var(--dim);margin-top:4px;letter-spacing:.1em}
+.rowbtns{display:flex;gap:14px;margin-top:18px;flex-wrap:wrap;justify-content:center}
+.ghostBtn{background:transparent;border:1px solid var(--line);color:var(--dim);border-radius:12px;padding:13px 28px;font-size:15px;letter-spacing:.08em;cursor:pointer;transition:.15s}
+.ghostBtn:hover{color:var(--ink);border-color:var(--teal)}
+@media (min-width:768px){.slot{width:64px;height:74px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<div id="wrap">
+  <div id="top">
+    <div class="chip"><span class="k">嘗試</span> <b id="tryV">0</b></div>
+    <div class="chip"><span class="k">最佳</span> <b id="bestV">--</b></div>
+    <div class="spacer"></div>
+    <button id="muteBtn" aria-label="聲音開關">
+      <svg id="iconOn" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+      <svg id="iconOff" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+    </button>
+  </div>
+  <div id="stage">
+    <div id="slots"><div class="slot" data-i="0"></div><div class="slot" data-i="1"></div><div class="slot" data-i="2"></div><div class="slot" data-i="3"></div></div>
+    <div id="feedback"></div>
+    <div id="logBox"></div>
+    <div id="pad">
+      <button class="key" data-d="1">1</button><button class="key" data-d="2">2</button><button class="key" data-d="3">3</button><button class="key" data-d="4">4</button><button class="key" data-d="5">5</button>
+      <button class="key" data-d="6">6</button><button class="key" data-d="7">7</button><button class="key" data-d="8">8</button><button class="key" data-d="9">9</button><button class="key" data-d="0">0</button>
+      <button class="key wide" id="clearBtn">清除</button><button class="key wide act" id="submitBtn">送出</button>
+    </div>
+  </div>
+</div>
+<div id="vignette"></div>
+<div class="overlay show" id="menu">
+  <div class="logo"><span class="n">霓虹</span><span class="t">猜數字</span></div>
+  <div class="tag">1A2B · 邏輯解謎</div>
+  <button class="bigBtn" id="startBtn">開始遊戲</button>
+  <div class="help">
+    <div class="row"><span>電腦藏了 4 位不重複數字</span></div>
+    <div class="row"><span>A＝數字與位置都對</span></div>
+    <div class="row"><span>B＝數字對但位置錯</span></div>
+    <div class="row"><span>用鍵盤或下方數字鍵輸入</span></div>
+    <div class="row"><span>猜中即勝，次數越少越好</span></div>
+  </div>
+</div>
+<div class="overlay" id="result">
+  <div class="result">
+    <div class="big win" id="resTitle">猜中了！</div>
+    <div class="stat">
+      <div class="s"><div class="v" id="rTry">0</div><div class="k">本次嘗試</div></div>
+      <div class="s"><div class="v" id="rBest">--</div><div class="k">最佳紀錄</div></div>
+    </div>
+    <div class="rowbtns">
+      <button class="ghostBtn" id="againBtn">再玩一次</button>
+      <button class="ghostBtn" id="menuBtn">主選單</button>
+    </div>
+  </div>
+</div>
+<script>
+"use strict";
+const Sfx={audio:null,muted:false};
+Sfx.init=()=>{if(!Sfx.audio){const AC=window.AudioContext||window.webkitAudioContext;if(AC)Sfx.audio=new AC();}};
+Sfx.beep=(f,d,type,v,slide)=>{if(Sfx.muted||!Sfx.audio)return;try{const t=Sfx.audio.currentTime,o=Sfx.audio.createOscillator(),g=Sfx.audio.createGain();o.type=type||"square";o.frequency.setValueAtTime(f,t);if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+d);g.gain.setValueAtTime(v||.1,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(Sfx.audio.destination);o.start(t);o.stop(t+d+.02);}catch(e){}};
+Sfx.play=n=>{if(Sfx.muted)return;if(n==="key")Sfx.beep(300,.05,"square",.05);else if(n==="del")Sfx.beep(180,.06,"square",.05);else if(n==="submit")Sfx.beep(440,.09,"sine",.1);else if(n==="win"){Sfx.beep(520,.15,"sine",.14,880);Sfx.beep(660,.2,"sine",.12);}else if(n==="err")Sfx.beep(160,.15,"sawtooth",.1);};
+
+let secret, guess, tries, best, state="menu";
+const $=id=>document.getElementById(id);
+
+function newGame(){
+  const digits=[0,1,2,3,4,5,6,7,8,9];
+  for(let i=digits.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[digits[i],digits[j]]=[digits[j],digits[i]];}
+  secret=digits.slice(0,4).join("");
+  guess=""; tries=0;
+  $("logBox").innerHTML="";
+  $("feedback").textContent="";
+  renderSlots(); updateHud();
+  setState("play");
+}
+function renderSlots(){
+  const slots=document.querySelectorAll(".slot");
+  slots.forEach((s,i)=>{s.textContent=guess[i]||"";s.classList.toggle("filled",i<guess.length);});
+}
+function updateHud(){
+  $("tryV").textContent=tries;
+  $("bestV").textContent=best>0?best:"--";
+}
+function setState(s){
+  state=s;
+  $("menu").classList.toggle("show",s==="menu");
+  $("result").classList.toggle("show",s==="over");
+}
+function addDigit(d){
+  if(state!=="play")return;
+  if(guess.length>=4){$("feedback").textContent="已滿 4 位，請按送出";Sfx.play("err");return;}
+  if(guess.includes(d)){$("feedback").textContent="數字不可重複";Sfx.play("err");return;}
+  guess+=d; Sfx.play("key"); $("feedback").textContent="";
+  renderSlots();
+}
+function clearGuess(){if(state!=="play")return;guess="";Sfx.play("del");renderSlots();}
+function submitGuess(){
+  if(state!=="play")return;
+  if(guess.length<4){$("feedback").textContent="請輸入 4 位數字";Sfx.play("err");return;}
+  tries++;
+  let a=0,b=0;
+  for(let i=0;i<4;i++){if(guess[i]===secret[i])a++;else if(secret.includes(guess[i]))b++;}
+  const row=document.createElement("div");row.className="row";
+  row.innerHTML=`<span class="n">${guess}</span><span class="fb a">${a}A</span><span class="fb b">${b}B</span>`;
+  $("logBox").prepend(row);
+  Sfx.play("submit");
+  if(a===4){win();return;}
+  guess=""; renderSlots(); updateHud();
+}
+function win(){
+  Sfx.play("win");
+  if(!best||tries<best){best=tries;try{localStorage.setItem("ngGuess_best",String(best));}catch(e){}}
+  $("rTry").textContent=tries;
+  $("rBest").textContent=best;
+  $("resTitle").textContent="猜中了！答案是 "+secret;
+  updateHud();
+  setState("over");
+}
+function toggleMute(){
+  Sfx.muted=!Sfx.muted;
+  $("iconOn").style.display=Sfx.muted?"none":"block";
+  $("iconOff").style.display=Sfx.muted?"block":"none";
+}
+function bind(){
+  document.querySelectorAll(".key[data-d]").forEach(k=>k.addEventListener("click",()=>addDigit(k.dataset.d)));
+  $("clearBtn").addEventListener("click",clearGuess);
+  $("submitBtn").addEventListener("click",submitGuess);
+  $("startBtn").addEventListener("click",()=>{Sfx.init();Sfx.audio&&Sfx.audio.resume&&Sfx.audio.resume();newGame();});
+  $("againBtn").addEventListener("click",newGame);
+  $("menuBtn").addEventListener("click",()=>setState("menu"));
+  $("muteBtn").addEventListener("click",toggleMute);
+  addEventListener("keydown",e=>{
+    if(state!=="play"){
+      if(state==="menu"&&(e.key==="Enter"||e.key===" ")){$("startBtn").click();}
+      return;
+    }
+    if(/^[0-9]$/.test(e.key))addDigit(e.key);
+    else if(e.key==="Backspace"){guess=guess.slice(0,-1);Sfx.play("del");renderSlots();}
+    else if(e.key==="Enter")submitGuess();
+  });
+}
+function init(){
+  best=parseInt(localStorage.getItem("ngGuess_best")||"0",10)||0;
+  updateHud(); bind();
+}
+window.addEventListener("DOMContentLoaded",init);
+</script>
+
+<!-- infucoco-watermark -->
+<img src="../../assets/images/infucoco-mascot-mark.png" alt="infucoco" style="position:fixed;right:8px;bottom:8px;width:40px;opacity:.9;pointer-events:none;z-index:99999;border-radius:12px;box-shadow:0 4px 14px #0009;image-rendering:auto">
+</body>
+</html>

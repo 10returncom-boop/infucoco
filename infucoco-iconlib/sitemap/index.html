@@ -119,4 +119,19 @@
 
 
 <script src="../assets/js/site.js"></script>
+
+<style>
+.float-actions{position:fixed;right:16px;bottom:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;align-items:center;font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif}
+.float-actions a.line{display:inline-flex;align-items:center;justify-content:center;width:160px;padding:12px 0;border-radius:40px;font-size:1rem;font-weight:900;color:#fff;background:#06C755;box-shadow:0 8px 24px rgba(6,199,85,.45);line-height:1.2;text-align:center;text-decoration:none;letter-spacing:.05em}
+.float-actions a.line:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.float-actions .nav-toggle{width:60px;height:60px;border-radius:50%;font-size:1.8rem;font-weight:900;padding:0;cursor:pointer;border:3px solid #1C1A15;background:#fff;color:#1C1A15;box-shadow:0 6px 20px rgba(0,0,0,.2);line-height:1;display:flex;align-items:center;justify-content:center}
+.float-actions .nav-toggle:hover{transform:scale(1.08)}
+.float-actions .nav-list{display:none;flex-direction:column;gap:6px;align-items:center}
+.float-actions.open .nav-list{display:flex}
+.float-actions .nav-list a{display:inline-flex;align-items:center;justify-content:center;width:200px;padding:12px 0;border-radius:40px;font-size:.95rem;font-weight:900;color:#fff;background:linear-gradient(135deg,#8A52C0 0%,#6B3FA8 100%);box-shadow:0 6px 18px rgba(59,32,110,.35);line-height:1.2;white-space:nowrap;text-align:center;text-decoration:none;letter-spacing:.05em}
+.float-actions .nav-list a:hover{transform:translateY(-2px);filter:brightness(1.15)}
+.float-actions.open .nav-toggle::after{content:"✕";font-size:1.6rem}
+.float-actions .nav-toggle::after{content:"☰";font-size:1.6rem}
+@media(max-width:900px){.float-actions{right:10px;bottom:14px;gap:6px}.float-actions a.line{width:140px;padding:10px 0;font-size:.9rem}.float-actions .nav-toggle{width:52px;height:52px;font-size:1.4rem;border-width:2px}.float-actions.open .nav-toggle{width:56px;height:56px}.float-actions .nav-list a{width:200px;padding:11px 0;font-size:.95rem}}
+</style><div class="float-actions" id="float-nav"><a class="line" href="https://line.me/ti/p/~331.today" target="_blank" rel="noopener" title="LINE 聯絡">LINE</a><button class="nav-toggle" onclick="document.getElementById('float-nav').classList.toggle('open')" aria-label="選單"></button><div class="nav-list"><a href="https://infucoco.com/">首頁</a><a href="https://infucoco.com/infucoco-iconlib/index.html">工具</a><a href="https://infucoco.com/games.html">遊戲</a><a href="https://infucoco.com/quotes.html">金句</a><a href="https://infucoco.com/quiz.html">心靈療癒</a><a href="https://infucoco.com/stories.html">故事</a><a href="https://infucoco.com/gallery.html">infu百寶箱</a><a href="https://infucoco.com/stickers.html">數位商品</a><a href="https://infucoco.com/shop.html">實體周邊</a><a href="https://infucoco.com/member.html">會員</a><a href="https://infucoco.com/about.html">關於</a></div></div>
 </body></html>

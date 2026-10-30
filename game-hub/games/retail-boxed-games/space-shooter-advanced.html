@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>太空射擊</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+  html,body{margin:0;padding:0;height:100%;background:#050510;overflow:hidden;font-family:"Microsoft JhengHei","PingFang TC",sans-serif;}
+  #wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;}
+  canvas{display:block;background:#050510;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,.6);touch-action:manipulation;}
+</style>
+</head>
+<body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<div id="wrap"><canvas id="cv"></canvas></div>
+<script>
+(function(){
+  const cv=document.getElementById('cv');
+  const ctx=cv.getContext('2d');
+  let W,H,DPR;
+  function resize(){
+    DPR=window.devicePixelRatio||1;
+    W=Math.min(window.innerWidth,480);
+    H=Math.min(window.innerHeight,760);
+    cv.style.width=W+'px'; cv.style.height=H+'px';
+    cv.width=W*DPR; cv.height=H*DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  window.addEventListener('resize',resize);
+  resize();
+
+  let state='title';
+  let player, bullets, enemies, particles, stars, keys, score, lives, wave, waveTimer, shootCd;
+  let touchLeft=false, touchRight=false, touchFire=false;
+
+  function reset(){
+    player={x:W/2,y:H-80,w:36,h:30,cooldown:0};
+    bullets=[]; enemies=[]; particles=[];
+    score=0; lives=3; wave=1; waveTimer=0; shootCd=0;
+    stars=[];
+    for(let i=0;i<80;i++) stars.push({x:Math.random()*W,y:Math.random()*H,s:Math.random()*1.8+0.4,v:Math.random()*1.5+0.5});
+    keys={};
+  }
+  function spawnEnemy(){
+    const r=wave;
+    const x=20+Math.random()*(W-40);
+    const hp=1+Math.floor(wave/3);
+    enemies.push({x:x,y:-30,w:30+Math.random()*10,h:26,v:1+wave*0.15+Math.random()*1.2,hp:hp,maxhp:hp,type:Math.random()<0.25?'big':'small'});
+  }
+  function explode(x,y,color,n){
+    for(let i=0;i<n;i++){
+      const a=Math.random()*Math.PI*2, s=Math.random()*4+1;
+      particles.push({x:x,y:y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:30+Math.random()*20,color:color});
+    }
+  }
+
+  window.addEventListener('keydown',e=>{
+    keys[e.code]=true;
+    if(e.code==='Space') e.preventDefault();
+    if(state==='title' && (e.code==='Space'||e.code==='Enter')){ reset(); state='play'; }
+    if(state==='over' && e.code==='Enter'){ reset(); state='play'; }
+  });
+  window.addEventListener('keyup',e=>{ keys[e.code]=false; });
+
+  // touch: left half = move left/right by dragging, right half = fire zone
+  let touchId=null, touchStartX=0;
+  cv.addEventListener('pointerdown',e=>{
+    e.preventDefault();
+    if(state==='title'){ reset(); state='play'; return; }
+    if(state==='over'){
+      // check restart button
+      const r=cv.getBoundingClientRect();
+      const mx=e.clientX-r.left, my=e.clientY-r.top;
+      const bw=180,bh=48,bx=W/2-bw/2,by=H*0.6;
+      if(mx>=bx&&mx<=bx+bw&&my>=by&&my<=by+bh){ reset(); state='play'; }
+      return;
+    }
+    touchId=e.pointerId; touchStartX=e.clientX;
+    // right side = fire
+    const r=cv.getBoundingClientRect();
+    if(e.clientX-r.left > W*0.6) touchFire=true;
+  });
+  cv.addEventListener('pointermove',e=>{
+    if(state!=='play'||e.pointerId!==touchId) return;
+    const r=cv.getBoundingClientRect();
+    const dx=(e.clientX-touchStartX);
+    player.x+=dx; touchStartX=e.clientX;
+    player.x=Math.max(player.w/2,Math.min(W-player.w/2,player.x));
+  });
+  cv.addEventListener('pointerup',e=>{ if(e.pointerId===touchId){ touchId=null; touchFire=false; } });
+  cv.addEventListener('pointercancel',()=>{ touchId=null; touchFire=false; });
+
+  function drawStars(){
+    ctx.fillStyle='#fff';
+    stars.forEach(s=>{
+      ctx.globalAlpha=0.4+Math.sin(s.y*0.05)*0.3;
+      ctx.fillRect(s.x,s.y,s.s,s.s);
+      s.y+=s.v; if(s.y>H){ s.y=0; s.x=Math.random()*W; }
+    });
+    ctx.globalAlpha=1;
+  }
+  function drawPlayer(){
+    ctx.save();
+    ctx.translate(player.x,player.y);
+    // ship body
+    ctx.fillStyle='#4fc3f7';
+    ctx.beginPath();
+    ctx.moveTo(0,-player.h/2);
+    ctx.lineTo(player.w/2,player.h/2);
+    ctx.lineTo(0,player.h/3);
+    ctx.lineTo(-player.w/2,player.h/2);
+    ctx.closePath(); ctx.fill();
+    ctx.strokeStyle='#0288d1'; ctx.lineWidth=1.5; ctx.stroke();
+    // cockpit
+    ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(0,-2,5,0,Math.PI*2); ctx.fill();
+    // engine flame
+    const f=8+Math.random()*8;
+    ctx.fillStyle='#ff9800';
+    ctx.beginPath(); ctx.moveTo(-6,player.h/3); ctx.lineTo(0,player.h/3+f); ctx.lineTo(6,player.h/3); ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+  function drawBullets(){
+    ctx.fillStyle='#ffee58';
+    bullets.forEach(b=>{ ctx.fillRect(b.x-2,b.y-8,4,12); });
+  }
+  function drawEnemies(){
+    enemies.forEach(en=>{
+      ctx.save(); ctx.translate(en.x,en.y);
+      ctx.fillStyle=en.type==='big'?'#ef5350':'#ab47bc';
+      ctx.beginPath();
+      ctx.moveTo(0,en.h/2);
+      ctx.lineTo(en.w/2,-en.h/2);
+      ctx.lineTo(0,-en.h/4);
+      ctx.lineTo(-en.w/2,-en.h/2);
+      ctx.closePath(); ctx.fill();
+      ctx.strokeStyle='#7b1fa2'; ctx.lineWidth=1.5; ctx.stroke();
+      ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(0,0,3,0,Math.PI*2); ctx.fill();
+      // hp bar
+      if(en.maxhp>1){
+        ctx.fillStyle='#000'; ctx.fillRect(-en.w/2,-en.h/2-8,en.w,4);
+        ctx.fillStyle='#4caf50'; ctx.fillRect(-en.w/2,-en.h/2-8,en.w*(en.hp/en.maxhp),4);
+      }
+      ctx.restore();
+    });
+  }
+  function drawParticles(){
+    particles.forEach(p=>{
+      ctx.globalAlpha=Math.max(0,p.life/50);
+      ctx.fillStyle=p.color;
+      ctx.fillRect(p.x-2,p.y-2,4,4);
+    });
+    ctx.globalAlpha=1;
+  }
+  function drawHUD(){
+    ctx.textAlign='left';
+    ctx.fillStyle='#fff'; ctx.font='bold 18px "Microsoft JhengHei"';
+    ctx.fillText('得分：'+score,12,26);
+    ctx.fillText('波次：'+wave,12,50);
+    // lives
+    for(let i=0;i<3;i++){
+      ctx.fillStyle=i<lives?'#4caf50':'#333';
+      ctx.beginPath();
+      ctx.moveTo(W-20-i*24,12); ctx.lineTo(W-12-i*24,22); ctx.lineTo(W-20-i*24,32); ctx.lineTo(W-28-i*24,22);
+      ctx.closePath(); ctx.fill();
+    }
+  }
+  function drawUI(){
+    ctx.textAlign='center';
+    if(state==='title'){
+      ctx.fillStyle='#fff'; ctx.font='bold 44px "Microsoft JhengHei"';
+      ctx.strokeStyle='#7b1fa2'; ctx.lineWidth=4;
+      ctx.strokeText('太空射擊',W/2,H*0.3);
+      ctx.fillText('太空射擊',W/2,H*0.3);
+      ctx.font='18px "Microsoft JhengHei"';
+      ctx.lineWidth=2;
+      ctx.strokeText('方向鍵移動，空白鍵射擊',W/2,H*0.3+45);
+      ctx.fillText('方向鍵移動，空白鍵射擊',W/2,H*0.3+45);
+      ctx.strokeText('擊毀敵機得分，3 條生命',W/2,H*0.3+75);
+      ctx.fillText('擊毀敵機得分，3 條生命',W/2,H*0.3+75);
+      ctx.strokeText('點擊畫面開始',W/2,H*0.3+120);
+      ctx.fillText('點擊畫面開始',W/2,H*0.3+120);
+    } else if(state==='over'){
+      ctx.fillStyle='rgba(0,0,0,0.6)'; ctx.fillRect(0,0,W,H);
+      ctx.fillStyle='#ff5252'; ctx.font='bold 36px "Microsoft JhengHei"';
+      ctx.strokeStyle='#000'; ctx.lineWidth=4;
+      ctx.strokeText('遊戲結束',W/2,H*0.35); ctx.fillText('遊戲結束',W/2,H*0.35);
+      ctx.fillStyle='#fff'; ctx.font='22px "Microsoft JhengHei"';
+      ctx.strokeText('最終得分：'+score,W/2,H*0.35+45); ctx.fillText('最終得分：'+score,W/2,H*0.35+45);
+      ctx.strokeText('抵達波次：'+wave,W/2,H*0.35+78); ctx.fillText('抵達波次：'+wave,W/2,H*0.35+78);
+      const bw=180,bh=48,bx=W/2-bw/2,by=H*0.6;
+      ctx.fillStyle='#4caf50'; ctx.fillRect(bx,by,bw,bh);
+      ctx.strokeStyle='#2e7d32'; ctx.lineWidth=2; ctx.strokeRect(bx,by,bw,bh);
+      ctx.fillStyle='#fff'; ctx.strokeStyle='rgba(0,0,0,0.5)'; ctx.lineWidth=3;
+      ctx.strokeText('重新開始',W/2,by+31); ctx.fillText('重新開始',W/2,by+31);
+    }
+  }
+
+  function update(){
+    drawStars();
+    if(state!=='play') return;
+    // movement
+    const sp=5;
+    if(keys['ArrowLeft']) player.x-=sp;
+    if(keys['ArrowRight']) player.x+=sp;
+    if(keys['ArrowUp']) player.y-=sp;
+    if(keys['ArrowDown']) player.y+=sp;
+    player.x=Math.max(player.w/2,Math.min(W-player.w/2,player.x));
+    player.y=Math.max(player.h/2,Math.min(H-40,player.y));
+    // shooting
+    player.cooldown--;
+    const wantFire = keys['Space'] || touchFire;
+    if(wantFire && player.cooldown<=0){
+      bullets.push({x:player.x,y:player.y-player.h/2,v:8});
+      player.cooldown=12;
+    }
+    bullets.forEach(b=>b.y-=b.v);
+    bullets=bullets.filter(b=>b.y>-20);
+    // wave / spawn
+    waveTimer++;
+    const spawnRate=Math.max(25,70-wave*4);
+    if(waveTimer%spawnRate===0) spawnEnemy();
+    if(score>0 && score%20===0){ /* wave level via score threshold */ }
+    wave=1+Math.floor(score/15);
+    // enemies move
+    enemies.forEach(en=>en.y+=en.v);
+    // collisions bullet-enemy
+    for(let i=enemies.length-1;i>=0;i--){
+      const en=enemies[i];
+      for(let j=bullets.length-1;j>=0;j--){
+        const b=bullets[j];
+        if(b.x>en.x-en.w/2 && b.x<en.x+en.w/2 && b.y>en.y-en.h/2 && b.y<en.y+en.h/2){
+          bullets.splice(j,1); en.hp--;
+          if(en.hp<=0){
+            explode(en.x,en.y,'#ff9800',18);
+            score+=en.type==='big'?15:10;
+            enemies.splice(i,1);
+          }
+          break;
+        }
+      }
+    }
+    // player hit / enemy reaches bottom
+    for(let i=enemies.length-1;i>=0;i--){
+      const en=enemies[i];
+      // reached bottom
+      if(en.y-en.h/2 > H){
+        enemies.splice(i,1); lives--; explode(player.x,player.y,'#f44336',10);
+        if(lives<=0) gameOver();
+        continue;
+      }
+      // collide with player
+      const dx=en.x-player.x, dy=en.y-player.y;
+      if(Math.abs(dx)<(en.w+player.w)/2-6 && Math.abs(dy)<(en.h+player.h)/2-6){
+        explode(en.x,en.y,'#ff9800',18);
+        enemies.splice(i,1); lives--;
+        explode(player.x,player.y,'#f44336',10);
+        if(lives<=0) gameOver();
+      }
+    }
+    // particles
+    particles.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; p.life--; });
+    particles=particles.filter(p=>p.life>0);
+  }
+  function gameOver(){ state='over'; }
+  function loop(){
+    ctx.fillStyle='#050510'; ctx.fillRect(0,0,W,H);
+    update();
+    drawEnemies();
+    drawBullets();
+    drawPlayer();
+    drawParticles();
+    drawHUD();
+    drawUI();
+    requestAnimationFrame(loop);
+  }
+  reset(); loop();
+})();
+</script>
+
+<!-- infucoco-watermark -->
+<img src="../../assets/images/infucoco-mascot-mark.png" alt="infucoco" style="position:fixed;right:8px;bottom:8px;width:40px;opacity:.9;pointer-events:none;z-index:99999;border-radius:12px;box-shadow:0 4px 14px #0009;image-rendering:auto">
+</body>
+</html>

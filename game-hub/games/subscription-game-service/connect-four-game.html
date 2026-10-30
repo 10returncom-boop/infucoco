@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>霓虹四子棋 — 對戰 AI</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0e17'/%3E%3Ccircle cx='22' cy='22' r='8' fill='%232dd4bf'/%3E%3Ccircle cx='42' cy='22' r='8' fill='%23ff6b9d'/%3E%3Ccircle cx='32' cy='42' r='8' fill='%23f0c040'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+:root{--bg:#070a12;--ink:#e8ecf5;--dim:#8fa0bd;--teal:#2dd4bf;--pink:#ff6b9d;--gold:#f0c040;--cyan:#53c7ff;--line:#22304a;--panel:#0e1524}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Segoe UI",system-ui,sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+#vignette{position:fixed;inset:0;pointer-events:none;z-index:5;background:radial-gradient(ellipse at center,transparent 55%,rgba(2,4,9,.7) 100%)}
+#wrap{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:6;padding:12px}
+#top{display:flex;align-items:center;gap:8px;width:min(440px,94vw);flex-wrap:wrap}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px 12px;font-size:13px}
+.chip b{font-variant-numeric:tabular-nums}
+.chip .you b{color:var(--teal)}.chip .cpu b{color:var(--pink)}
+.chip .k{font-size:11px;color:var(--dim)}
+.spacer{flex:1}
+#muteBtn{width:40px;height:40px;border-radius:10px;background:var(--panel);border:1px solid var(--line);color:var(--dim);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;flex:none}
+#muteBtn:hover{color:var(--ink);border-color:var(--teal)}
+#board{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;width:min(440px,94vw);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px;box-shadow:0 0 50px rgba(83,199,255,.1);position:relative}
+.col{display:flex;flex-direction:column;gap:6px;cursor:pointer;border-radius:10px}
+.col:hover{background:rgba(83,199,255,.06)}
+.col.sel{background:rgba(45,212,191,.1)}
+.slot{aspect-ratio:1/1;background:#080d18;border:1px solid var(--line);border-radius:50%;position:relative;min-height:38px}
+.disc{position:absolute;inset:8%;border-radius:50%}
+.disc.you{background:radial-gradient(circle at 35% 30%,#5ff0dd,#12a08c);box-shadow:0 0 12px rgba(45,212,191,.55)}
+.disc.cpu{background:radial-gradient(circle at 35% 30%,#ff9fbe,#d83a72);box-shadow:0 0 12px rgba(255,107,157,.55)}
+.disc.ghost{opacity:.35}
+#tipBar{font-size:13px;color:var(--dim);letter-spacing:.06em;text-align:center;min-height:18px}
+.overlay{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;flex-direction:column;background:radial-gradient(ellipse at 50% 40%,#0d1526,#05070d 80%);padding:24px;text-align:center;overflow:auto}
+.overlay.show{display:flex}
+.logo{font-size:clamp(38px,8vw,60px);font-weight:900;letter-spacing:.06em}
+.logo .n{color:var(--cyan)}.logo .t{color:var(--gold)}
+.tag{color:var(--dim);letter-spacing:.3em;margin-top:12px;font-size:14px}
+.bigBtn{margin-top:26px;background:linear-gradient(180deg,#53c7ff,#2a8fd6);color:#04121c;border:none;border-radius:14px;padding:15px 52px;font-size:18px;font-weight:800;letter-spacing:.15em;cursor:pointer;transition:.18s;box-shadow:0 10px 30px rgba(83,199,255,.26)}
+.bigBtn:hover{transform:translateY(-2px)}
+.help{display:grid;grid-template-columns:1fr;gap:8px 0;margin-top:24px;font-size:14px;color:var(--dim);max-width:340px}
+.help .row{display:flex;justify-content:space-between;align-items:center}
+.result .big{font-size:clamp(34px,7vw,52px);font-weight:900}
+.result .big.win{color:var(--teal)}.result .big.lose{color:var(--pink)}.result .big.draw{color:var(--gold)}
+.stat{display:flex;gap:26px;justify-content:center;margin:24px 0 8px;flex-wrap:wrap}
+.stat .v{font-size:28px;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums}
+.stat .k{font-size:12px;color:var(--dim);margin-top:4px;letter-spacing:.1em}
+.rowbtns{display:flex;gap:14px;margin-top:20px;flex-wrap:wrap;justify-content:center}
+.ghostBtn{background:transparent;border:1px solid var(--line);color:var(--dim);border-radius:12px;padding:13px 28px;font-size:15px;letter-spacing:.08em;cursor:pointer;transition:.15s;min-height:44px}
+.ghostBtn:hover{color:var(--ink);border-color:var(--teal)}
+@media (min-width:768px){#board{width:min(460px,94vw)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<div id="wrap">
+  <div id="top">
+    <div class="chip you"><span class="k">你</span> <b id="sYou">0</b></div>
+    <div class="chip cpu"><span class="k">電腦</span> <b id="sCpu">0</b></div>
+    <div class="chip"><span class="k">連勝</span> <b id="sStreak">0</b></div>
+    <div class="spacer"></div>
+    <button id="muteBtn" aria-label="聲音開關">
+      <svg id="iconOn" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+      <svg id="iconOff" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+    </button>
+  </div>
+  <div id="board"></div>
+  <div id="tipBar">點擊欄位或用 ← → 選擇、空白鍵落子</div>
+</div>
+<div id="vignette"></div>
+<div class="overlay show" id="menu">
+  <div class="logo"><span class="n">霓虹</span><span class="t">四子棋</span></div>
+  <div class="tag">CONNECT · FOUR</div>
+  <button class="bigBtn" id="startBtn">開始遊戲</button>
+  <div class="help">
+    <div class="row"><span>點擊欄位</span><span>棋子落下</span></div>
+    <div class="row"><span>縱橫斜連四子</span><span>先連線者獲勝</span></div>
+    <div class="row"><span>鍵盤 ← →</span><span>空白鍵落子</span></div>
+  </div>
+</div>
+<div class="overlay" id="result">
+  <div class="result">
+    <div class="big win" id="resTitle">你贏了！</div>
+    <div class="stat">
+      <div><div class="v" id="rYou">0</div><div class="k">你的勝場</div></div>
+      <div><div class="v" id="rStreak">0</div><div class="k">連勝</div></div>
+      <div><div class="v" id="rCpu">0</div><div class="k">電腦勝場</div></div>
+    </div>
+    <div class="rowbtns">
+      <button class="ghostBtn" id="againBtn">再玩一次</button>
+      <button class="ghostBtn" id="menuBtn">回主選單</button>
+    </div>
+  </div>
+</div>
+<script>
+"use strict";
+const Sfx={audio:null,muted:false};
+Sfx.init=()=>{if(!Sfx.audio){const AC=window.AudioContext||window.webkitAudioContext;if(AC)Sfx.audio=new AC();}};
+Sfx.beep=(f,d,type,v,slide)=>{if(Sfx.muted||!Sfx.audio)return;try{const t=Sfx.audio.currentTime,o=Sfx.audio.createOscillator(),g=Sfx.audio.createGain();o.type=type||"square";o.frequency.setValueAtTime(f,t);if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+d);g.gain.setValueAtTime(v||.1,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(Sfx.audio.destination);o.start(t);o.stop(t+d+.02);}catch(e){}};
+Sfx.play=n=>{if(Sfx.muted)return;if(n==="drop")Sfx.beep(280,.09,"sine",.13,180);else if(n==="bad")Sfx.beep(150,.1,"square",.07);else if(n==="win"){Sfx.beep(520,.12,"sine",.14);setTimeout(()=>Sfx.beep(780,.2,"sine",.14),130);}else if(n==="lose")Sfx.beep(220,.45,"sawtooth",.13,90);else if(n==="draw")Sfx.beep(320,.2,"triangle",.11);};
+
+const R=6,C=7,HUMAN=1,AI=2;
+let board=[],colEls=[],gameOver=true,turn=HUMAN,selCol=3;
+let sYou=0,sCpu=0,streak=0,best=0;
+const tip=document.getElementById("tipBar");
+
+function loadBest(){try{best=parseInt(localStorage.getItem("ngConnect4_best")||"0",10)||0;}catch(e){best=0;}}
+function saveBest(){try{localStorage.setItem("ngConnect4_best",String(best));}catch(e){}}
+
+function buildBoard(){
+  const bd=document.getElementById("board");bd.innerHTML="";colEls=[];
+  for(let c=0;c<C;c++){
+    const col=document.createElement("div");col.className="col";col.dataset.c=c;
+    for(let r=0;r<R;r++){const s=document.createElement("div");s.className="slot";col.appendChild(s);}
+    col.addEventListener("click",()=>humanDrop(c));
+    bd.appendChild(col);colEls.push(col);
+  }
+}
+function newGame(){
+  board=Array.from({length:R},()=>Array(C).fill(0));
+  gameOver=false;turn=HUMAN;selCol=3;render();updateHud();selRender();tip.textContent="輪到你落子";
+}
+function dropRow(c){for(let r=R-1;r>=0;r--)if(board[r][c]===0)return r;return -1;}
+
+function render(){
+  for(let c=0;c<C;c++){
+    const slots=colEls[c].children;
+    for(let r=0;r<R;r++){
+      slots[r].innerHTML="";
+      const v=board[r][c];if(!v)continue;
+      const d=document.createElement("div");d.className="disc "+(v===HUMAN?"you":"cpu");slots[r].appendChild(d);
+    }
+  }
+}
+function selRender(){
+  for(let c=0;c<C;c++)colEls[c].classList.toggle("sel",c===selCol&&!gameOver&&turn===HUMAN);
+}
+function updateHud(){document.getElementById("sYou").textContent=sYou;document.getElementById("sCpu").textContent=sCpu;document.getElementById("sStreak").textContent=streak;}
+
+function humanDrop(c){
+  if(gameOver||turn!==HUMAN)return;
+  const r=dropRow(c);if(r<0){Sfx.play("bad");return;}
+  board[r][c]=HUMAN;render();Sfx.play("drop");
+  if(checkWin(HUMAN)){endGame("human");return;}
+  if(isFull()){endGame("draw");return;}
+  turn=AI;tip.textContent="電腦思考中…";selRender();setTimeout(aiDrop,550);
+}
+
+function checkWin(p){
+  // horizontal
+  for(let r=0;r<R;r++)for(let c=0;c<C-3;c++){if(board[r][c]===p&&board[r][c+1]===p&&board[r][c+2]===p&&board[r][c+3]===p)return true;}
+  // vertical
+  for(let c=0;c<C;c++)for(let r=0;r<R-3;r++){if(board[r][c]===p&&board[r+1][c]===p&&board[r+2][c]===p&&board[r+3][c]===p)return true;}
+  // diag up
+  for(let r=3;r<R;r++)for(let c=0;c<C-3;c++){if(board[r][c]===p&&board[r-1][c+1]===p&&board[r-2][c+2]===p&&board[r-3][c+3]===p)return true;}
+  // diag down
+  for(let r=0;r<R-3;r++)for(let c=0;c<C-3;c++){if(board[r][c]===p&&board[r+1][c+1]===p&&board[r+2][c+2]===p&&board[r+3][c+3]===p)return true;}
+  return false;
+}
+function isFull(){for(let c=0;c<C;c++)if(board[0][c]===0)return false;return true;}
+function validCols(){const m=[];for(let c=0;c<C;c++)if(board[0][c]===0)m.push(c);return m;}
+
+function scoreWindow(w,p){
+  const opp=p===HUMAN?AI:HUMAN;let me=0,op=0;
+  for(const x of w){if(x===p)me++;else if(x===opp)op++;}
+  if(me>0&&op>0)return 0;
+  if(me===4)return 100000;
+  if(me===3)return 60;
+  if(me===2)return 8;
+  if(op===3)return -70;
+  if(op===2)return -6;
+  return 0;
+}
+function evaluate(b){
+  let sc=0;
+  // center preference
+  let center=0;for(let r=0;r<R;r++)if(b[r][3]===AI)center++;
+  sc+=center*7;
+  for(let r=0;r<R;r++)for(let c=0;c<C-3;c++)sc+=scoreWindow([b[r][c],b[r][c+1],b[r][c+2],b[r][c+3]],AI);
+  for(let c=0;c<C;c++)for(let r=0;r<R-3;r++)sc+=scoreWindow([b[r][c],b[r+1][c],b[r+2][c],b[r+3][c]],AI);
+  for(let r=3;r<R;r++)for(let c=0;c<C-3;c++)sc+=scoreWindow([b[r][c],b[r-1][c+1],b[r-2][c+2],b[r-3][c+3]],AI);
+  for(let r=0;r<R-3;r++)for(let c=0;c<C-3;c++)sc+=scoreWindow([b[r][c],b[r+1][c+1],b[r+2][c+2],b[r+3][c+3]],AI);
+  return sc;
+}
+function orderCols(cols){return cols.slice().sort((a,b)=>Math.abs(a-3)-Math.abs(b-3));}
+
+function minimax(b,depth,alpha,beta,maxim){
+  const val=validCols();
+  if(depth===0||!val.length){
+    if(!val.length)return 0;
+    return evaluate(b);
+  }
+  if(maxim){
+    let v=-Infinity;
+    for(const c of orderCols(val)){const r=dropRowIn(b,c);b[r][c]=AI;
+      v=Math.max(v,minimax(b,depth-1,alpha,beta,false));b[r][c]=0;
+      alpha=Math.max(alpha,v);if(beta<=alpha)break;}
+    return v;
+  } else {
+    let v=Infinity;
+    for(const c of orderCols(val)){const r=dropRowIn(b,c);b[r][c]=HUMAN;
+      v=Math.min(v,minimax(b,depth-1,alpha,beta,true));b[r][c]=0;
+      beta=Math.min(beta,v);if(beta<=alpha)break;}
+    return v;
+  }
+}
+function dropRowIn(b,c){for(let r=R-1;r>=0;r--)if(b[r][c]===0)return r;return -1;}
+
+function aiDrop(){
+  if(gameOver||turn!==AI)return;
+  const val=validCols();if(!val.length){endGame("draw");return;}
+  let bestSc=-Infinity,bestC=val[0];
+  for(const c of orderCols(val)){
+    const r=dropRow(c);board[r][c]=AI;
+    // immediate win check
+    let sc;
+    if(checkWin(AI)){board[r][c]=0;bestC=c;break;}
+    sc=minimax(board,5,-Infinity,Infinity,false);
+    board[r][c]=0;
+    if(sc>bestSc){bestSc=sc;bestC=c;}
+  }
+  const r=dropRow(bestC);board[r][bestC]=AI;render();Sfx.play("drop");
+  if(checkWin(AI)){endGame("cpu");return;}
+  if(isFull()){endGame("draw");return;}
+  turn=HUMAN;tip.textContent="輪到你落子";selRender();
+}
+
+function endGame(who){
+  gameOver=true;selRender();
+  const rt=document.getElementById("resTitle");
+  if(who==="human"){sYou++;streak++;best=Math.max(best,streak);rt.textContent="你連線了！";rt.className="big win";Sfx.play("win");}
+  else if(who==="cpu"){sCpu++;streak=0;rt.textContent="電腦連線了";rt.className="big lose";Sfx.play("lose");}
+  else{rt.textContent="平手";rt.className="big draw";Sfx.play("draw");}
+  saveBest();updateHud();
+  document.getElementById("rYou").textContent=sYou;
+  document.getElementById("rStreak").textContent=best;
+  document.getElementById("rCpu").textContent=sCpu;
+  setTimeout(()=>document.getElementById("result").classList.add("show"),500);
+}
+
+function toggleMute(){Sfx.muted=!Sfx.muted;document.getElementById("iconOn").style.display=Sfx.muted?"none":"block";document.getElementById("iconOff").style.display=Sfx.muted?"block":"none";}
+
+function onKey(e){
+  if(gameOver||turn!==HUMAN)return;
+  const k=e.key;
+  if(k==="ArrowLeft"){e.preventDefault();selCol=Math.max(0,selCol-1);selRender();}
+  else if(k==="ArrowRight"){e.preventDefault();selCol=Math.min(C-1,selCol+1);selRender();}
+  else if(k===" "||k==="Enter"){e.preventDefault();humanDrop(selCol);}
+}
+
+function bind(){
+  document.getElementById("startBtn").addEventListener("click",()=>{Sfx.init();Sfx.audio&&Sfx.audio.resume&&Sfx.audio.resume();document.getElementById("menu").classList.remove("show");newGame();});
+  document.getElementById("againBtn").addEventListener("click",()=>{Sfx.init();document.getElementById("result").classList.remove("show");newGame();});
+  document.getElementById("menuBtn").addEventListener("click",()=>{document.getElementById("result").classList.remove("show");document.getElementById("menu").classList.add("show");});
+  document.getElementById("muteBtn").addEventListener("click",toggleMute);
+  addEventListener("keydown",onKey);
+}
+
+loadBest();buildBoard();bind();
+</script>
+
+<!-- infucoco-watermark -->
+<img src="../../assets/images/infucoco-mascot-mark.png" alt="infucoco" style="position:fixed;right:8px;bottom:8px;width:40px;opacity:.9;pointer-events:none;z-index:99999;border-radius:12px;box-shadow:0 4px 14px #0009;image-rendering:auto">
+</body>
+</html>

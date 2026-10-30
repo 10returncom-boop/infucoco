@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>泡泡射手 BUBBLES — 彈射益智</title>
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="infucoco電玩追追追追">
+<meta property="og:url" content="https://infucoco.com/game-hub/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="infucoco電玩追追追追｜電玩無止境">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0e17'/%3E%3Ccircle cx='20' cy='20' r='10' fill='%2353c7ff'/%3E%3Ccircle cx='44' cy='20' r='10' fill='%23ff6b9d'/%3E%3Ccircle cx='32' cy='42' r='10' fill='%23f0c040'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+:root{--bg:#070a12;--ink:#e8ecf5;--dim:#8fa0bd;--teal:#2dd4bf;--pink:#ff6b9d;--gold:#f0c040;--cyan:#53c7ff;--line:#22304a;--panel:#0e1524}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Segoe UI",system-ui,sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:none}
+#vignette{position:fixed;inset:0;pointer-events:none;z-index:5;background:radial-gradient(ellipse at center,transparent 55%,rgba(2,4,9,.7) 100%)}
+#wrap{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:6}
+#top{display:flex;align-items:center;gap:10px;width:min(560px,94vw)}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:7px 14px;font-size:14px}
+.chip b{color:var(--gold);font-variant-numeric:tabular-nums}
+.chip .k{font-size:11px;color:var(--dim)}
+.spacer{flex:1}
+#muteBtn{width:40px;height:40px;border-radius:10px;background:var(--panel);border:1px solid var(--line);color:var(--dim);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s}
+#muteBtn:hover{color:var(--ink);border-color:var(--teal)}
+#board{background:#0b101d;border:1px solid var(--line);border-radius:16px;box-shadow:0 0 50px rgba(83,199,255,.08);cursor:crosshair}
+#tipBar{font-size:12px;color:var(--dim);letter-spacing:.12em}
+.overlay{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;flex-direction:column;background:radial-gradient(ellipse at 50% 40%,#0d1526,#05070d 80%);padding:24px;text-align:center}
+.overlay.show{display:flex}
+.logo{font-size:clamp(40px,8vw,64px);font-weight:900;letter-spacing:.1em}.logo .b{color:var(--cyan)}.logo .s{color:var(--gold)}
+.tag{color:var(--dim);letter-spacing:.3em;margin-top:12px;font-size:15px}
+.bigBtn{margin-top:32px;background:linear-gradient(180deg,#53c7ff,#2a8fd6);color:#04121c;border:none;border-radius:14px;padding:16px 52px;font-size:19px;font-weight:800;letter-spacing:.15em;cursor:pointer;transition:.18s;box-shadow:0 10px 30px rgba(83,199,255,.26)}
+.bigBtn:hover{transform:translateY(-2px)}
+.help{display:grid;grid-template-columns:1fr;gap:8px 0;margin-top:28px;font-size:14px;color:var(--dim);max-width:360px}
+.help .row{display:flex;justify-content:space-between;align-items:center}
+.result .big{font-size:clamp(36px,7vw,54px);font-weight:900}.result .big.win{color:var(--teal)}
+.stat{display:flex;gap:30px;justify-content:center;margin:26px 0 8px}
+.stat .v{font-size:30px;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums}
+.stat .k{font-size:12px;color:var(--dim);margin-top:4px;letter-spacing:.1em}
+.rowbtns{display:flex;gap:14px;margin-top:20px}
+.ghostBtn{background:transparent;border:1px solid var(--line);color:var(--dim);border-radius:12px;padding:14px 30px;font-size:15px;letter-spacing:.08em;cursor:pointer;transition:.15s}
+.ghostBtn:hover{color:var(--ink);border-color:var(--teal)}
+@media (max-width:640px){#board{width:min(94vw,520px)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="site-nav-fixed"><button class="mega-toggle" id="megaToggle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="mt-label">網站地圖</span><span class="arrow">▾</span></button>
+  <div class="mega-panel" id="megaPanel">
+  <div class="mega-inner">
+    <div class="mega-col"><h4 data-eco="content"><span class="num">1</span>🎨 內容生產鏈</h4><ul><li><a href="../../index.html#chain" data-eco="content">遊戲研發</a></li><li><a href="../../index.html#chain" data-eco="content">IP與素材</a></li><li><a href="../../index.html#chain" data-eco="content">設計流程</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="publishing"><span class="num">2</span>📢 發行營運鏈</h4><ul><li><a href="../../index.html#chain" data-eco="publishing">發行模式</a></li><li><a href="../../index.html#chain" data-eco="publishing">營運維運</a></li><li><a href="../../index.html#chain" data-eco="publishing">在地化</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="platform"><span class="num">3</span>💿 平台通路鏈</h4><ul><li><a href="../../index.html#chain" data-eco="platform">數位商店</a></li><li><a href="../../index.html#chain" data-eco="platform">雲端串流</a></li><li><a href="../../index.html#chain" data-eco="platform">實體通路</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="infrastructure"><span class="num">4</span>🔧 硬體基建鏈</h4><ul><li><a href="../../index.html#chain" data-eco="infrastructure">遊戲硬體</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">伺服器與雲端</a></li><li><a href="../../index.html#chain" data-eco="infrastructure">支付與金流</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="monetization"><span class="num">5</span>💰 商業變現鏈</h4><ul><li><a href="../../index.html#chain" data-eco="monetization">付費模式</a></li><li><a href="../../index.html#chain" data-eco="monetization">遊戲內經濟</a></li><li><a href="../../index.html#chain" data-eco="monetization">周邊與授權</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="creator"><span class="num">6</span>🎬 創作者生態鏈</h4><ul><li><a href="../../index.html#chain" data-eco="creator">直播與影音</a></li><li><a href="../../index.html#chain" data-eco="creator">UGC與模組</a></li><li><a href="../../index.html#chain" data-eco="creator">知識與評測</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="regulation"><span class="num">7</span>⚖️ 法規合規鏈</h4><ul><li><a href="../../index.html#chain" data-eco="regulation">分級與審查</a></li><li><a href="../../index.html#chain" data-eco="regulation">消費者保護</a></li><li><a href="../../index.html#chain" data-eco="regulation">智財與法律</a></li></ul></div>
+    <div class="mega-col"><h4 data-eco="player"><span class="num">8</span>👥 玩家需求鏈</h4><ul><li><a href="../../index.html#chain" data-eco="player">玩家族群</a></li><li><a href="../../index.html#chain" data-eco="player">社群與參與</a></li><li><a href="../../index.html#chain" data-eco="player">數據與回饋</a></li></ul></div>
+  </div>
+</div>
+</div>
+<style>
+.site-nav-fixed{position:fixed;top:12px;left:12px;z-index:99999}
+.site-nav-fixed.right{left:auto;right:12px}
+.site-nav-fixed .mega-panel{position:absolute;top:calc(100% + 6px);left:0;width:min(94vw,780px);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);max-height:82vh;overflow:auto}
+.site-nav-fixed .mega-toggle{box-shadow:0 6px 20px rgba(0,0,0,.35)}
+</style>
+
+<script>
+(function(){
+  var mt=document.getElementById('megaToggle'),mp=document.getElementById('megaPanel');
+  if(mt&&mp){mt.addEventListener('click',function(){mp.classList.toggle('open');mt.classList.toggle('open');});}
+  function base(){var a=document.querySelector('.site-nav-fixed a[data-eco],.mega-panel a[data-eco]');var h=a?a.getAttribute('href'):'../index.html#chain';return h.replace(/\?[^#]*#.*$/,'').replace(/#.*$/,'');}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[data-eco]'):null;
+    if(a){var href=a.getAttribute('href')||'';if(href.indexOf('index.html#chain')>-1){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(a.getAttribute('data-eco'))+'#chain';}return;}
+    var h4=e.target.closest?e.target.closest('.mega-col h4[data-eco]'):null;
+    if(h4){e.preventDefault();location.href=base()+'?eco='+encodeURIComponent(h4.getAttribute('data-eco'))+'#chain';}
+  });
+})();
+</script>
+<div id="wrap">
+  <div id="top">
+    <div class="chip">分數 <b id="scoreV">0</b></div>
+    <div class="chip">最佳 <b id="bestV">0</b></div>
+    <div class="chip">發射 <b id="shotsV">0</b></div>
+    <div class="spacer"></div>
+    <button id="muteBtn" aria-label="聲音開關">
+      <svg id="iconOn" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+      <svg id="iconOff" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+    </button>
+  </div>
+  <canvas id="board"></canvas>
+  <div id="tipBar">移動滑鼠瞄準 · 點擊發射 · 三顆同色黏連消除 · 清空泡泡過關</div>
+</div>
+<div id="vignette"></div>
+<div class="overlay show" id="menu">
+  <div class="logo"><span class="b">泡泡</span><span class="s">射手</span></div>
+  <div class="tag">BUBBLE SHOOTER · 彈射益智</div>
+  <button class="bigBtn" id="startBtn">開始遊戲</button>
+  <div class="help">
+    <div class="row"><span>滑鼠瞄準</span><span>點擊發射</span></div>
+    <div class="row"><span>三顆同色黏連</span><span>消除得分</span></div>
+    <div class="row"><span>清空所有泡泡</span><span>進入下一關</span></div>
+  </div>
+</div>
+<div class="overlay" id="result">
+  <div class="result">
+    <div class="big win" id="resTitle">遊戲結束</div>
+    <div class="stat">
+      <div class="s"><div class="v" id="rScore">0</div><div class="k">分數</div></div>
+      <div class="s"><div class="v" id="rLevel">1</div><div class="k">關卡</div></div>
+      <div class="s"><div class="v" id="rBest">0</div><div class="k">最佳</div></div>
+    </div>
+    <div class="rowbtns">
+      <button class="ghostBtn" id="againBtn">再玩一次</button>
+      <button class="ghostBtn" id="menuBtn">主選單</button>
+    </div>
+  </div>
+</div>
+<script>
+"use strict";
+const Sfx={audio:null,muted:false};
+Sfx.init=()=>{if(!Sfx.audio){const AC=window.AudioContext||window.webkitAudioContext;if(AC)Sfx.audio=new AC();}};
+Sfx.beep=(f,d,type,v,slide)=>{if(Sfx.muted||!Sfx.audio)return;try{const t=Sfx.audio.currentTime,o=Sfx.audio.createOscillator(),g=Sfx.audio.createGain();o.type=type||"square";o.frequency.setValueAtTime(f,t);if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+d);g.gain.setValueAtTime(v||.1,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(Sfx.audio.destination);o.start(t);o.stop(t+d+.02);}catch(e){}};
+Sfx.play=n=>{if(Sfx.muted)return;if(n==="shoot")Sfx.beep(500,.05,"square",.07,700);else if(n==="stick")Sfx.beep(340,.06,"triangle",.1,240);else if(n==="pop")Sfx.beep(620,.08,"sine",.13);else if(n==="win")Sfx.beep(520,.2,"sine",.16,880);else if(n==="over")Sfx.beep(220,.5,"sawtooth",.16,60)};
+
+const COLS=9,RAD=26,GAP=2,ROW_H=44;let DPR,canvas,ctx,OFFX,TOP=70,BOTTOM;
+const COLORS=["#53c7ff","#ff6b9d","#f0c040","#2dd4bf","#c77bff"];
+const G={state:"menu",grid:[],score:0,best:0,level:1,shots:0,current:0,next:0,flying:null,aim:0,parts:[]};
+function resize(){canvas=document.getElementById("board");DPR=Math.min(devicePixelRatio||1,2);const w=Math.min(window.innerWidth*.94,560);const h=Math.min(w*1.4,window.innerHeight*.78);canvas.width=w*DPR;canvas.height=h*DPR;canvas.style.width=w+"px";canvas.style.height=h+"px";ctx=canvas.getContext("2d");ctx.setTransform(DPR,0,0,DPR,0,0);const cw=COLS*2*RAD;OFFX=(w-cw)/2;TOP=70;BOTTOM=h-60;}
+function rpos(row,c){const x=OFFX+RAD+c*2*RAD+(row%2?RAD:0);const y=TOP+row*ROW_H;return{x,y};}
+function newGame(){G.level=1;startLevel();G.score=0;G.shots=0;G.best=parseInt(localStorage.getItem("bub_best")||"0",10)||0;G.parts=[];}
+function startLevel(){G.grid=[];const rows=4+Math.min(G.level,3);for(let r=0;r<rows;r++){G.grid[r]=[];for(let c=0;c<COLS-(r%2?1:0);c++)G.grid[r][c]=Math.floor(Math.random()*COLORS.length);}G.current=Math.floor(Math.random()*COLORS.length);G.next=Math.floor(Math.random()*COLORS.length);G.flying=null;setState("play");updateHud();}
+function setState(s){G.state=s;document.getElementById("menu").classList.toggle("show",s==="menu");document.getElementById("result").classList.toggle("show",s==="over");}
+function fire(e){if(G.state!=="play"||G.flying)return;const r=canvas.getBoundingClientRect();const mx=e.clientX-r.left,my=e.clientY-r.top;const shoot={x:OFFX+COLS*RAD,y:BOTTOM,color:G.current};const dx=mx-shoot.x,dy=my-shoot.y;const ang=Math.atan2(dy,dx);const sp=760;G.flying={x:shoot.x,y:shoot.y,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,color:G.current};G.shots++;G.current=G.next;G.next=Math.floor(Math.random()*COLORS.length);Sfx.play("shoot");updateHud();}
+function updateFlying(dt){const f=G.flying;if(!f)return;f.x+=f.vx*dt;f.y+=f.vy*dt;
+  // 左右牆
+  if(f.x<OFFX+RAD){f.x=OFFX+RAD;f.vx*=-1;}if(f.x>OFFX+COLS*2*RAD-RAD){f.x=OFFX+COLS*2*RAD-RAD;f.vx*=-1;}
+  // 頂
+  if(f.y<TOP+RAD){f.y=TOP+RAD;land(f);return;}
+  // 撞既有泡泡
+  for(let r=0;r<G.grid.length;r++){for(let c=0;c<G.grid[r].length;c++){const p=rpos(r,c);if(Math.hypot(f.x-p.x,f.y-p.y)<RAD*2-2){land(f);return;}}}
+  if(f.y>BOTTOM+RAD*2){f.y=BOTTOM;land(f);return;}
+}
+function land(f){
+  // 找插入列
+  const col=Math.floor((f.x-OFFX-RAD)/(2*RAD));
+  let row=0;
+  for(let r=0;r<G.grid.length;r++){if(G.grid[r]&&f.y>rpos(r,0).y){row=r+1;}else break;}
+  const isOdd=row%2;
+  const c=isOdd?Math.floor((f.x-OFFX-RAD-RAD)/(2*RAD)):col;
+  const p=rpos(row,c);
+  f.x=p.x;f.y=p.y;
+  if(!G.grid[row])G.grid[row]=[];
+  if(G.grid[row][c]!=null){row--;const pp=rpos(row,row%2?Math.floor((f.x-OFFX-RAD-RAD)/(2*RAD)):Math.floor((f.x-OFFX-RAD)/(2*RAD)));f.x=pp.x;f.y=pp.y;row=Math.max(0,row);const cc=row%2?Math.floor((f.x-OFFX-RAD-RAD)/(2*RAD)):Math.floor((f.x-OFFX-RAD)/(2*RAD));if(!G.grid[row])G.grid[row]=[];G.grid[row][cc]=f.color;resolve(row,cc);}
+  else{G.grid[row][c]=f.color;}
+  Sfx.play("stick");G.flying=null;
+  if(!hasBubbles()){G.score+=100*G.level;Sfx.play("win");G.level++;startLevel();return;}
+  if(needsResolve(row,c))resolve(row,c);
+  updateHud();
+}
+function needsResolve(row,c){return G.grid[row]&&G.grid[row][c]!=null;}
+function resolve(row,c){
+  const color=G.grid[row][c];if(color==null)return;
+  const visited=flood(row,c,color);
+  if(visited.length>=3){
+    let popped=0;
+    for(const[r,cc]of visited){if(G.grid[r]&&G.grid[r][cc]!=null){G.grid[r][cc]=null;popped++;}}
+    G.score+=popped*10;Sfx.play("pop");
+    for(const[r,cc]of visited){const p=rpos(r,cc);burst(p.x,p.y,COLORS[color]);}
+    dropFloating();
+  }
+}
+function flood(row,c,color){
+  const q=[[row,c]],seen=new Set([row+","+c]);const out=[];
+  while(q.length){
+    const[r,cc]=q.pop();
+    if(!G.grid[r]||G.grid[r][cc]!==color)continue;
+    out.push([r,cc]);
+    for(const[nr,nc]of[[r-1,cc],[r+1,cc],[r,cc-1],[r,cc+1]]){
+      if(nr>=0&&!seen.has(nr+","+nc)){seen.add(nr+","+nc);q.push([nr,nc]);}
+    }
+  }
+  return out;
+}
+function dropFloating(){// 移除與頂層無連接的泡泡
+  const connected=new Set();const top=[];
+  for(let r=0;r<G.grid.length;r++)for(let c=0;c<G.grid[r].length;c++)if(G.grid[r][c]!=null){if(r===0)top.push([r,c]);}
+  const q=[...top];for(const[r,c]of top)connected.add(r+","+c);
+  while(q.length){const[r,cc]=q.pop();if(!G.grid[r]||G.grid[r][cc]==null)continue;for(const[nr,nc]of[[r-1,cc],[r+1,cc],[r,cc-1],[r,cc+1]]){if(nr>=0&&G.grid[nr]&&G.grid[nr][nc]!=null&&!connected.has(nr+","+nc)){connected.add(nr+","+nc);q.push([nr,nc]);}}}
+  for(let r=0;r<G.grid.length;r++)for(let c=0;c<G.grid[r].length;c++)if(G.grid[r][c]!=null&&!connected.has(r+","+c)){const p=rpos(r,c);burst(p.x,p.y,COLORS[G.grid[r][c]]);G.grid[r][c]=null;G.score+=5;}
+}
+function hasBubbles(){return G.grid.some(r=>r&&r.some(v=>v!=null));}
+function burst(x,y,c){for(let i=0;i<8;i++){const a=Math.random()*6.28,sp=Math.random()*120+20;G.parts.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:.4,c,r:2+Math.random()*2});}}
+function updateParts(dt){for(let i=G.parts.length-1;i>=0;i--){const p=G.parts[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;if(p.life<=0)G.parts.splice(i,1);}}
+function update(dt){if(G.state!=="play")return;updateFlying(dt);updateParts(dt);}
+function draw(){
+  const c=ctx,w=canvas.width/DPR,h=canvas.height/DPR;c.clearRect(0,0,w,h);
+  c.fillStyle="#0b101d";c.fillRect(0,0,w,h);
+  // 頂部發射台
+  c.fillStyle="#ff6b9d";c.beginPath();c.moveTo(OFFX,TOP);c.lineTo(OFFX+COLS*2*RAD,TOP);c.lineTo(OFFX+COLS*RAD,TOP-26);c.closePath();c.fill();
+  // 既有泡泡
+  for(let r=0;r<G.grid.length;r++)for(let col=0;col<(G.grid[r]?G.grid[r].length:0);col++){const v=G.grid[r][col];if(v==null)continue;const p=rpos(r,col);drawBall(c,p.x,p.y,COLORS[v]);}
+  // 飛行中
+  if(G.flying)drawBall(c,G.flying.x,G.flying.y,COLORS[G.flying.color]);
+  // 發射待命
+  drawBall(c,OFFX+COLS*RAD,BOTTOM,COLORS[G.current],true);
+  // 下一顆
+  drawBall(c,OFFX+COLS*RAD+50,BOTTOM+14,COLORS[G.next]);
+  c.fillStyle="#8fa0bd";c.font="11px 'Noto Sans TC',sans-serif";c.textAlign="center";c.fillText("NEXT",OFFX+COLS*RAD+50,BOTTOM-6);
+  // 瞄準線
+  if(G.state==="play"&&!G.flying){c.strokeStyle="rgba(120,150,190,.25)";c.lineWidth=1;c.setLineDash([4,4]);c.beginPath();c.moveTo(OFFX+COLS*RAD,BOTTOM);c.lineTo(G.aimX||OFFX+COLS*RAD,G.aimY||0);c.stroke();c.setLineDash([]);}
+  // 粒子
+  for(const p of G.parts){c.globalAlpha=Math.max(0,p.life/.4);c.fillStyle=p.c;c.beginPath();c.arc(p.x,p.y,p.r,0,7);c.fill();c.globalAlpha=1;}
+}
+function drawBall(c,x,y,col,a){c.fillStyle=col;c.beginPath();c.arc(x,y,RAD-2,0,7);c.fill();c.fillStyle="rgba(255,255,255,.35)";c.beginPath();c.arc(x-RAD*.3,y-RAD*.3,RAD*.22,0,7);c.fill();c.strokeStyle="rgba(255,255,255,.5)";c.lineWidth=1.5;c.beginPath();c.arc(x,y,RAD-2,0,7);c.stroke();}
+function updateHud(){document.getElementById("scoreV").textContent=G.score;document.getElementById("bestV").textContent=G.best;document.getElementById("shotsV").textContent=G.shots;}
+function bind(){const cv=document.getElementById("board");cv.addEventListener("mousemove",e=>{const r=cv.getBoundingClientRect();G.aimX=e.clientX-r.left;G.aimY=e.clientY-r.top;});cv.addEventListener("mousedown",fire);cv.addEventListener("touchstart",e=>{e.preventDefault();fire(e.touches[0]);},{passive:false});cv.addEventListener("touchmove",e=>{e.preventDefault();const t=e.touches[0];const r=cv.getBoundingClientRect();G.aimX=t.clientX-r.left;G.aimY=t.clientY-r.top;},{passive:false});document.getElementById("startBtn").addEventListener("click",()=>{Sfx.init();Sfx.audio&&Sfx.audio.resume&&Sfx.audio.resume();newGame();});document.getElementById("againBtn").addEventListener("click",newGame);document.getElementById("menuBtn").addEventListener("click",()=>setState("menu"));document.getElementById("muteBtn").addEventListener("click",toggleMute);}
+function toggleMute(){Sfx.muted=!Sfx.muted;document.getElementById("iconOn").style.display=Sfx.muted?"none":"block";document.getElementById("iconOff").style.display=Sfx.muted?"block":"none";}
+function loop(t){const dt=Math.min((t-lastT)/1000,.05);lastT=t;update(dt);draw();requestAnimationFrame(loop);}let lastT=0;
+function init(){resize();addEventListener("resize",resize);bind();G.best=parseInt(localStorage.getItem("bub_best")||"0",10)||0;document.getElementById("bestV").textContent=G.best;lastT=performance.now();requestAnimationFrame(loop);}
+window.addEventListener("DOMContentLoaded",init);
+</script>
+
+<!-- infucoco-watermark -->
+<img src="../../assets/images/infucoco-mascot-mark.png" alt="infucoco" style="position:fixed;right:8px;bottom:8px;width:40px;opacity:.9;pointer-events:none;z-index:99999;border-radius:12px;box-shadow:0 4px 14px #0009;image-rendering:auto">
+</body>
+</html>
