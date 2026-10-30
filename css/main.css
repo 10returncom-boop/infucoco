@@ -426,7 +426,7 @@ h3{letter-spacing:.03em;line-height:1.35}
 .opt-row button.sel{background:var(--btn-grad);color:var(--btn-ink);border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.45)}
 .popover-dropdown__chip{flex:1;padding:8px;border-radius:12px;font-size:.78rem;cursor:pointer}
 
-/* ===== 右下角浮動小按鈕 ===== */
+/* ===== 右下角統一 FAB (回首頁／上一頁／LINE／選單) ===== */
 .float-actions{position:fixed;right:16px;bottom:20px;z-index:90;display:flex;flex-direction:column;gap:8px;align-items:center}
 .float-actions a.line{display:inline-flex;align-items:center;justify-content:center;width:160px;padding:12px 0;border-radius:40px;font-size:1rem;font-weight:900;color:#fff;background:#06C755;box-shadow:0 8px 24px rgba(6,199,85,.45);line-height:1.2;text-align:center;text-decoration:none;letter-spacing:.05em}
 .float-actions a.line:hover{transform:translateY(-2px);filter:brightness(1.1)}
@@ -438,6 +438,12 @@ h3{letter-spacing:.03em;line-height:1.35}
 .float-actions .nav-list a:hover{transform:translateY(-2px);filter:brightness(1.15);box-shadow:0 10px 26px rgba(59,32,110,.5)}
 .float-actions.open .nav-toggle::after{content:"✕";font-size:1.6rem}
 .float-actions .nav-toggle::after{content:"☰";font-size:1.6rem}
+/* 回首頁／回上一頁 小圓鈕 */
+.float-actions .mini-fab{display:flex;gap:8px;align-items:center}
+.float-actions .mini-fab a,.float-actions .mini-fab button{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;text-decoration:none;border:2px solid #1C1A15;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.18);transition:.2s;line-height:1;padding:0}
+.float-actions .mini-fab a{background:linear-gradient(135deg,#FF8C42,#E36B00);color:#fff}
+.float-actions .mini-fab button{background:#fff;color:#1C1A15}
+.float-actions .mini-fab a:hover,.float-actions .mini-fab button:hover{transform:scale(1.12)}
 @media(max-width:900px){
   .float-actions{right:10px;bottom:14px;gap:6px}
   .float-actions a.line{width:140px;padding:10px 0;font-size:.9rem}
@@ -445,19 +451,7 @@ h3{letter-spacing:.03em;line-height:1.35}
   .float-actions.open .nav-toggle{width:56px;height:56px}
   .float-actions .nav-list{gap:6px}
   .float-actions .nav-list a{width:200px;padding:11px 0;font-size:.95rem}
-}
-
-/* ===== 右側中間 FAB (回首頁／上一頁) ===== */
-.side-fab{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:89;display:flex;flex-direction:column;gap:10px;align-items:center}
-.side-fab a,.side-fab button{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;text-decoration:none;border:3px solid #1C1A15;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.18);transition:.2s;line-height:1;padding:0}
-.side-fab a{background:linear-gradient(135deg,#FF8C42,#E36B00);color:#fff}
-.side-fab button{background:#fff;color:#1C1A15}
-.side-fab a:hover,.side-fab button:hover{transform:scale(1.12)}
-.side-fab .fab-label{position:absolute;right:62px;top:50%;transform:translateY(-50%);background:#1C1A15;color:#fff;font-size:.75rem;font-weight:700;padding:4px 10px;border-radius:20px;white-space:nowrap;opacity:0;pointer-events:none;transition:.2s}
-.side-fab a:hover .fab-label,.side-fab button:hover .fab-label{opacity:1;right:68px}
-@media(max-width:900px){
-  .side-fab{right:10px;gap:8px}
-  .side-fab a,.side-fab button{width:44px;height:44px;font-size:1.2rem;border-width:2px}
+  .float-actions .mini-fab a,.float-actions .mini-fab button{width:38px;height:38px;font-size:1rem;border-width:2px}
 }
 
 /* ===== 全域響應式文字 RWD ===== */
