@@ -447,6 +447,19 @@ h3{letter-spacing:.03em;line-height:1.35}
   .float-actions .nav-list a{width:200px;padding:11px 0;font-size:.95rem}
 }
 
+/* ===== 右側中間 FAB (回首頁／上一頁) ===== */
+.side-fab{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:89;display:flex;flex-direction:column;gap:10px;align-items:center}
+.side-fab a,.side-fab button{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;text-decoration:none;border:3px solid #1C1A15;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.18);transition:.2s;line-height:1;padding:0}
+.side-fab a{background:linear-gradient(135deg,#FF8C42,#E36B00);color:#fff}
+.side-fab button{background:#fff;color:#1C1A15}
+.side-fab a:hover,.side-fab button:hover{transform:scale(1.12)}
+.side-fab .fab-label{position:absolute;right:62px;top:50%;transform:translateY(-50%);background:#1C1A15;color:#fff;font-size:.75rem;font-weight:700;padding:4px 10px;border-radius:20px;white-space:nowrap;opacity:0;pointer-events:none;transition:.2s}
+.side-fab a:hover .fab-label,.side-fab button:hover .fab-label{opacity:1;right:68px}
+@media(max-width:900px){
+  .side-fab{right:10px;gap:8px}
+  .side-fab a,.side-fab button{width:44px;height:44px;font-size:1.2rem;border-width:2px}
+}
+
 /* ===== 全域響應式文字 RWD ===== */
 .rt{white-space:nowrap}
 .rt span{white-space:nowrap}
