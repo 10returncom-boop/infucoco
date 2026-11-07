@@ -531,3 +531,18 @@ h3{letter-spacing:.03em;line-height:1.35}
 .nav-dd-panel a.active{background:#FFE9F2;color:#C2539A}
 /* 下拉開啟時解除 nav 溢出裁切（2026-10-29） */
 .nav-links.dd-open{overflow:visible}
+
+/* infu世界 紫卡按鈕（gallery 標題可點） */
+.infu-title-btn{
+  display:inline-block;
+  padding:14px 30px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#5F3FA8 0%,#7C5CD0 100%);
+  color:#fff !important;
+  text-decoration:none;
+  box-shadow:0 8px 22px rgba(95,63,168,.35);
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.infu-title-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(95,63,168,.5)}
+.infu-title-btn h1{margin:0;font-size:1.8rem;color:#fff !important}
+.infu-title-btn .rl{color:#fff}
