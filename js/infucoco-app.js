@@ -31,7 +31,7 @@
           <div class="popover-dropdown__grid">
             <a class="popover-dropdown__link" href="quotes.html">金句</a>
             <a class="popover-dropdown__link" href="stories.html">故事</a>
-            <a class="popover-dropdown__link" href="games.html">遊戲</a>
+            <a class="popover-dropdown__link" href="game-hub/index.html">遊戲</a>
             <a class="popover-dropdown__link" href="quiz.html">心靈療癒</a>
             <a class="popover-dropdown__link" href="gallery.html">infu世界</a>
             <a class="popover-dropdown__link" href="stickers.html">數位商品</a>
