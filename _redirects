@@ -1,3 +1,7 @@
+/shop/api/*   /shop/api/:splat   200
+/shop/*       /shop/index.html    200
 # 301 重新導向：舊 /games 與 /games.html 統一導向 /game-hub/
 /games          /game-hub/   301
 /games.html     /game-hub/   301
+# 舊遊戲頁複本已刪除，統一導回 play.html
+/play.html@g=*   /play.html   301
